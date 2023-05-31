@@ -21,8 +21,10 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@fortawesome/free-solid-svg-icons": "^6.4.0",
 		"@picocss/pico": "^1.5.10",
 		"drizzle-orm": "^0.26.3",
-		"postgres": "^3.3.5"
+		"postgres": "^3.3.5",
+		"svelte-fa": "^3.0.4"
 	}
 }
