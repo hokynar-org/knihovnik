@@ -1,19 +1,18 @@
-lockfileVersion: '6.1'
-
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
+lockfileVersion: '6.0'
 
 dependencies:
   '@fortawesome/free-solid-svg-icons':
     specifier: ^6.4.0
     version: 6.4.0
+  '@neondatabase/serverless':
+    specifier: ^0.4.9
+    version: 0.4.9
   '@picocss/pico':
     specifier: ^1.5.10
     version: 1.5.10
   drizzle-orm:
     specifier: ^0.26.3
-    version: 0.26.3(postgres@3.3.5)
+    version: 0.26.3(@neondatabase/serverless@0.4.9)(postgres@3.3.5)
   postgres:
     specifier: ^3.3.5
     version: 3.3.5
@@ -299,6 +298,12 @@ packages:
       '@jridgewell/sourcemap-codec': 1.4.14
     dev: true
 
+  /@neondatabase/serverless@0.4.9:
+    resolution: {integrity: sha512-JJvap8zh7GLfTIEyzYeSE6NeWjZxpcsW3nWR7P6EnfXcyI71vVo6SFr+XCTISgfJNpdofV9udkPEKV7DAYKo5w==}
+    dependencies:
+      '@types/pg': 8.6.6
+    dev: false
+
   /@nodelib/fs.scandir@2.1.5:
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
     engines: {node: '>= 8'}
@@ -404,6 +409,18 @@ packages:
   /@types/cookie@0.5.1:
     resolution: {integrity: sha512-COUnqfB2+ckwXXSFInsFdOAWQzCCx+a5hq2ruyj+Vjund94RJQd4LG2u9hnvJrTgunKAaax7ancBYlDrNYxA0g==}
     dev: true
+
+  /@types/node@20.2.5:
+    resolution: {integrity: sha512-JJulVEQXmiY9Px5axXHeYGLSjhkZEnD+MDPDGbCbIAbMslkKwmygtZFy1X6s/075Yo94sf8GuSlFfPzysQrWZQ==}
+    dev: false
+
+  /@types/pg@8.6.6:
+    resolution: {integrity: sha512-O2xNmXebtwVekJDD+02udOncjVcMZQuTEQEMpKJ0ZRf5E7/9JJX3izhKUcUifBkyKpljyUM6BTgy2trmviKlpw==}
+    dependencies:
+      '@types/node': 20.2.5
+      pg-protocol: 1.6.0
+      pg-types: 2.2.0
+    dev: false
 
   /@types/pug@2.0.6:
     resolution: {integrity: sha512-SnHmG9wN1UVmagJOnyo/qkk0Z7gejYxOYYmaAwr5u2yFYfsupN3sg10kyzN8Hep/2zbHxCnsumxOoRIRMBwKCg==}
@@ -576,7 +593,7 @@ packages:
       - supports-color
     dev: true
 
-  /drizzle-orm@0.26.3(postgres@3.3.5):
+  /drizzle-orm@0.26.3(@neondatabase/serverless@0.4.9)(postgres@3.3.5):
     resolution: {integrity: sha512-KefTFAXxFtBmDRZWgM71ucxUuDvNEiPgv0lg7qAPEfrQVfyzSz0ukUfNz2Ck4Pro6PEmYFJmA6oNQwwgENkk7g==}
     peerDependencies:
       '@aws-sdk/client-rds-data': '>=3'
@@ -638,6 +655,7 @@ packages:
       sqlite3:
         optional: true
     dependencies:
+      '@neondatabase/serverless': 0.4.9
       postgres: 3.3.5
     dev: false
 
@@ -1239,6 +1257,26 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
+  /pg-int8@1.0.1:
+    resolution: {integrity: sha512-WCtabS6t3c8SkpDBUlb1kjOs7l66xsGdKpIPZsg4wR+B3+u9UAum2odSsF9tnvxg80h4ZxLWMy4pRjOsFIqQpw==}
+    engines: {node: '>=4.0.0'}
+    dev: false
+
+  /pg-protocol@1.6.0:
+    resolution: {integrity: sha512-M+PDm637OY5WM307051+bsDia5Xej6d9IR4GwJse1qA1DIhiKlksvrneZOYQq42OM+spubpcNYEo2FcKQrDk+Q==}
+    dev: false
+
+  /pg-types@2.2.0:
+    resolution: {integrity: sha512-qTAAlrEsl8s4OiEQY69wDvcMIdQN6wdz5ojQiOy6YRMuynxenON0O5oCpJI6lshc6scgAY8qvJ2On/p+CXY0GA==}
+    engines: {node: '>=4'}
+    dependencies:
+      pg-int8: 1.0.1
+      postgres-array: 2.0.0
+      postgres-bytea: 1.0.0
+      postgres-date: 1.0.7
+      postgres-interval: 1.2.0
+    dev: false
+
   /picocolors@1.0.0:
     resolution: {integrity: sha512-1fygroTLlHu66zi26VoTDv8yRgm0Fccecssto+MhsZ0D/DGW2sm8E8AjW7NU5VVTRt5GxbeZ5qBuJr+HyLYkjQ==}
     dev: true
@@ -1256,6 +1294,28 @@ packages:
       picocolors: 1.0.0
       source-map-js: 1.0.2
     dev: true
+
+  /postgres-array@2.0.0:
+    resolution: {integrity: sha512-VpZrUqU5A69eQyW2c5CA1jtLecCsN2U/bD6VilrFDWq5+5UIEVO7nazS3TEcHf1zuPYO/sqGvUvW62g86RXZuA==}
+    engines: {node: '>=4'}
+    dev: false
+
+  /postgres-bytea@1.0.0:
+    resolution: {integrity: sha512-xy3pmLuQqRBZBXDULy7KbaitYqLcmxigw14Q5sj8QBVLqEwXfeybIKVWiqAXTlcvdvb0+xkOtDbfQMOf4lST1w==}
+    engines: {node: '>=0.10.0'}
+    dev: false
+
+  /postgres-date@1.0.7:
+    resolution: {integrity: sha512-suDmjLVQg78nMK2UZ454hAG+OAW+HQPZ6n++TNDUX+L0+uUlLywnoxJKDou51Zm+zTCjrCl0Nq6J9C5hP9vK/Q==}
+    engines: {node: '>=0.10.0'}
+    dev: false
+
+  /postgres-interval@1.2.0:
+    resolution: {integrity: sha512-9ZhXKM/rw350N1ovuWHbGxnGh/SNJ4cnxHiM0rxE4VN41wsg8P8zWn9hv/buK00RP4WvlOyr/RBDiptyxVbkZQ==}
+    engines: {node: '>=0.10.0'}
+    dependencies:
+      xtend: 4.0.2
+    dev: false
 
   /postgres@3.3.5:
     resolution: {integrity: sha512-+JD93VELV9gHkqpV5gdL5/70HdGtEw4/XE1S4BC8f1mcPmdib3K5XsKVbnR1XcAyC41zOnifJ+9YRKxdIsXiUw==}
@@ -1557,6 +1617,15 @@ packages:
     resolution: {integrity: sha512-l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ==}
     dev: true
 
+  /xtend@4.0.2:
+    resolution: {integrity: sha512-LKYU1iAXJXUgAXn9URjiu+MWhyUXHsvfp7mcuYm9dSUKK0/CjtrUwFAxD82/mCWbtLsGjFIad0wIsod4zrTAEQ==}
+    engines: {node: '>=0.4'}
+    dev: false
+
   /zod@3.21.4:
     resolution: {integrity: sha512-m46AKbrzKVzOzs/DZgVnG5H55N1sv1M8qZU3A8RIKbs3mrACDNeIOeilDymVb2HdmP8uwshOCF4uJ8uM9rCqJw==}
     dev: true
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
