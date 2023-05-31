@@ -1,12 +1,12 @@
 <script lang="ts">
-    import type { PageServerLoad } from './$types';
+    import type { PageData } from './$types';
 
-    export let data: PageServerLoad;
+    export let data: PageData;
     let user = data
 </script>
 <h1>
     User (si vole hehehehe)
 </h1>
 <div>
-    {user?.user}
+    {user}
 </div>
