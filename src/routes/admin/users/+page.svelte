@@ -3,10 +3,20 @@
 
     export let data: PageServerData;
 </script>
+<div class="container">
 <h1>
     Seznam uživatelů
 </h1>
-<table class="container">
+<table role="grid">
+    <thead>
+        <tr>
+          <th scope="col">id</th>
+          <th scope="col">Jméno</th>
+          <th scope="col">Kontakt</th>
+          <th scope="col">Odstraň</th>
+        </tr>
+      </thead>
+    
     {#each data.users as usr (usr.id)}
     <tr>
         <td>
@@ -27,8 +37,10 @@
 
     {/each}
 </table>
+</div>
 <style>
 .smol{
+    width: 2rem;
     margin:0;
     padding:0;
 }
