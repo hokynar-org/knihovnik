@@ -6,8 +6,8 @@ import { users } from '$lib/server/db/schema';
 import {db} from '$lib/server/db/drizzle'
 
 const schema = z.object({
-  username: z.string().min(2),
-  name: z.string().min(1),
+  user_name: z.string().min(2),
+  full_name: z.string().min(1),
   pronouns: z.string(),
   email: z.string().email(),
 });
@@ -27,7 +27,7 @@ export const actions = {
       return fail(400, { form });
     }
 
-    await db.insert(users).values({ fullName: form.data.name, phone: form.data.email});
+    await db.insert(users).values({user_name: form.data.user_name, full_name: form.data.full_name, email: form.data.email, pronouns: form.data.pronouns});
     // TODO: Do something with the validated data
 
     throw redirect(303, '/');
