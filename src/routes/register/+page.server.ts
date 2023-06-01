@@ -49,6 +49,6 @@ export const actions = {
       password_hash: await bcrypt.hash(form.data.password, 10)
     });
 
-    return redirect(303, '/');
+    throw redirect(303, '/');
   },
 } satisfies Actions;
