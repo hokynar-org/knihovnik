@@ -63,7 +63,7 @@
 </style>
 
 <!-- <SuperDebug data={$form} /> -->
-
+<div>
 <form method="POST">
   <div class="form-group">
     <input type    ="text" name="username" bind:value={$form.username} id="username" placeholder=" " />
