@@ -7,7 +7,8 @@
 		"build": "vite build",
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
+		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+		"migrate": "drizzle-kit generate:pg --schema=src/lib/server/db/schema.ts && ts-node --esm src/lib/server/db/migrate.ts"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^2.0.0",
@@ -26,9 +27,12 @@
 		"@fortawesome/free-solid-svg-icons": "^6.4.0",
 		"@neondatabase/serverless": "^0.4.9",
 		"@picocss/pico": "^1.5.10",
+		"@types/ws": "^8.5.4",
+		"dotenv": "^16.1.3",
 		"drizzle-orm": "^0.26.3",
 		"postgres": "^3.3.5",
 		"svelte-fa": "^3.0.4",
+		"ts-node": "^10.9.1",
 		"ws": "^8.13.0"
 	}
 }
