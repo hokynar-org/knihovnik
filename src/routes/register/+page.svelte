@@ -15,13 +15,13 @@ Yo lemme hop in here real quick
 <div class=container>
 
 <form method="POST">
-  <label for="username">Username</label>
+  <label for="user_name">Username</label>
   <input type="text" name="user_name" bind:value={$form.user_name} />
 
   <label for="email">E-mail</label>
   <input type="email" name="email" bind:value={$form.email} />
 
-  <label for="name">Name</label>
+  <label for="full_name">Name</label>
   <input type=text name="full_name" bind:value={$form.full_name} />
 
   <label for="pronouns">Prefered pronouns</label>
