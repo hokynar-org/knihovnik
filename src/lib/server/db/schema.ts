@@ -6,4 +6,5 @@ export const users = pgTable("users", {
   user_name: text("user_name"),
   email: varchar("email", { length: 256 }),
   pronouns: text("pronouns"),
+  password_hash: text("password_hash"),
 });

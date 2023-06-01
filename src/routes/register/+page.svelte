@@ -27,6 +27,9 @@ Yo lemme hop in here real quick
   <label for="pronouns">Prefered pronouns</label>
   <input type="text" name="pronouns" bind:value={$form.pronouns} placeholder="they/them" />
 
+  <label for="password">Password</label>
+  <input type="password" name="password" bind:value={$form.password} placeholder="password" />
+
   <div><button>Submit</button></div>
 </form>
 </div>
