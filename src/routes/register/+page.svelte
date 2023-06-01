@@ -12,6 +12,7 @@
 <SuperDebug data={$form} />
 
 Yo lemme hop in here real quick
+<div class=container>
 
 <form method="POST">
   <label for="username">Username</label>
@@ -28,3 +29,4 @@ Yo lemme hop in here real quick
 
   <div><button>Submit</button></div>
 </form>
+</div>
