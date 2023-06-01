@@ -23,10 +23,16 @@
             {usr.id}
         </td>
         <td>
-            {usr.fullName}
+            {usr.user_name}
         </td>
         <td>
-            {usr.phone}
+            {usr.full_name}
+        </td>
+        <td>
+            {usr.email}
+        </td>
+        <td>
+            {usr.pronouns}
         </td>
         <td>
         <form class="smol" action="?/deleteUser&id={usr.id}" method="POST">
