@@ -15,16 +15,18 @@ const schema = z.object({
   email: z.string().email(),
 });
 
-export const load = (async () => {
-  const form = await superValidate(schema);
+export const load = (async ({locals}) => {
+  if (locals.user) {
+    throw redirect(302, '/')
+  }
 
+  const form = await superValidate(schema);
   return { form };
 }) satisfies PageServerLoad;
 
 export const actions = {
   default: async ({ request }) => {
     const form = await superValidate(request, schema);
-    // console.log("POST", form);
 
     if (!form.valid) {
       return fail(400, { form });
@@ -34,11 +36,11 @@ export const actions = {
     const email = await db.select().from(users).where(eq(users.email, form.data.email));
 
     if(user.length>0){
-      return fail(400, {user_name_taken:true})
+      return fail(400, { form });
     }
 
     if(email.length>0){
-      return fail(400, {email_taken:true})
+      return fail(400, { form });
     }
 
     await db.insert(users).values({
@@ -46,9 +48,10 @@ export const actions = {
       full_name: form.data.full_name,
       email: form.data.email,
       pronouns: form.data.pronouns,
-      password_hash: await bcrypt.hash(form.data.password, 10)
+      password_hash: await bcrypt.hash(form.data.password, 10),
+      auth_token: crypto.randomUUID(),
     });
 
-    throw redirect(303, '/');
+    throw redirect(303, '/login');
   },
 } satisfies Actions;

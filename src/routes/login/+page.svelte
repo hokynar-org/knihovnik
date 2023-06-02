@@ -6,12 +6,12 @@
 </script>
 <div class="container">
 <h3>Login</h3>
-<form method="post">
+<form method="POST">
     <label for="email">E-mail</label>
     <input type="email" name="email" bind:value={$form.email} />
 
     <label for="email">Password</label>
-    <input type="password">
+    <input type="password" name="password" bind:value={$form.password} >
 
     <button>
         Login

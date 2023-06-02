@@ -1,14 +1,32 @@
 <script lang="ts">
   import "@picocss/pico/css/pico.css";
+  import {page} from '$app/stores';
+  const user = $page.data.user
 </script>
-<a href="/"><h2>Knihovnik</h2></a>
+<nav>
+<ul>
+  <li><a href="/"><h2>Knihovnik</h2></a></li>
+</ul>
+{#if user}
+<ul>
+  <li>{user.user_name}</li>
+</ul>
+{/if}
+</nav>
 <nav>
   <ul>
+    {#if !user}
     <li>
       <a href="/register">
         <h3>Register</h3>
       </a>
     </li>
+    <li>
+      <a href="/login">
+        <h3>Login</h3>
+      </a>
+    </li>
+    {/if}
     <li>
       <a href="/borrow">
       <h3>Borrow</h3>
@@ -25,12 +43,19 @@
       </a>
     </li>
   </ul>
+  {#if user}
   <ul>
     <li>
       <a href="/admin">
       <h3>Admin</h3>
       </a>
     </li>
+    <li>
+      <a href="/logout">
+      <h3>Logout</h3>
+      </a>
+    </li>
   </ul>
+  {/if}
 </nav>
 <slot />
