@@ -5,6 +5,7 @@ import { fail, type Actions, redirect } from "@sveltejs/kit";
 import { users } from "$lib/server/db/schema";
 import { eq } from "drizzle-orm";
 import bcrypt from 'bcrypt';
+import {db} from '$lib/server/db/drizzle'
 import type { PgUUID } from "drizzle-orm/pg-core";
 
 
