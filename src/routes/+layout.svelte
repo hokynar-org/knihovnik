@@ -27,6 +27,7 @@
       </a>
     </li>
     {/if}
+    {#if user}
     <li>
       <a href="/borrow">
       <h3>Borrow</h3>
@@ -42,12 +43,13 @@
       <h3>Community</h3>
       </a>
     </li>
+    {/if}
   </ul>
   {#if user}
   <ul>
     <li>
-      <a href="/admin">
-      <h3>Admin</h3>
+      <a href="/user">
+      <h3>User</h3>
       </a>
     </li>
     <li>

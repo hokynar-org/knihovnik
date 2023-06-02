@@ -9,12 +9,12 @@
   const { form } = superForm(data.form);
 </script>
 
-<SuperDebug data={$form} />
+<!-- <SuperDebug data={$form} /> -->
 
 Yo lemme hop in here real quick
 <div class=container>
 
-<form method="POST">
+<form method="POST" action="?/register">
   <label for="user_name">Username</label>
   <input type="text" name="user_name" bind:value={$form.user_name} />
 

@@ -15,6 +15,9 @@ export const handle: Handle = async ({ event, resolve }) => {
   if (user) {
     event.locals.user = {
         user_name: String(user.user_name),
+        full_name: String(user.full_name),
+        pronouns: String(user.pronouns),
+        email: String(user.email),
     }
   }
   return await resolve(event)

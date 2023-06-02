@@ -24,8 +24,8 @@ export const load = (async ({locals}) => {
   return { form };
 }) satisfies PageServerLoad;
 
-export const actions = {
-  default: async ({ request }) => {
+export const actions: Actions = {
+  register: async ({ request }) => {
     const form = await superValidate(request, schema);
 
     if (!form.valid) {

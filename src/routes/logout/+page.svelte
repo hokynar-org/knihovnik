@@ -3,7 +3,7 @@
 </script>
 <div class="container">
 <h3>Logout user {$page.data.user.user_name}</h3>
-<form method="POST">
+<form action="?/logout" method="POST">
     <button>
         Logout
     </button>

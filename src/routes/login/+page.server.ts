@@ -12,6 +12,7 @@ import type { PgUUID } from "drizzle-orm/pg-core";
 const schema = z.object({
   email: z.string().email(),
   password: z.string().min(1),
+  stay: z.boolean()
 });
 
 export const load = (async ({locals}) => {
@@ -23,10 +24,10 @@ export const load = (async ({locals}) => {
     return { form };
 }) satisfies PageServerLoad;
 
-export const actions = {
-    default: async ({cookies, request }) => {
+export const actions:Actions = {
+    login: async ({cookies, request }) => {
       const form = await superValidate(request, schema);
-  
+
       if (!form.valid) {
         return fail(400, { form });
       }
@@ -36,7 +37,7 @@ export const actions = {
       const found_users = await db.select().from(users).where(eq(users.email, email));
       if(found_users.length==0){
         return fail(400, { form });
-    }
+      }
 
       const user=found_users[0];
       const password_auth = await bcrypt.compare(password, String(user.password_hash))
@@ -47,6 +48,7 @@ export const actions = {
 
       const new_users_find = await db.update(users).set({ auth_token: crypto.randomUUID()}).where(eq(users.id, user.id)).returning();
       const new_user=new_users_find[0];
+      if(form.data.stay){
       cookies.set('session', String(new_user.auth_token), {
         path: '/',
         httpOnly: true,
@@ -54,6 +56,15 @@ export const actions = {
         secure: process.env.NODE_ENV === 'production',
         maxAge: 60 * 60 * 24 * 30,
       });
+      }
+      else{
+        cookies.set('session', String(new_user.auth_token), {
+          path: '/',
+          httpOnly: true,
+          sameSite: 'strict',
+          secure: process.env.NODE_ENV === 'production',
+        });
+      }
       throw redirect(303, '/login');
     },
 } satisfies Actions;

@@ -8,6 +8,9 @@ declare global {
 		interface Locals {
 			user: {
 				user_name: string
+				email: string
+				full_name: string
+				pronouns: string
 			}
 		}		
 	}
