@@ -13,6 +13,7 @@ const schema = z.object({
   password: z.string().min(4),
   pronouns: z.string(),
   email: z.string().email(),
+  role: z.boolean().default(false)
 });
 
 export const load = (async ({locals}) => {
@@ -45,14 +46,25 @@ export const actions: Actions = {
     if(email.length>0){
       return fail(400, { form });
     }
-
-    await db.insert(users).values({
-      user_name: form.data.user_name,
-      full_name: form.data.full_name,
-      email: form.data.email,
-      pronouns: form.data.pronouns,
-      password_hash: await bcrypt.hash(form.data.password, 10),
-    });
+    if(form.data.role){
+      await db.insert(users).values({
+        user_name: form.data.user_name,
+        full_name: form.data.full_name,
+        email: form.data.email,
+        pronouns: form.data.pronouns,
+        password_hash: await bcrypt.hash(form.data.password, 10),
+        role: "ADMIN",
+      });
+    }
+    else{
+      await db.insert(users).values({
+        user_name: form.data.user_name,
+        full_name: form.data.full_name,
+        email: form.data.email,
+        pronouns: form.data.pronouns,
+        password_hash: await bcrypt.hash(form.data.password, 10),
+      });
+    }
 
     throw redirect(303, '/login');
   },

@@ -29,7 +29,10 @@ Yo lemme hop in here real quick
 
   <label for="password">Password</label>
   <input type="password" name="password" bind:value={$form.password} placeholder="password" />
-
+  <fieldset>
+    <label for="role">Admin?</label>
+    <input type="checkbox" name="role" bind:checked={$form.role}>
+  </fieldset>
   <div><button>Submit</button></div>
 </form>
 </div>

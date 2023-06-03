@@ -22,14 +22,9 @@ export const handle: Handle = async ({ event, resolve }) => {
   }
 
   const user = found_users[0];
-
+  const {password_hash: password_hash,...user_safe} = user;
   if (user) {
-    event.locals.user = {
-        user_name: String(user.user_name),
-        full_name: String(user.full_name),
-        pronouns: String(user.pronouns),
-        email: String(user.email),
-    }
+    event.locals.user=user_safe;
   }
   return await resolve(event)
 }

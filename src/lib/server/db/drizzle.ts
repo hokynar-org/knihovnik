@@ -1,8 +1,8 @@
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
-import { db_url } from '$env/static/private';
+import { DATABASE_URL } from '$env/static/private';
 
-const db = global.db || drizzle(postgres(db_url+"?sslmode=require"))
+const db = global.db || drizzle(postgres(DATABASE_URL+"?sslmode=require"))
 
 if (process.env.NODE_ENV === "development") {
 	global.db = db

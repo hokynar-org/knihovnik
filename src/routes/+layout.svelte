@@ -9,7 +9,7 @@
 </ul>
 {#if user}
 <ul>
-  <li>{user.user_name}</li>
+  <li>{user.user_name}, {user.role}, {user.email}</li>
 </ul>
 {/if}
 </nav>
@@ -57,7 +57,15 @@
       <h3>Logout</h3>
       </a>
     </li>
+    {#if user.role=="ADMIN"}
+    <li>
+      <a href="/admin">
+      <h3>Admin</h3>
+      </a>
+    </li> 
+    {/if}
   </ul>
+  
   {/if}
 </nav>
 <slot />

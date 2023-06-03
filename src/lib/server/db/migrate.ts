@@ -7,7 +7,7 @@ import "dotenv/config";
 
 neonConfig.webSocketConstructor = ws;
 
-const pool = new Pool({ connectionString: process.env.db_url });
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 const db = drizzle(pool);
 
 await migrate(db, { migrationsFolder: `${process.cwd()}/drizzle` });

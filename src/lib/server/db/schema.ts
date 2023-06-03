@@ -7,9 +7,10 @@ export const users = pgTable("users", {
   email: varchar("email", { length: 256 }),
   pronouns: text("pronouns"),
   password_hash: text("password_hash"),
+  role: text("role").default("USER")
 });
 
 export const sessions = pgTable("sessions",{
   auth_token:uuid("auth_token").primaryKey(),
   user_id: integer('user_id').references(() => users.id)
-})
+});

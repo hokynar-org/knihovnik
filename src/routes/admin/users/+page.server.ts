@@ -4,7 +4,8 @@ import { users } from '$lib/server/db/schema';
 import {db} from '$lib/server/db/drizzle'
 import { fail, redirect } from "@sveltejs/kit";
 
-export const load = (async ({ locals }) => {
+export const load = (async ({ locals,parent }) => {
+	await parent()
 	if (!locals.user) {
 		throw redirect(302, '/login')
 	}
