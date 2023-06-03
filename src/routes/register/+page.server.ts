@@ -25,7 +25,10 @@ export const load = (async ({locals}) => {
 }) satisfies PageServerLoad;
 
 export const actions: Actions = {
-  register: async ({ request }) => {
+  register: async ({ request, locals }) => {
+    if (locals.user) {
+      throw redirect(302, '/')
+    }
     const form = await superValidate(request, schema);
 
     if (!form.valid) {

@@ -4,7 +4,10 @@ import { users } from '$lib/server/db/schema';
 import {db} from '$lib/server/db/drizzle'
 import { fail, redirect } from "@sveltejs/kit";
 
-export const load = (async ({ }) => {
+export const load = (async ({ locals }) => {
+	if (!locals.user) {
+		throw redirect(302, '/login')
+	}
     const allUsers = await db.select().from(users);
     return {
         users: allUsers
@@ -12,7 +15,10 @@ export const load = (async ({ }) => {
 }) satisfies PageServerLoad;
 
 export const actions: Actions = {
-	deleteUser: async ({ url }) => {
+	deleteUser: async ({ url, locals }) => {
+		if (!locals.user) {
+			throw redirect(302, '/login')
+		}
 		const id = url.searchParams.get("id");
 		if (!id) {
 			return fail(400, { message: "Invalid request" })

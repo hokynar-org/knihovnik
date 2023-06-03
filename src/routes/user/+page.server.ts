@@ -18,9 +18,9 @@ const schema_password = z.object({
   new_password: z.string().min(4),
 });
 
-export const load = (async ({locals, cookies}) => {
+export const load = (async ({locals, cookies}) => { 
   if (!locals.user) {
-    throw redirect(302, '/')
+    throw redirect(302, '/login')
   }
 
   const form =          await superValidate(schema);
@@ -30,7 +30,10 @@ export const load = (async ({locals, cookies}) => {
 }) satisfies PageServerLoad;
 
 export const actions:Actions = {
-  update: async ({ request,cookies }) => {
+  update: async ({ request,cookies,locals }) => {
+    if (!locals.user) {
+      throw redirect(302, '/login')
+    }
     const form = await superValidate(request, schema);
     if (!form.valid) {
       return fail(400, { form });
@@ -45,7 +48,10 @@ export const actions:Actions = {
 
     throw redirect(303, '/user');
   },
-  update_password: async ({ request,cookies }) => {
+  update_password: async ({ request,cookies,locals }) => {
+    if (!locals.user) {
+      throw redirect(302, '/login')
+    }
     const form = await superValidate(request, schema_password);
     
     if (!form.valid) {
