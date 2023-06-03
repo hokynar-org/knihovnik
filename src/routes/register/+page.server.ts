@@ -46,6 +46,7 @@ export const actions: Actions = {
     if(email.length>0){
       return fail(400, { form });
     }
+    
     if(form.data.role){
       await db.insert(users).values({
         user_name: form.data.user_name,

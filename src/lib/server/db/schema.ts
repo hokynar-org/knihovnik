@@ -11,6 +11,13 @@ export const users = pgTable("users", {
 });
 
 export const sessions = pgTable("sessions",{
-  auth_token:uuid("auth_token").primaryKey(),
+  auth_token: uuid("auth_token").primaryKey(),
+  user_id: integer('user_id').references(() => users.id)
+});
+
+export const items = pgTable("items", {
+  id: serial("id").primaryKey(),
+  name: text("name"),
+  description: text("description"),
   user_id: integer('user_id').references(() => users.id)
 });
