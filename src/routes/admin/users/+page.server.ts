@@ -1,6 +1,6 @@
 import {eq} from 'drizzle-orm';
 import type {Actions, PageServerLoad } from './$types';
-import { sessions, users } from '$lib/server/db/schema';
+import { items, sessions, users } from '$lib/server/db/schema';
 import {db} from '$lib/server/db/drizzle'
 import { fail, redirect } from "@sveltejs/kit";
 
@@ -32,6 +32,7 @@ export const actions: Actions = {
 		}
     
 		try {
+			await db.delete(items).where(eq(items.user_id, Number(id)));
 			await db.delete(sessions).where(eq(sessions.user_id, Number(id)));
 			await db.delete(users).where(eq(users.id, Number(id)));
 		} catch (err) {
