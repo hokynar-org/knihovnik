@@ -13,6 +13,11 @@
             <h4>Groups</h4>
         </a>
         </li>
+        <li>
+            <a href="/admin/sessions">
+                <h4>Sessions</h4>
+            </a>
+        </li>
     </ul>
 </nav>
 <slot/>

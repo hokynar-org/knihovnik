@@ -1,15 +1,26 @@
 import type { Handle } from '@sveltejs/kit'
 import { db } from '$lib/server/db/drizzle'
-import { users } from '$lib/server/db/schema'
+import { sessions, users } from '$lib/server/db/schema'
 import { eq } from 'drizzle-orm'
 
 export const handle: Handle = async ({ event, resolve }) => {
-  const session = event.cookies.get('session')
-  if (!session) {
+  const user_session = event.cookies.get('session')
+  if (!user_session) {
     return await resolve(event)
   }
 
-  const found_users = await db.select().from(users).where(eq(users.auth_token, session));
+  const db_sessions = await db.select().from(sessions).where(eq(sessions.auth_token,String(user_session)));
+
+  if (db_sessions.length==0) {
+    return await resolve(event)
+  }
+
+  const found_users = await db.select().from(users).where(eq(users.id,Number(db_sessions[0].user_id)));
+
+  if (found_users.length==0) {
+    return await resolve(event)
+  }
+
   const user = found_users[0];
 
   if (user) {

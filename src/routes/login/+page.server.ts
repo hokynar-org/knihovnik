@@ -2,7 +2,7 @@ import { z } from "zod";
 import { superValidate } from "sveltekit-superforms/server";
 import type { PageServerLoad } from "./$types";
 import { fail, type Actions, redirect } from "@sveltejs/kit";
-import { users } from "$lib/server/db/schema";
+import { users, sessions } from "$lib/server/db/schema";
 import { eq } from "drizzle-orm";
 import bcrypt from 'bcrypt';
 import {db} from '$lib/server/db/drizzle'
@@ -38,18 +38,20 @@ export const actions:Actions = {
       if(found_users.length==0){
         return fail(400, { form });
       }
-
       const user=found_users[0];
       const password_auth = await bcrypt.compare(password, String(user.password_hash))
 
       if(!password_auth){
         return fail(400, { form });
-    }
+      }
 
-      const new_users_find = await db.update(users).set({ auth_token: crypto.randomUUID()}).where(eq(users.id, user.id)).returning();
-      const new_user=new_users_find[0];
+      const session = await db.insert(sessions).values({
+        auth_token: crypto.randomUUID(),
+        user_id: user.id,
+      }).returning()
+      
       if(form.data.stay){
-      cookies.set('session', String(new_user.auth_token), {
+      cookies.set('session', String(session[0].auth_token), {
         path: '/',
         httpOnly: true,
         sameSite: 'strict',
@@ -58,7 +60,7 @@ export const actions:Actions = {
       });
       }
       else{
-        cookies.set('session', String(new_user.auth_token), {
+        cookies.set('session', String(session[0].auth_token), {
           path: '/',
           httpOnly: true,
           sameSite: 'strict',

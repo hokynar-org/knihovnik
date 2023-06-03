@@ -1,7 +1,7 @@
 import { redirect } from '@sveltejs/kit'
 import type { Actions, PageServerLoad } from './$types'
 import { db } from '$lib/server/db/drizzle';
-import { users } from '$lib/server/db/schema';
+import { sessions, users } from '$lib/server/db/schema';
 import { eq } from 'drizzle-orm';
 
 export const load = (async ({locals}) => {
@@ -16,11 +16,8 @@ export const actions: Actions = {
     if (!locals.user) {
         throw redirect(302, '/login')
     }
-    const session = cookies.get('session');
-    await db.update(users).set({
-      auth_token: crypto.randomUUID(),
-    }).where(eq(users.auth_token,String(session)));
-
+    const user_session = cookies.get('session');
+    await db.delete(sessions).where(eq(sessions.auth_token, String(user_session)));
     cookies.set('session', '', {
       path: '/',
       expires: new Date(0),

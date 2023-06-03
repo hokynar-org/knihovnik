@@ -52,7 +52,6 @@ export const actions: Actions = {
       email: form.data.email,
       pronouns: form.data.pronouns,
       password_hash: await bcrypt.hash(form.data.password, 10),
-      auth_token: crypto.randomUUID(),
     });
 
     throw redirect(303, '/login');
