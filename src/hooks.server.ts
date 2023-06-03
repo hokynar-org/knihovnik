@@ -12,7 +12,8 @@ export const handle: Handle = async ({ event, resolve }) => {
   const db_sessions = await db.select().from(sessions).where(eq(sessions.auth_token,String(user_session)));
 
   if (db_sessions.length==0) {
-    return await resolve(event)
+    event.cookies.delete('session');
+    return await resolve(event);
   }
 
   const found_users = await db.select().from(users).where(eq(users.id,Number(db_sessions[0].user_id)));

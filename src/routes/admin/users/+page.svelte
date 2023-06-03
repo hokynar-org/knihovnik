@@ -10,10 +10,12 @@
 <table role="grid">
     <thead>
         <tr>
-          <th scope="col">id</th>
-          <th scope="col">Jméno</th>
-          <th scope="col">Kontakt</th>
-          <th scope="col">Odstraň</th>
+          <th scope="col">ID</th>
+          <th scope="col">User Name</th>
+          <th scope="col">Email</th>
+          <th scope="col">Full Name</th>
+          <th scope="col">Pronouns</th>
+          <th scope="col">Delete</th>
         </tr>
       </thead>
     
@@ -26,16 +28,16 @@
             {usr.user_name}
         </td>
         <td>
-            {usr.full_name}
+            {usr.email}
         </td>
         <td>
-            {usr.email}
+            {usr.full_name}
         </td>
         <td>
             {usr.pronouns}
         </td>
         <td>
-        <form class="smol" action="?/deleteUser&id={usr.id}" method="POST">
+        <form class="smol" action="?/delete_user&id={usr.id}" method="POST">
             <button type="submit" class="smol outline secondary">X</button>
         </form>
         </td>
