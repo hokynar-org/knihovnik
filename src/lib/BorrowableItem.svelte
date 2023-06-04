@@ -16,6 +16,9 @@
     export let user_id: number;
 </script>
 
+<head>
+    <link rel="stylesheet" href="src/lib/style.css">
+</head>
 <article>
     <div data-tooltip={imageAltText} data-placement="top">
         <img src={image} alt={imageAltText} />
