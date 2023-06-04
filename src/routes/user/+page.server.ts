@@ -2,7 +2,7 @@ import { z } from "zod";
 import { superValidate } from "sveltekit-superforms/server";
 import type { PageServerLoad, Actions } from "./$types.d.ts";
 import { fail, redirect } from "@sveltejs/kit";
-import { sessions, users } from '$lib/server/db/schema';
+import { borrow_asks, sessions, users } from '$lib/server/db/schema';
 import {db} from '$lib/server/db/drizzle';
 import {eq} from 'drizzle-orm';
 import bcrypt from 'bcrypt';
@@ -25,8 +25,9 @@ export const load = (async ({locals, cookies}) => {
 
   const form =          await superValidate(schema);
   const form_password = await superValidate(schema_password);
+  const found_borrow_asks = await db.select().from(borrow_asks).where(eq(borrow_asks.lender_id,locals.user.id))
 
-  return {form: form, form_password: form_password};
+  return {borrow_asks:found_borrow_asks,form: form, form_password: form_password};
 }) satisfies PageServerLoad;
 
 export const actions:Actions = {

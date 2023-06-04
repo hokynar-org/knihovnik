@@ -16,6 +16,21 @@
   <!-- <SuperDebug data={$form} />
 
   <SuperDebug data={$form_password} /> -->
+<table>
+  {#each data.borrow_asks as ask (ask.id) }
+    <tr>
+      <td>
+        {ask.id}
+      </td>
+      <td>
+        {ask.item_id}
+      </td>
+      <td>
+        {ask.borrower_id}
+      </td>
+    </tr>
+  {/each}
+</table>
 
 <div class="container">
   <h4>

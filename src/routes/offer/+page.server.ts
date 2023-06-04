@@ -15,7 +15,7 @@ export const load = (async ({locals}) => {
   if (!locals.user) {
     throw redirect(302, '/login')
   }
-  const user_items = await db.select().from(items).where(eq(items.user_id,locals.user.id));
+  const user_items = await db.select().from(items).where(eq(items.owner_id,locals.user.id));
   return {
     user_items:user_items,
     item_form:superValidate(item_form_schema)
@@ -30,7 +30,6 @@ export const actions: Actions = {
     }
 
     const form = await superValidate(request, item_form_schema);
-    console.log(form)
     if (!form.valid) {
       return fail(400, { form });
     }
@@ -38,9 +37,11 @@ export const actions: Actions = {
       await db.insert(items).values({
         name: form.data.name,
         description: form.data.description,
-        user_id: locals.user.id,
+        owner_id: locals.user.id,
+        holder_id: locals.user.id,
       })
     } catch (error) {
+      console.error(error)
       return fail(500, {message: "Internal Error",});
     }
   },
@@ -60,7 +61,7 @@ export const actions: Actions = {
         return fail(400, { message: "Invalid request" })
       }
       const item = found_items[0];
-      if(item.user_id != locals.user.id){
+      if(item.owner_id != locals.user.id){
         return fail(400, { message: "Invalid request" })
       }
       await db.delete(items).where(eq(items.id, Number(id)));

@@ -16,3 +16,17 @@ export interface User {
     email: string;
     communities: Community[];
 }
+
+
+export interface PublicUserSafe {
+    user_name: string
+    full_name: string
+    id: number
+}
+  
+export interface PublicItemSafe{
+    name: string
+    description: string
+    id:number
+    user_id:number
+}
