@@ -37,6 +37,9 @@
             {usr.pronouns}
         </td>
         <td>
+            {usr.role}
+        </td>
+        <td>
         <form class="smol" action="?/delete_user&id={usr.id}" method="POST">
             <button type="submit" class="smol outline secondary">X</button>
         </form>

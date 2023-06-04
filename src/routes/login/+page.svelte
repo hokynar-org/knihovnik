@@ -3,7 +3,6 @@
     import type { PageServerData } from './$types';
     export let data: PageServerData;
     const { form } = superForm(data.form);
-    $: console.log($form.stay);
 </script>
 
 <div class="container">

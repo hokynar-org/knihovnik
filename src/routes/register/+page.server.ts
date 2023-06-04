@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { superValidate } from "sveltekit-superforms/server";
-import type { PageServerLoad, Actions } from "./$types.d.ts";
+import type { PageServerLoad, Actions } from "./$types";
 import { fail, redirect } from "@sveltejs/kit";
 import { users } from '$lib/server/db/schema';
 import {db} from '$lib/server/db/drizzle';

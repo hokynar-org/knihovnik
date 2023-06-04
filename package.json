@@ -13,6 +13,7 @@
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^2.1.0",
 		"@sveltejs/kit": "^1.20.1",
+		"@types/bcryptjs": "^2.4.2",
 		"drizzle-kit": "^0.18.1",
 		"svelte": "^3.59.1",
 		"svelte-check": "^3.4.3",
