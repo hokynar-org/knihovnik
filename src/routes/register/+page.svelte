@@ -1,26 +1,36 @@
 <script lang="ts">
   import type { PageData } from "./$types.d.ts";
   import { superForm } from "sveltekit-superforms/client";
-  import SuperDebug from "sveltekit-superforms/client/SuperDebug.svelte";
 
   export let data: PageData;
 
-  // Client API:
-  const { form } = superForm(data.form);
+  const { form, errors, constraints, enhance } = superForm(data.form);
 </script>
 
-<!-- <SuperDebug data={$form} /> -->
 <div>
-  <form method="POST">
+  <form method="POST" use:enhance>
     <div class="form-group">
       <input
         type="text"
-        name="username"
+        name="user_name"
         bind:value={$form.user_name}
-        id="username"
-        placeholder=" "
+        id="user_name"
+        {...$constraints.user_name}
       />
-      <label for="username">Username</label>
+      <label for="user_name">Username</label>
+      <small>{$errors.user_name ?? ""}</small>
+    </div>
+
+    <div class="form-group">
+      <input
+        type="password"
+        name="password"
+        bind:value={$form.password}
+        id="password"
+        {...$constraints.password}
+      />
+      <label for="password">Password</label>
+      <small>{$errors.password ?? ""}</small>
     </div>
 
     <div class="form-group">
@@ -29,37 +39,38 @@
         name="email"
         bind:value={$form.email}
         id="email"
-        placeholder=" "
+        {...$constraints.email}
       />
       <label for="email">E-mail</label>
+      <small>{$errors.email ?? ""}</small>
     </div>
 
     <div class="form-group">
       <input
         type="text"
-        name="name"
+        name="full_name"
         bind:value={$form.full_name}
-        id="name"
-        placeholder=" "
+        id="full_name"
+        {...$constraints.full_name}
       />
-      <label for="name">Name</label>
+      <label for="full_name">Name</label>
+      <small>{$errors.full_name ?? ""}</small>
     </div>
 
     <div class="form-group">
       <input
         type="text"
-        name="prefferred pronouns"
+        name="pronouns"
         bind:value={$form.pronouns}
         id="pronouns"
-        placeholder=" "
+        {...$constraints.pronouns}
       />
       <label for="pronouns">Prefferred pronouns</label>
+      <small>{$errors.pronouns ?? ""}</small>
     </div>
     <div><button>Submit</button></div>
   </form>
 </div>
-
-
 
 <style lang="scss">
   @use "../forms.scss";
