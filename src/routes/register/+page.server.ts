@@ -26,7 +26,7 @@ export const load = (async ({locals}) => {
 }) satisfies PageServerLoad;
 
 export const actions: Actions = {
-  register: async ({ request, locals }) => {
+  default: async ({ request, locals }) => {
     if (locals.user) {
       throw redirect(302, '/')
     }
