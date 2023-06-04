@@ -5,7 +5,7 @@ import { fail, redirect } from "@sveltejs/kit";
 import { users } from '$lib/server/db/schema';
 import {db} from '$lib/server/db/drizzle';
 import {eq} from 'drizzle-orm';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 
 const schema = z.object({
   user_name: z.string().min(2),
