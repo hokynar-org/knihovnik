@@ -59,56 +59,8 @@
   </form>
 </div>
 
-<style>
-  /* Center the form container */
-  form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    max-width: 100%;
-    width: 100%;
-    height: 100vh;
-  }
 
-  /* Style the form group */
-  .form-group {
-    position: relative;
-    margin-bottom: 0.5rem;
-  }
 
-  /* Style form elements */
-  input {
-    padding: 1rem;
-    width: 100%;
-    border: 0.1px solid gray;
-    border-radius: 5px;
-    background: none;
-    transition: all 0.2s ease;
-  }
-
-  input:focus + label,
-  input:not(:placeholder-shown) + label {
-    top: -1rem;
-    left: 0;
-    color: #007bff;
-    font-size: 0.75rem;
-  }
-
-  label {
-    position: absolute;
-    top: 0.7rem;
-    left: 0.7rem;
-    color: gray;
-    pointer-events: none;
-    transition: all 0.3s ease;
-  }
-
-  button {
-    padding: 0.4rem 1.5rem;
-    background-color: #017da3;
-    color: white;
-    border: none;
-    border-radius: 5px;
-  }
+<style lang="scss">
+  @use "../forms.scss";
 </style>
