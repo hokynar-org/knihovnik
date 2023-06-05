@@ -15,7 +15,7 @@ const schema = z.object({
   stay: z.boolean()
 });
 
-export const load = (async ({locals}) => {
+export const load:PageServerLoad = (async ({locals}) => {
     if (locals.user) {
         throw redirect(302, '/')
     }

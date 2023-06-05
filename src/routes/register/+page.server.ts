@@ -12,8 +12,7 @@ const schema = z.object({
   full_name: z.string().min(1),
   password: z.string().min(4),
   pronouns: z.string(),
-  email: z.string().email(),
-  role: z.boolean().default(false)
+  email: z.string().email()
 });
 
 export const load = (async ({locals}) => {
@@ -28,7 +27,7 @@ export const load = (async ({locals}) => {
 export const actions: Actions = {
   default: async ({ request, locals }) => {
     if (locals.user) {
-      throw redirect(302, '/')
+      throw redirect(303, '/')
     }
     const form = await superValidate(request, schema);
 
@@ -46,25 +45,19 @@ export const actions: Actions = {
     if(email.length>0){
       return fail(400, { form });
     }
-    
-    if(form.data.role){
+
+    try {
       await db.insert(users).values({
         user_name: form.data.user_name,
         full_name: form.data.full_name,
         email: form.data.email,
         pronouns: form.data.pronouns,
         password_hash: await bcrypt.hash(form.data.password, 10),
-        role: "ADMIN",
-      });
-    }
-    else{
-      await db.insert(users).values({
-        user_name: form.data.user_name,
-        full_name: form.data.full_name,
-        email: form.data.email,
-        pronouns: form.data.pronouns,
-        password_hash: await bcrypt.hash(form.data.password, 10),
-      });
+      });    
+    } catch (error) {
+      return fail(500, {
+				message: "Database Error",
+			})
     }
 
     throw redirect(303, '/login');
