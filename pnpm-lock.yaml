@@ -45,9 +45,6 @@ devDependencies:
   '@sveltejs/kit':
     specifier: ^1.20.1
     version: 1.20.1(svelte@3.59.1)(vite@4.3.9)
-  '@types/bcryptjs':
-    specifier: ^2.4.2
-    version: 2.4.2
   drizzle-kit:
     specifier: ^0.18.1
     version: 0.18.1
@@ -466,10 +463,6 @@ packages:
   /@tsconfig/node16@1.0.4:
     resolution: {integrity: sha512-vxhUy4J8lyeyinH7Azl1pdd43GJhZH/tP2weN8TntQblOY+A0XbT8DJk1/oCPuOOyg/Ja757rG0CgHcWC8OfMA==}
     dev: false
-
-  /@types/bcryptjs@2.4.2:
-    resolution: {integrity: sha512-LiMQ6EOPob/4yUL66SZzu6Yh77cbzJFYll+ZfaPiPPFswtIlA/Fs1MzdKYA7JApHU49zQTbJGX3PDmCpIdDBRQ==}
-    dev: true
 
   /@types/cookie@0.5.1:
     resolution: {integrity: sha512-COUnqfB2+ckwXXSFInsFdOAWQzCCx+a5hq2ruyj+Vjund94RJQd4LG2u9hnvJrTgunKAaax7ancBYlDrNYxA0g==}
