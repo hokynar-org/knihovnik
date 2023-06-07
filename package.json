@@ -1,8 +1,4 @@
 {
-
-
-
-	
 	"name": "knihovnik",
 	"version": "0.0.1",
 	"private": true,
@@ -17,7 +13,9 @@
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^2.1.0",
 		"@sveltejs/kit": "^1.20.1",
+		"@types/nodemailer": "^6.4.8",
 		"drizzle-kit": "^0.18.1",
+		"nodemailer": "^6.9.3",
 		"svelte": "^3.59.1",
 		"svelte-check": "^3.4.3",
 		"sveltekit-superforms": "1.0.0-rc.1",
