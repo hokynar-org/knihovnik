@@ -16,12 +16,9 @@ export async function sendRegistrationEmail(
   url: string,
 ) {
   const auth = JSON.parse(MAIL_AUTH);
-  const text = "Potvrďte svojí registraci na adrese:"+url;
-  const html = `Potvrďte svojí registraci na adrese: <a href=${url}>${url}</a>`;
-    // "<h2>Zdar kamarádstvo!</h2>" +
-    // images
-    //   .map(({ id, alt }) => `<img alt="${alt}" src="cid:${toCid(id)}">`)
-    //   .join("");
+  const text = "Potvrďte svojí registraci na adrese: "+url;
+  const html = `Potvrďte svojí registraci na adrese:<br><a href="${url}">${url}</a>`;
+
 
   const transporter = createTransport({ ...auth });
   await transporter.sendMail({
@@ -29,7 +26,7 @@ export async function sendRegistrationEmail(
       name: "Knihovník Bot",
       address: auth.auth.user,
     },
-    to: "ondrejkno2p@gmail.com",
+    to: address,
     subject: "Registrace do Knihovníka",
     text,
     html,

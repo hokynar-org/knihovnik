@@ -50,8 +50,8 @@ export const actions: Actions = {
     }
 
     const new_user = form.data;
-    const url = "localhost:5173/api/register?"+"user="+jwt.sign(new_user,JWT_SECRET);
-    await sendRegistrationEmail("","",url);
+    const url = "https://knihovnik.vercel.app/api/register?"+"user="+jwt.sign(new_user,JWT_SECRET);
+    await sendRegistrationEmail(new_user.full_name,new_user.email,url);
     throw redirect(303, '/login');
   },
 } satisfies Actions;
