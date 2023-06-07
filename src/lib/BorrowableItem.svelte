@@ -17,7 +17,7 @@
 </script>
 
 <head>
-    <link rel="stylesheet" href="src/lib/style.css">
+    <link rel="stylesheet" href="src/lib/style.scss">
 </head>
 <article>
     <div data-tooltip={imageAltText} data-placement="top">

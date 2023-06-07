@@ -28,7 +28,6 @@
 	"dependencies": {
 		"@fortawesome/free-solid-svg-icons": "^6.4.0",
 		"@neondatabase/serverless": "^0.4.9",
-		"@picocss/pico": "^1.5.10",
 		"@types/ws": "^8.5.4",
 		"bcryptjs": "^2.4.3",
 		"dotenv": "^16.1.3",
