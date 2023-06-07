@@ -6,6 +6,9 @@ import { users } from '$lib/server/db/schema';
 import {db} from '$lib/server/db/drizzle';
 import {eq} from 'drizzle-orm';
 import bcrypt from 'bcryptjs';
+import {sendRegistrationEmail} from '$lib/server/mail.ts'
+import jwt from "jsonwebtoken";
+import { JWT_SECRET } from "$env/static/private";
 
 const schema = z.object({
   user_name: z.string().min(2),
@@ -46,20 +49,9 @@ export const actions: Actions = {
       return fail(400, { form });
     }
 
-    try {
-      await db.insert(users).values({
-        user_name: form.data.user_name,
-        full_name: form.data.full_name,
-        email: form.data.email,
-        pronouns: form.data.pronouns,
-        password_hash: await bcrypt.hash(form.data.password, 10),
-      });    
-    } catch (error) {
-      return fail(500, {
-				message: "Database Error",
-			})
-    }
-
+    const new_user = form.data;
+    const url = "localhost:5173/api/register?"+"user="+jwt.sign(new_user,JWT_SECRET);
+    await sendRegistrationEmail("","",url);
     throw redirect(303, '/login');
   },
 } satisfies Actions;
