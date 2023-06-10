@@ -1,6 +1,8 @@
 @import url('reset.css');
 :root {
-    // if default theme is light
+    @import url('darkLightModes.css');
+
+// if default theme is light
     body {
         --textColor: #000000;
         --backgroundColor: #f7f9eb;
@@ -20,6 +22,7 @@
 
     // if default theme is dark
     @media (prefers-color-scheme: dark) {
+
         // light theme for people who default to dark mode
         body.light {
             --textColor: #000000;
@@ -28,7 +31,7 @@
             --secondaryColor: #e7edce;
             --accent: #b16406;
         }
-    
+
         body {
             --textColor: #c4c4c4;
             --backgroundColor: #151409;
@@ -41,6 +44,12 @@
     body {
         color: var(--textColor);
         background-color: var(--backgroundColor);
+    }
+
+    h4 {
+        color: var(--accentColor);
+        font-size: 24px;
+        margin-bottom: 5px;
     }
 
 }
