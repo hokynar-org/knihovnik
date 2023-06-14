@@ -1,45 +1,6 @@
-@import url('reset.css');
+@use 'darkLightModes.scss';
+@use 'reset.css';
 :root {
-    @import url('darkLightModes.css');
-
-// if default theme is light
-    body {
-        --textColor: #000000;
-        --backgroundColor: #f7f9eb;
-        --priaryColor: #ca7207;
-        --secondaryColor: #e7edce;
-        --accent: #b16406;
-    }
-
-    // dark theme for people who default to light mode
-    body.dark {
-        --textColor: #c4c4c4;
-        --backgroundColor: #151409;
-        --priaryColor: #1b6f27;
-        --secondaryColor: #132711;
-        --accent: #20832f;
-    }
-
-    // if default theme is dark
-    @media (prefers-color-scheme: dark) {
-
-        // light theme for people who default to dark mode
-        body.light {
-            --textColor: #000000;
-            --backgroundColor: #f7f9eb;
-            --priaryColor: #ca7207;
-            --secondaryColor: #e7edce;
-            --accent: #b16406;
-        }
-
-        body {
-            --textColor: #c4c4c4;
-            --backgroundColor: #151409;
-            --priaryColor: #1b6f27;
-            --secondaryColor: #132711;
-            --accent: #20832f;
-        }
-    }
 
     body {
         color: var(--textColor);
