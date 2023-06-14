@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { superValidate } from "sveltekit-superforms/server";
+import { superValidate, setError } from "sveltekit-superforms/server";
 import type { PageServerLoad } from "./$types";
 import { fail, type Actions, redirect } from "@sveltejs/kit";
 import { users, sessions } from "$lib/server/db/schema";
@@ -29,27 +29,36 @@ export const actions:Actions = {
       const form = await superValidate(request, schema);
 
       if (!form.valid) {
-        return fail(400, { form });
+        return setError(form, 'email', 'Enter an email and a password')
       }
 
       const email = form.data.email;
       const password = form.data.password;
-      const found_users = await db.select().from(users).where(eq(users.email, email));
+      let found_users;
+      try {
+        found_users = await db.select().from(users).where(eq(users.email, email));
+      } catch (error) {
+        return setError(form, 'email', 'We are sorry, an internal error occurred.')
+      }
       if(found_users.length==0){
-        return fail(400, { form });
+        return setError(form, 'email', 'Invalid email or password')
       }
       const user=found_users[0];
       const password_auth = await bcrypt.compare(password, String(user.password_hash))
 
       if(!password_auth){
-        return fail(400, { form });
+        return setError(form, 'email', 'Invalid email or password')
+      }
+      let session;
+      try {
+        session = await db.insert(sessions).values({
+          auth_token: crypto.randomUUID(),
+          user_id: user.id,
+        }).returning()
+      } catch (error) {
+        return setError(form, 'email', 'We are sorry, an internal error occurred.')
       }
 
-      const session = await db.insert(sessions).values({
-        auth_token: crypto.randomUUID(),
-        user_id: user.id,
-      }).returning()
-      
       if(form.data.stay){
       cookies.set('session', String(session[0].auth_token), {
         path: '/',
