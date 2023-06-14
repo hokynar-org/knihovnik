@@ -62,13 +62,15 @@ declare const cookieStore: {
 };
 
 if (browser) {
-  const storedTheme =
-    ((await cookieStore.get("theme"))?.value as ColorTheme) ??
-    preferredColorTheme() ??
-    ColorTheme.Light;
+  (async () => {
+    const storedTheme =
+      ((await cookieStore.get("theme"))?.value as ColorTheme) ??
+      preferredColorTheme() ??
+      ColorTheme.Light;
 
-  colorTheme.set(storedTheme);
-  colorTheme.subscribe(async (value) => {
-    await cookieStore.set("theme", value);
-  });
+    colorTheme.set(storedTheme);
+    colorTheme.subscribe(async (value) => {
+      await cookieStore.set("theme", value);
+    });
+  })();
 }
