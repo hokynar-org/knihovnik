@@ -1,4 +1,6 @@
 <script lang="ts">
+  import "$lib/style.scss";
+
   import { browser } from "$app/environment";
   import { page } from "$app/stores";
   import { colorTheme } from "$lib/colorTheme";
@@ -7,10 +9,6 @@
     document.body.className = $colorTheme;
   }
 </script>
-
-<head>
-  <link rel="stylesheet" href="src/lib/style.scss" />
-</head>
 
 <div class="scaffold">
   <nav>
