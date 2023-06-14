@@ -1,14 +1,25 @@
 <script lang="ts">
-  import "$lib/style.scss";
+  import "./style.scss";
 
   import { browser } from "$app/environment";
   import { page } from "$app/stores";
-  import { colorTheme } from "$lib/colorTheme";
+  import { ColorTheme, colorTheme } from "$lib/colorTheme";
+
   const user = $page.data.user;
-  $: if (browser) {
-    document.body.className = $colorTheme;
+
+  // $: if (browser) {
+  //   document.body.className = $colorTheme;
+  // }
+
+  if (!browser) {
+    $colorTheme = $page.data.theme;
   }
 </script>
+
+<div id="theme-indicator"
+  class:light={$colorTheme === ColorTheme.Light}
+  class:dark={$colorTheme === ColorTheme.Dark}
+/>
 
 <div class="scaffold">
   <nav>
@@ -81,7 +92,7 @@
         background-color: var(--secondaryColor);
       }
     }
-    @mixin marginsForNavs{
+    @mixin marginsForNavs {
       margin: 2px;
       padding: 10px;
       border-radius: 10px;
