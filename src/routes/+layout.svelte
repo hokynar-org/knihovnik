@@ -5,7 +5,7 @@
   import { page } from "$app/stores";
   import { ColorTheme, colorTheme } from "$lib/colorTheme";
 
-  const user = $page.data.user;
+  $: user = $page.data.user;
 
   // $: if (browser) {
   //   document.body.className = $colorTheme;

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { superValidate } from "sveltekit-superforms/server";
+import { message, setError, superValidate } from "sveltekit-superforms/server";
 import type { PageServerLoad, Actions } from "./$types";
 import { fail, redirect } from "@sveltejs/kit";
 import { users } from '$lib/server/db/schema';
@@ -35,23 +35,30 @@ export const actions: Actions = {
     const form = await superValidate(request, schema);
 
     if (!form.valid) {
-      return fail(400, { form });
+      return message(form, 'Enter all of the required information', {status:400});
+    }
+    let user;
+    let email;
+    try {
+      user  = await db.select().from(users).where(eq(users.user_name, form.data.user_name));
+      email = await db.select().from(users).where(eq(users.email, form.data.email));
+    } catch (error) {
+      return message(form, 'Internal Error', {status:500});
     }
 
-    const user  = await db.select().from(users).where(eq(users.user_name, form.data.user_name));
-    const email = await db.select().from(users).where(eq(users.email, form.data.email));
-
     if(user.length>0){
-      return fail(400, { form });
+      setError(form, 'user_name', 'This user name has already been taken')
+      return message(form, 'This user name has already been taken', {status:400});
     }
 
     if(email.length>0){
-      return fail(400, { form });
+      setError(form, 'email', 'You already have an account')
+      return message(form, 'You already have an account', {status:400});
     }
 
     const new_user = form.data;
     const url = "https://knihovnik.vercel.app/api/register?"+"user="+jwt.sign(new_user,JWT_SECRET);
     await sendRegistrationEmail(new_user.full_name,new_user.email,url);
-    throw redirect(303, '/login');
+    throw redirect(303, '/register/success');
   },
 } satisfies Actions;

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { superValidate, setError } from "sveltekit-superforms/server";
+import { superValidate, message } from "sveltekit-superforms/server";
 import type { PageServerLoad } from "./$types";
 import { fail, type Actions, redirect } from "@sveltejs/kit";
 import { users, sessions } from "$lib/server/db/schema";
@@ -25,11 +25,15 @@ export const load:PageServerLoad = (async ({locals}) => {
 }) satisfies PageServerLoad;
 
 export const actions:Actions = {
-    login: async ({cookies, request }) => {
+    login: async ({cookies, request, locals}) => {
+      if (locals.user) {
+        throw redirect(303, '/')
+      }
+
       const form = await superValidate(request, schema);
 
       if (!form.valid) {
-        return setError(form, 'email', 'Enter an email and a password')
+        return message(form, 'Enter valid email and password', {status:400});
       }
 
       const email = form.data.email;
@@ -38,16 +42,16 @@ export const actions:Actions = {
       try {
         found_users = await db.select().from(users).where(eq(users.email, email));
       } catch (error) {
-        return setError(form, 'email', 'We are sorry, an internal error occurred.')
+        return message(form, 'Internal Error', {status:500});
       }
       if(found_users.length==0){
-        return setError(form, 'email', 'Invalid email or password')
+        return message(form, 'Invalid email or password', {status:400});
       }
       const user=found_users[0];
       const password_auth = await bcrypt.compare(password, String(user.password_hash))
 
       if(!password_auth){
-        return setError(form, 'email', 'Invalid email or password')
+        return message(form, 'Invalid email or password', {status:400});
       }
       let session;
       try {
@@ -56,7 +60,7 @@ export const actions:Actions = {
           user_id: user.id,
         }).returning()
       } catch (error) {
-        return setError(form, 'email', 'We are sorry, an internal error occurred.')
+        return message(form, 'Internal Error', {status:500});
       }
 
       if(form.data.stay){
@@ -76,6 +80,6 @@ export const actions:Actions = {
           secure: process.env.NODE_ENV === 'production',
         });
       }
-      throw redirect(303, '/login');
+      throw redirect(303, '/');
     },
 } satisfies Actions;

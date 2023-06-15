@@ -26,6 +26,12 @@
     transition: all 0.2s ease;
   }
 
+  p {
+    color:red;
+    padding: 0.2rem;
+    font-size: small;
+  }
+
   input:focus + label,
   input:not(:placeholder-shown) + label {
     top: -1rem;

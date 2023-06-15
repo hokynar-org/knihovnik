@@ -4,21 +4,22 @@
 
   export let data: PageData;
 
-  const { form, errors, constraints, enhance } = superForm(data.form);
+  const { form, errors, message, constraints, enhance} = superForm(data.form);
 </script>
 
 <div>
   <form method="POST" use:enhance>
     <div class="form-group">
       <input
-        type="text"
-        name="user_name"
-        bind:value={$form.user_name}
-        id="user_name"
-        {...$constraints.user_name}
+        type="email"
+        name="email"
+        bind:value={$form.email}
+        id="email"
+        placeholder=" "
+        {...$constraints.email}
       />
-      <label for="user_name">Username</label>
-      <small>{$errors.user_name ?? ""}</small>
+      <label for="email">E-mail</label>
+      <p>{$errors.email ?? ""}</p>
     </div>
 
     <div class="form-group">
@@ -27,22 +28,24 @@
         name="password"
         bind:value={$form.password}
         id="password"
+        placeholder=" "
         {...$constraints.password}
       />
       <label for="password">Password</label>
-      <small>{$errors.password ?? ""}</small>
+      <p>{$errors.password ?? ""}</p>
     </div>
 
     <div class="form-group">
       <input
-        type="email"
-        name="email"
-        bind:value={$form.email}
-        id="email"
-        {...$constraints.email}
+        type="text"
+        name="user_name"
+        bind:value={$form.user_name}
+        id="user_name"
+        placeholder=" "
+        {...$constraints.user_name}
       />
-      <label for="email">E-mail</label>
-      <small>{$errors.email ?? ""}</small>
+      <label for="user_name">Username</label>
+      <p>{$errors.user_name ?? ""}</p>
     </div>
 
     <div class="form-group">
@@ -51,10 +54,11 @@
         name="full_name"
         bind:value={$form.full_name}
         id="full_name"
+        placeholder=" "
         {...$constraints.full_name}
       />
       <label for="full_name">Name</label>
-      <small>{$errors.full_name ?? ""}</small>
+      <p>{$errors.full_name ?? ""}</p>
     </div>
 
     <div class="form-group">
@@ -63,12 +67,16 @@
         name="pronouns"
         bind:value={$form.pronouns}
         id="pronouns"
+        placeholder=" "
         {...$constraints.pronouns}
       />
       <label for="pronouns">Prefferred pronouns</label>
-      <small>{$errors.pronouns ?? ""}</small>
+      <p>{$errors.pronouns ?? ""}</p>
     </div>
     <div><button>Submit</button></div>
+    {#if $message}
+      <p style="font-size: medium">{$message}</p>
+    {/if}
   </form>
 </div>
 
