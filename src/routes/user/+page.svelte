@@ -12,8 +12,6 @@
   $form.user_name = $page.data.user.user_name;
   $form.full_name = $page.data.user.full_name;
   $form.pronouns = $page.data.user.pronouns;
-
-
 </script>
 
 <!-- <SuperDebug data={$form} />

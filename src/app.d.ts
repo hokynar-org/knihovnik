@@ -4,12 +4,12 @@
 import type { PostgresJsDatabase } from "drizzle-orm/postgres-js";
 
 declare global {
-	namespace App {
-		interface Locals {
-			user
-		}		
-	}
-	var db: PostgresJsDatabase;
+  namespace App {
+    interface Locals {
+      user;
+    }
+  }
+  var db: PostgresJsDatabase;
 }
 
 export {};

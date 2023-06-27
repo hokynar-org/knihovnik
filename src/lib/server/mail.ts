@@ -13,12 +13,11 @@ const toCid = (id: string) => `${id}@knihovnik.vercel.com`;
 export async function sendRegistrationEmail(
   name: string,
   address: string,
-  url: string,
+  url: string
 ) {
   const auth = JSON.parse(MAIL_AUTH);
-  const text = "Potvrďte svojí registraci na adrese: "+url;
+  const text = "Potvrďte svojí registraci na adrese: " + url;
   const html = `Potvrďte svojí registraci na adrese:<br><a href="${url}">${url}</a>`;
-
 
   const transporter = createTransport({ ...auth });
   await transporter.sendMail({

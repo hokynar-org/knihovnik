@@ -1,77 +1,94 @@
 <script lang="ts">
-    import type { PageServerData } from './$types';
+  import type { PageServerData } from "./$types";
 
-    export let data: PageServerData;
+  export let data: PageServerData;
 </script>
+
 <div class="container">
-<h1>
-    Seznam uživatelů
-</h1>
-<table role="grid">
+  <h1>Seznam uživatelů</h1>
+  <table role="grid">
     <thead>
-        <tr>
-          <th scope="col">ID</th>
-          <th scope="col">User Name</th>
-          <th scope="col">Email</th>
-          <th scope="col">Full Name</th>
-          <th scope="col">Pronouns</th>
-          <th scope="col">Change Role</th>
-          <th scope="col">Delete</th>
-        </tr>
-      </thead>
-    
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">User Name</th>
+        <th scope="col">Email</th>
+        <th scope="col">Full Name</th>
+        <th scope="col">Pronouns</th>
+        <th scope="col">Change Role</th>
+        <th scope="col">Delete</th>
+      </tr>
+    </thead>
+
     {#each data.users as usr (usr.id)}
-    <tr>
+      <tr>
         <td>
-            {usr.id}
+          {usr.id}
         </td>
         <td>
-            {usr.user_name}
+          {usr.user_name}
         </td>
         <td>
-            {usr.email}
+          {usr.email}
         </td>
         <td>
-            {usr.full_name}
+          {usr.full_name}
         </td>
         <td>
-            {usr.pronouns}
+          {usr.pronouns}
         </td>
         <td>
-        {#if usr.role=="ADMIN"}
-            <form class="bigger" action="?/change_user_role&id={usr.id}&role=USER" method="POST">
-                <button type="submit" class="smol outline secondary">{usr.role}</button>
+          {#if usr.role == "ADMIN"}
+            <form
+              class="bigger"
+              action="?/change_user_role&id={usr.id}&role=USER"
+              method="POST"
+            >
+              <button type="submit" class="smol outline secondary"
+                >{usr.role}</button
+              >
             </form>
-        {:else if usr.role=="USER"}
-            <form class="bigger" action="?/change_user_role&id={usr.id}&role=ADMIN" method="POST">
-                <button type="submit" class="smol outline secondary">{usr.role}</button>
+          {:else if usr.role == "USER"}
+            <form
+              class="bigger"
+              action="?/change_user_role&id={usr.id}&role=ADMIN"
+              method="POST"
+            >
+              <button type="submit" class="smol outline secondary"
+                >{usr.role}</button
+              >
             </form>
-        {:else}
-            <form class="bigger" action="?/change_user_role&id={usr.id}&role=USER" method="POST">
-                <button type="submit" class="smol outline secondary">{usr.role}</button>
+          {:else}
+            <form
+              class="bigger"
+              action="?/change_user_role&id={usr.id}&role=USER"
+              method="POST"
+            >
+              <button type="submit" class="smol outline secondary"
+                >{usr.role}</button
+              >
             </form>
-        {/if}
+          {/if}
         </td>
         <td>
-            <form class="smol" action="?/delete_user&id={usr.id}" method="POST">
-                <button type="submit" class="smol outline secondary">X</button>
-            </form>
+          <form class="smol" action="?/delete_user&id={usr.id}" method="POST">
+            <button type="submit" class="smol outline secondary">X</button>
+          </form>
         </td>
-    </tr>
-
+      </tr>
     {/each}
-</table>
+  </table>
 </div>
-<style>
-.smol{
-    width: 2rem;
-    margin:0;
-    padding:0;
-}
 
-.bigger button{
+<style>
+  .smol {
+    width: 2rem;
+    margin: 0;
+    padding: 0;
+  }
+
+  .bigger button {
     width: 6rem;
-    margin:0;
-    padding:0;
-}
+    margin: 0;
+    padding: 0;
+  }
 </style>

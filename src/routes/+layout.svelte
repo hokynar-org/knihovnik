@@ -16,7 +16,8 @@
   }
 </script>
 
-<div id="theme-indicator"
+<div
+  id="theme-indicator"
   class:light={$colorTheme === ColorTheme.Light}
   class:dark={$colorTheme === ColorTheme.Dark}
 />

@@ -4,7 +4,7 @@
 
   export let data: PageData;
 
-  const { form, errors, message, constraints, enhance} = superForm(data.form);
+  const { form, errors, message, constraints, enhance } = superForm(data.form);
 </script>
 
 <div>
