@@ -7,7 +7,6 @@
 <div>
     {data.user_items.length}
 </div>
-I want to give shit away!!! (HELL YEAH!!)
 <div class=container>
 
     <form method="POST" action="?/new_item">
