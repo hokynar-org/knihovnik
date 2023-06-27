@@ -32,9 +32,19 @@ export const items = pgTable("items", {
 });
 
 export const borrow_asks = pgTable("borrow_asks", {
-  id: serial("id").primaryKey(),
   item_id: integer("item_id").references(() => items.id),
   lender_id: integer("lender_id").references(() => users.id),
   borrower_id: integer("borrower_id").references(() => users.id),
   timestamp: timestamp("timestamp").defaultNow(),
+});
+
+export const community = pgTable("community",{
+  id: serial("id").primaryKey(),
+  name: text("name"),
+  description: text("description"),
+});
+
+export const item_visibility = pgTable("item_visibility",{
+  item_id: integer("item_id").references(() => items.id),
+  community_id: integer("community_id").references(() => community.id),
 });

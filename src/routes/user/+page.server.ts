@@ -29,7 +29,7 @@ export const load = (async ({ locals, cookies }) => {
     .select()
     .from(borrow_asks)
     .where(eq(borrow_asks.lender_id, locals.user.id));
-
+  
   return {
     borrow_asks: found_borrow_asks,
     form: form,

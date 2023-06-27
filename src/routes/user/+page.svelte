@@ -18,11 +18,8 @@
 
   <SuperDebug data={$form_password} /> -->
 <table>
-  {#each data.borrow_asks as ask (ask.id)}
+  {#each data.borrow_asks as ask (ask.timestamp)}
     <tr>
-      <td>
-        {ask.id}
-      </td>
       <td>
         {ask.item_id}
       </td>
