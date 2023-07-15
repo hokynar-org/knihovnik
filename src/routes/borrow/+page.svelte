@@ -1,13 +1,12 @@
 <script lang="ts">
   import BorrowableItem from "../../lib/BorrowableItem.svelte";
-  import type { PageData, PageServerData } from "./$types";
-  export let data: PageData;
-  const user = data.user;
+
+  export let data;
 </script>
 
 <div class="container">
   {#each data.offers as offer (offer.item.id)}
-    <BorrowableItem {offer} user_id={user.id} />
+    <BorrowableItem {offer} user_id={data.user.id} />
   {/each}
 </div>
 

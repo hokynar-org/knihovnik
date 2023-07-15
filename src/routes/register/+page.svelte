@@ -1,8 +1,7 @@
 <script lang="ts">
-  import type { PageData } from "./$types.d.ts";
   import { superForm } from "sveltekit-superforms/client";
 
-  export let data: PageData;
+  export let data;
 
   const { form, errors, message, constraints, enhance } = superForm(data.form);
 </script>

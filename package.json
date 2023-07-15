@@ -13,7 +13,10 @@
   "devDependencies": {
     "@sveltejs/adapter-auto": "^2.1.0",
     "@sveltejs/kit": "^1.20.5",
+    "@types/bcryptjs": "^2.4.2",
+    "@types/jsonwebtoken": "^9.0.2",
     "@types/nodemailer": "^6.4.8",
+    "@types/ws": "^8.5.5",
     "drizzle-kit": "^0.19.2",
     "nodemailer": "^6.9.3",
     "svelte": "^4.0.0",
@@ -28,7 +31,6 @@
   "dependencies": {
     "@fortawesome/free-solid-svg-icons": "^6.4.0",
     "@neondatabase/serverless": "^0.4.22",
-    "@types/ws": "^8.5.5",
     "bcryptjs": "^2.4.3",
     "dotenv": "^16.3.1",
     "drizzle-orm": "^0.27.0",

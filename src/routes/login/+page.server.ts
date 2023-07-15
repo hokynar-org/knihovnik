@@ -1,12 +1,12 @@
+import bcrypt from "bcryptjs";
 import { z } from "zod";
 import { superValidate, message } from "sveltekit-superforms/server";
-import type { PageServerLoad } from "./$types";
 import { fail, type Actions, redirect } from "@sveltejs/kit";
 import { users, sessions } from "$lib/server/db/schema";
 import { eq } from "drizzle-orm";
-import bcrypt from "bcryptjs";
 import { db } from "$lib/server/db/drizzle";
 import type { PgUUID } from "drizzle-orm/pg-core";
+import type { PageServerLoad } from "./$types";
 
 const schema = z.object({
   email: z.string().email(),

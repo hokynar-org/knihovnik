@@ -1,16 +1,18 @@
-import { users } from "$lib/server/db/schema";
-import { db } from "$lib/server/db/drizzle";
-import { error, fail, json, redirect } from "@sveltejs/kit";
-import type { RequestHandler } from "./$types";
-import { eq } from "drizzle-orm";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { users } from "$lib/server/db/schema";
+import { db } from "$lib/server/db/drizzle";
+import { fail, redirect } from "@sveltejs/kit";
+import { eq } from "drizzle-orm";
 import { JWT_SECRET } from "$env/static/private";
+import type { RequestHandler } from "./$types";
 
 export const GET = (async ({ url }) => {
   const register_jwt = url.searchParams.get("user");
-  let jwt_user = "";
+  let jwt_user;
+
   try {
+    // FIXME: I don't think this returns a string
     jwt_user = jwt.verify(register_jwt, JWT_SECRET);
   } catch (error) {
     console.log(jwt_user);

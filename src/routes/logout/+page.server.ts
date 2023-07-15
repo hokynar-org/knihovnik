@@ -1,8 +1,8 @@
 import { redirect } from "@sveltejs/kit";
-import type { Actions, PageServerLoad } from "./$types";
 import { db } from "$lib/server/db/drizzle";
-import { sessions, users } from "$lib/server/db/schema";
+import { sessions } from "$lib/server/db/schema";
 import { eq } from "drizzle-orm";
+import type { Actions, PageServerLoad } from "./$types";
 
 export const load = (async ({ locals }) => {
   if (!locals.user) {

@@ -26,24 +26,16 @@
   <nav>
     <a href="/"><h2>Knihovnik</h2></a>
     {#if user}
+      {@const isAdmin = user.role == "ADMIN"}
+
       <div class="userInfo">
         {user.user_name}
       </div>
-      {#if user.role == "ADMIN"}
+      {#if isAdmin}
         <a href="/admin">
           <h3>Admin</h3>
         </a>
       {/if}
-    {/if}
-    {#if !user}
-      <a href="/register">
-        <h3>Register</h3>
-      </a>
-      <a href="/login">
-        <h3>Login</h3>
-      </a>
-    {/if}
-    {#if user}
       <a href="/borrow">
         <h3>Borrow</h3>
       </a>
@@ -53,19 +45,19 @@
       <a href="/community">
         <h3>Community</h3>
       </a>
-    {/if}
-    {#if user}
       <a href="/user">
         <h3>User</h3>
       </a>
       <a href="/logout">
         <h3>Logout</h3>
       </a>
-      {#if user.role == "ADMIN"}
-        <a href="/admin">
-          <h3>Admin</h3>
-        </a>
-      {/if}
+    {:else}
+      <a href="/register">
+        <h3>Register</h3>
+      </a>
+      <a href="/login">
+        <h3>Login</h3>
+      </a>
     {/if}
   </nav>
   <main>

@@ -1,8 +1,8 @@
 import { eq } from "drizzle-orm";
-import type { Actions, PageServerLoad } from "./$types";
-import { sessions, users } from "$lib/server/db/schema";
+import { sessions } from "$lib/server/db/schema";
 import { db } from "$lib/server/db/drizzle";
 import { fail, redirect } from "@sveltejs/kit";
+import type { Actions, PageServerLoad } from "./$types";
 
 export const load = (async ({ locals, parent }) => {
   await parent();

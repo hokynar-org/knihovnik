@@ -1,9 +1,9 @@
 <script lang="ts">
   import { superForm } from "sveltekit-superforms/client";
-  import type { PageServerData } from "./$types";
-  export let data: PageServerData;
+
+  export let data;
+
   const { form, enhance, message } = superForm(data.form);
-  import SuperDebug from "sveltekit-superforms/client/SuperDebug.svelte";
 </script>
 
 <div class="container">

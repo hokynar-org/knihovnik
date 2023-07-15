@@ -1,5 +1,3 @@
-import type { U } from "drizzle-orm/column.d-66a08b85";
-
 export interface Community {
   id: Number;
   dateCreated: Date;

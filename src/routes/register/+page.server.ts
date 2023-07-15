@@ -1,14 +1,13 @@
+import jwt from "jsonwebtoken";
 import { z } from "zod";
 import { message, setError, superValidate } from "sveltekit-superforms/server";
-import type { PageServerLoad, Actions } from "./$types";
-import { fail, redirect } from "@sveltejs/kit";
+import { redirect } from "@sveltejs/kit";
 import { users } from "$lib/server/db/schema";
 import { db } from "$lib/server/db/drizzle";
 import { eq } from "drizzle-orm";
-import bcrypt from "bcryptjs";
-import { sendRegistrationEmail } from "$lib/server/mail.ts";
-import jwt from "jsonwebtoken";
+import { sendRegistrationEmail } from "$lib/server/mail";
 import { JWT_SECRET } from "$env/static/private";
+import type { PageServerLoad, Actions } from "./$types";
 
 const schema = z.object({
   user_name: z.string().min(2),

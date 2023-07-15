@@ -1,10 +1,9 @@
 <script lang="ts">
-  import type { PageData } from "./$types.d.ts";
   import { superForm } from "sveltekit-superforms/client";
-  import SuperDebug from "sveltekit-superforms/client/SuperDebug.svelte";
   import { page } from "$app/stores";
   import { toggleTheme } from "$lib/colorTheme";
-  export let data: PageData;
+
+  export let data;
 
   const form = superForm(data.form).form;
   const form_password = superForm(data.form_password).form;
