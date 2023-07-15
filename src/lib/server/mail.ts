@@ -1,6 +1,6 @@
 import { createTransport } from "nodemailer";
-import type { Attachment } from "nodemailer/lib/mailer/";
 import { MAIL_AUTH } from "$env/static/private";
+import type { Attachment } from "nodemailer/lib/mailer/";
 
 // export interface MailImage {
 //   id: string;

@@ -1,38 +1,25 @@
-# create-svelte
+# Knihovník
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+Knihovna všeho - experimentální aplikace pro (knihovní ekonomii)[https://www.youtube.com/watch?v=NOYa3YzVtyk]. Napsaná ve SvelteKitu, běžící na edgi.
 
-## Creating a project
+## Jak devit
 
-If you're seeing this, you've probably already done this step. Congrats!
+1. nejprve se musí stáhnout balíčky pomocí `pnpm install`
+2. poté se musí vytvořit `.env` soubor s potřebnými parametry (koukni do sekce "Co musí být v .env")
+3. dev server se zapíná pomocí `pnpm dev`
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+## Co musí být v .env
 
-# create a new project in my-app
-npm create svelte@latest my-app
+Rychlý příklad:
+
+```sh
+DATABASE_URL="postgresql://user:pass@server.tech/db"
+JWT_SECRET="vXInABcD4oAa06ftFC+m1FS9lU9sVfzrsuEuFOyLGRU="
+MAIL_AUTH="?"
 ```
 
-## Developing
+### Seznam proměnných
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+- `DATABASE_URL`: link na datázi, pro náš se musí člověk poptat 😉
+- `JWT_SECRET`: Tajemství sloužící k ověřování JWT tokenu, lze vygenerovat pomocí `openssl rand -base64 32`
+- `MAIL_AUTH`: _TBD_ moderní věda zatím nedokáže určit, co sem patří
