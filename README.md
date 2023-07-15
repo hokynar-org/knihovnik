@@ -5,7 +5,7 @@ Knihovna všeho - experimentální aplikace pro [knihovní ekonomii](https://www
 ## Jak devit
 
 1. nejprve se musí stáhnout balíčky pomocí `pnpm install`
-2. poté se musí vytvořit `.env` soubor s potřebnými parametry (koukni do sekce "Co musí být v .env")
+2. poté se musí vytvořit `.env` soubor s potřebnými parametry (koukni do sekce [Co musí být v .env](#co-musí-být-v-env))
 3. dev server se zapíná pomocí `pnpm dev`
 
 ## Co musí být v .env
