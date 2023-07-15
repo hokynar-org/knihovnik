@@ -1,6 +1,6 @@
 # Knihovník
 
-Knihovna všeho - experimentální aplikace pro (knihovní ekonomii)[https://www.youtube.com/watch?v=NOYa3YzVtyk]. Napsaná ve SvelteKitu, běžící na edgi.
+Knihovna všeho - experimentální aplikace pro [knihovní ekonomii](https://www.youtube.com/watch?v=NOYa3YzVtyk). Napsaná ve SvelteKitu, běžící na edgi.
 
 ## Jak devit
 
