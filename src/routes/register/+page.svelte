@@ -6,7 +6,7 @@
   const { form, errors, message, constraints, enhance } = superForm(data.form);
 </script>
 
-<div>
+<div class="center-content">
   <form method="POST" use:enhance>
     <div class="form-group">
       <input
@@ -72,7 +72,7 @@
       <label for="pronouns">Prefferred pronouns</label>
       <p>{$errors.pronouns ?? ""}</p>
     </div>
-    <div><button>Submit</button></div>
+    <div><button type="submit">Submit</button></div>
     {#if $message}
       <p style="font-size: medium">{$message}</p>
     {/if}
@@ -81,4 +81,8 @@
 
 <style lang="scss">
   @use "../forms.scss";
+
+  .center-content {
+    margin-block: auto;
+  }
 </style>

@@ -15,8 +15,9 @@ export const GET = (async ({ url }) => {
     // FIXME: I don't think this returns a string
     jwt_user = jwt.verify(register_jwt, JWT_SECRET);
   } catch (error) {
-    console.log(jwt_user);
     throw redirect(303, "/");
+  } finally {
+    console.log(jwt_user);
   }
 
   const user = await db

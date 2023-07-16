@@ -16,11 +16,11 @@
   }
 </script>
 
-<div
-  id="theme-indicator"
-  class:light={$colorTheme === ColorTheme.Light}
-  class:dark={$colorTheme === ColorTheme.Dark}
-/>
+<svelte:head>
+  <title>Knihovník</title>
+</svelte:head>
+
+<div id="theme-indicator" class={$colorTheme} />
 
 <div class="scaffold">
   <nav>
@@ -68,16 +68,23 @@
 <style lang="scss">
   .scaffold {
     display: grid;
-    grid-template-columns: 1fr 4fr;
-    grid-template-rows: 1fr;
-    grid-template-areas: "nav main";
+    grid-template-columns: 1fr;
+    grid-template-areas: "nav" "main";
+    min-height: 100vh;
+
+    @media screen and (min-width: 768px) {
+      grid-template-columns: 1fr 4fr;
+      grid-template-areas: "nav main";
+    }
   }
+
   nav {
     grid-area: nav;
     display: flex;
     flex-direction: column;
     background-color: var(--primaryColor);
     padding: 20px;
+
     a {
       text-decoration: none;
       color: var(--primaryColor);
@@ -105,8 +112,12 @@
       @include marginsForNavs;
     }
   }
+
   main {
     padding: 20px;
     grid-area: main;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 </style>

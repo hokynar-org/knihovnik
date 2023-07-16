@@ -4,9 +4,6 @@ form {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  max-width: 100%;
-  width: 100%;
-  height: 100vh;
 }
 
 /* Style the form group */
@@ -23,6 +20,8 @@ input {
   border-radius: 5px;
   background: none;
   transition: all 0.2s ease;
+
+  color: inherit;
 }
 
 p {

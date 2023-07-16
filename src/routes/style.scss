@@ -33,11 +33,11 @@
 
 body {
   @include light-mode;
-}
 
-@media (prefers-color-scheme: dark) {
-  body {
-    @include dark-mode;
+  &:not(.light) {
+    @media (prefers-color-scheme: dark) {
+      @include dark-mode;
+    }
   }
 }
 

@@ -45,4 +45,8 @@
 
 <style lang="scss">
   @use "../forms.scss";
+
+  .container {
+    margin-block: auto;
+  }
 </style>
