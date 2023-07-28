@@ -7,7 +7,7 @@ export interface Community {
 }
 
 export interface User {
-  id: Number;
+  id: number;
   full_name: string
   user_name: string;
   password_hash: string;
@@ -25,7 +25,7 @@ export interface UserRegister {
 }
 
 export interface PrivateUserSafe {
-  id: Number;
+  id: number;
   full_name: string
   user_name: string;
   email: string;

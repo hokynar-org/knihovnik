@@ -27,10 +27,11 @@ export const items = pgTable("items", {
   holder_id: integer("holder_id").references(() => users.id),
 });
 
-export const borrow_asks = pgTable("borrow_asks", {
+export const borrow_request = pgTable("borrow_request", {
   item_id: integer("item_id").references(() => items.id),
   lender_id: integer("lender_id").references(() => users.id),
   borrower_id: integer("borrower_id").references(() => users.id),
+  status: text("status").default("PENDING"),
   timestamp: timestamp("timestamp").defaultNow(),
 });
 

@@ -25,6 +25,9 @@
       <td>
         {ask.borrower_id}
       </td>
+      <td>
+        {ask.status}
+      </td>
     </tr>
   {/each}
 </table>

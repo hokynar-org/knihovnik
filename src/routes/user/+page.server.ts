@@ -2,7 +2,7 @@ import bcrypt from "bcryptjs";
 import { z } from "zod";
 import { superValidate } from "sveltekit-superforms/server";
 import { fail, redirect } from "@sveltejs/kit";
-import { borrow_asks, users } from "$lib/server/db/schema";
+import { borrow_request, users } from "$lib/server/db/schema";
 import { db } from "$lib/server/db/drizzle";
 import { eq } from "drizzle-orm";
 import { JWT_SECRET } from "$env/static/private";
@@ -28,13 +28,12 @@ export const load = (async ({ locals, cookies }) => {
 
   const form = await superValidate(schema);
   const form_password = await superValidate(schema_password);
-  const found_borrow_asks = await db
+  const found_borrow_request = await db
     .select()
-    .from(borrow_asks)
-    .where(eq(borrow_asks.lender_id, Number(locals.user.id)));
-
+    .from(borrow_request)
+    .where(eq(borrow_request.lender_id, Number(locals.user.id)));
   return {
-    borrow_asks: found_borrow_asks,
+    borrow_asks: found_borrow_request,
     form: form,
     form_password: form_password,
   };
