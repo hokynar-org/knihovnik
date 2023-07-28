@@ -1,5 +1,5 @@
 export interface Community {
-  id: Number;
+  id: number;
   dateCreated: Date;
   communityName: string;
   communityDescription: string;
@@ -8,16 +8,16 @@ export interface Community {
 
 export interface User {
   id: number;
-  full_name: string
+  full_name: string;
   user_name: string;
   password_hash: string;
   email: string;
   pronouns: string;
-  role:string;
+  role: string;
 }
 
 export interface UserRegister {
-  full_name: string
+  full_name: string;
   user_name: string;
   password: string;
   email: string;
@@ -26,11 +26,11 @@ export interface UserRegister {
 
 export interface PrivateUserSafe {
   id: number;
-  full_name: string
+  full_name: string;
   user_name: string;
   email: string;
   pronouns: string;
-  role:string;
+  role: string;
 }
 
 export interface PublicUserSafe {
@@ -47,7 +47,7 @@ export interface PublicItemSafe {
 }
 
 export interface Session {
-  user_safe: PrivateUserSafe,
-  session_stay: boolean,
-  session_end: number,
+  user_safe: PrivateUserSafe;
+  session_stay: boolean;
+  session_end: number;
 }
