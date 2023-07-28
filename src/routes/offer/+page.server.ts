@@ -18,7 +18,7 @@ export const load = (async ({ locals }) => {
   const user_items = await db
     .select()
     .from(items)
-    .where(eq(items.owner_id, locals.user.id));
+    .where(eq(items.owner_id, Number(locals.user.id)));
   return {
     user_items: user_items,
     item_form: superValidate(item_form_schema),
@@ -38,10 +38,10 @@ export const actions: Actions = {
     }
     try {
       await db.insert(items).values({
-        name: form.data.name,
-        description: form.data.description,
-        owner_id: locals.user.id,
-        holder_id: locals.user.id,
+        name: form.data.name as string,
+        description: form.data.description as string,
+        owner_id: locals.user.id as number,
+        holder_id: locals.user.id as number,
       });
     } catch (error) {
       console.error(error);

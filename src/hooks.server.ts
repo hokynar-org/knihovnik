@@ -10,7 +10,7 @@ export const handle: Handle = async ({ event, resolve }) => {
   }
   try {
     const session = jwt.verify(session_jwt, JWT_SECRET) as Session;
-    if(session.session_end<=Date.now()){
+    if(session.session_end>=Date.now()){
       event.locals.user=session.user_safe;
     }
   } catch (error) {
