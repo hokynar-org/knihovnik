@@ -2,8 +2,9 @@
   import { superForm } from "sveltekit-superforms/client";
   import { page } from "$app/stores";
   import { toggleTheme } from "$lib/colorTheme";
+  import type { PageData } from "./$types";
 
-  export let data;
+  export let data: PageData;
 
   const form = superForm(data.form).form;
   const form_password = superForm(data.form_password).form;
@@ -16,21 +17,11 @@
 <!-- <SuperDebug data={$form} />
 
   <SuperDebug data={$form_password} /> -->
-<table>
-  {#each data.borrow_asks as ask (ask.timestamp)}
-    <tr>
-      <td>
-        {ask.item_id}
-      </td>
-      <td>
-        {ask.borrower_id}
-      </td>
-      <td>
-        {ask.status}
-      </td>
-    </tr>
-  {/each}
-</table>
+
+{#each data.notifications as notification}
+  {notification.borrower.user_name} chce {notification.item.name} ({notification
+    .borrowRequest.status})
+{/each}
 
 <div class="container">
   <h4>

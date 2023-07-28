@@ -2,7 +2,7 @@ import bcrypt from "bcryptjs";
 import { z } from "zod";
 import { superValidate } from "sveltekit-superforms/server";
 import { fail, redirect } from "@sveltejs/kit";
-import { borrow_request, users } from "$lib/server/db/schema";
+import { borrow_request, items, users } from "$lib/server/db/schema";
 import { db } from "$lib/server/db/drizzle";
 import { eq } from "drizzle-orm";
 import { JWT_SECRET } from "$env/static/private";
@@ -16,7 +16,7 @@ const schema = z.object({
   pronouns: z.string(),
 });
 
-const schema_password = z.object({
+const schemaPassword = z.object({
   old_password: z.string().min(4),
   new_password: z.string().min(4),
 });
@@ -27,15 +27,32 @@ export const load = (async ({ locals, cookies }) => {
   }
 
   const form = await superValidate(schema);
-  const form_password = await superValidate(schema_password);
-  const found_borrow_request = await db
+  const formPassword = await superValidate(schemaPassword);
+  const foundBorrowRequests = await db
     .select()
     .from(borrow_request)
     .where(eq(borrow_request.lender_id, Number(locals.user.id)));
+
+  let notifications: any[] = [];
+
+  for (const borrowRequest of foundBorrowRequests) {
+    const borrower = await db.select()
+      .from(users)
+      .where(eq(users.id, Number(borrowRequest.borrower_id)));
+
+    const item = await db.select()
+      .from(items)
+      .where(eq(items.id, Number(borrowRequest.item_id)));
+
+    notifications.push({ borrowRequest: borrowRequest, item: item[0], borrower: borrower[0] });
+  }
+
+  console.log(notifications);
   return {
-    borrow_asks: found_borrow_request,
+    borrow_asks: foundBorrowRequests,
+    notifications: notifications,
     form: form,
-    form_password: form_password,
+    form_password: formPassword,
   };
 }) satisfies PageServerLoad;
 
@@ -57,28 +74,28 @@ export const actions: Actions = {
         pronouns: form.data.pronouns,
       })
       .where(eq(users.id, Number(locals.user.id)));
-      const session_jwt = cookies.get('session_jwt') as string;
-      const session = jwt.verify(session_jwt,JWT_SECRET) as Session;
-      const user_safe = session.user_safe;
-      const new_session:Session = {
-        session_end: Date.now()+(session.session_stay?7*24*60*60*1000:4*60*60*1000),
-        session_stay: session.session_stay,
-        user_safe: {
-          id:user_safe.id,
-          email:user_safe.email,
-          role:user_safe.role,
-          user_name: form.data.user_name,
-          full_name: form.data.full_name,
-          pronouns: form.data.pronouns,
-        },
-      }
-      const new_session_jwt = jwt.sign(new_session, JWT_SECRET);
-      cookies.set("session_jwt", String(new_session_jwt), {
-        path: "/",
-        httpOnly: true,
-        sameSite: "strict",
-        secure: process.env.NODE_ENV === "production",
-      });
+    const session_jwt = cookies.get('session_jwt') as string;
+    const session = jwt.verify(session_jwt, JWT_SECRET) as Session;
+    const user_safe = session.user_safe;
+    const new_session: Session = {
+      session_end: Date.now() + (session.session_stay ? 7 * 24 * 60 * 60 * 1000 : 4 * 60 * 60 * 1000),
+      session_stay: session.session_stay,
+      user_safe: {
+        id: user_safe.id,
+        email: user_safe.email,
+        role: user_safe.role,
+        user_name: form.data.user_name,
+        full_name: form.data.full_name,
+        pronouns: form.data.pronouns,
+      },
+    }
+    const new_session_jwt = jwt.sign(new_session, JWT_SECRET);
+    cookies.set("session_jwt", String(new_session_jwt), {
+      path: "/",
+      httpOnly: true,
+      sameSite: "strict",
+      secure: process.env.NODE_ENV === "production",
+    });
 
     throw redirect(303, "/user");
   },
@@ -87,7 +104,7 @@ export const actions: Actions = {
     if (!locals.user) {
       throw redirect(302, "/login");
     }
-    const form = await superValidate(request, schema_password);
+    const form = await superValidate(request, schemaPassword);
 
     if (!form.valid) {
       return fail(400, { form });
