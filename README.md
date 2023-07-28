@@ -20,9 +20,9 @@ MAIL_AUTH='{ "from": "kni@hovnik.cz", "host": "smtp.cz", "port": 420, "auth": { 
 
 ### Seznam proměnných
 
--   `DATABASE_URL`: link na datázi, pro náš se musí člověk poptat 😉
--   `JWT_SECRET`: Tajemství sloužící k ověřování JWT tokenu, lze vygenerovat pomocí `openssl rand -base64 32`
--   `MAIL_AUTH`: JSON objekt s nastavením mailu. Musí obsahovat tyto props:
-    -   `from`: adresa, ze které chodí systémové maily
-    -   `host` (a případně `port`): adresa SMTP serveru
-    -   `auth`: přihlašovací údaje k SMTP serveru
+- `DATABASE_URL`: link na datázi, pro náš se musí člověk poptat 😉
+- `JWT_SECRET`: Tajemství sloužící k ověřování JWT tokenu, lze vygenerovat pomocí `openssl rand -base64 32`
+- `MAIL_AUTH`: JSON objekt s nastavením mailu. Musí obsahovat tyto props:
+  - `from`: adresa, ze které chodí systémové maily
+  - `host` (a případně `port`): adresa SMTP serveru
+  - `auth`: přihlašovací údaje k SMTP serveru

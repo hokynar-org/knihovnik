@@ -1,52 +1,52 @@
 @use 'reset.css';
 
 :root {
-    body {
-        color: var(--textColor);
-        background-color: var(--backgroundColor);
-    }
+  body {
+    color: var(--textColor);
+    background-color: var(--backgroundColor);
+  }
 
-    h4 {
-        color: var(--accentColor);
-        font-size: 24px;
-        margin-bottom: 5px;
-    }
+  h4 {
+    color: var(--accentColor);
+    font-size: 24px;
+    margin-bottom: 5px;
+  }
 }
 
 // --- Dark & Light Mode ---
 
 @mixin light-mode {
-    --textColor: #000000;
-    --backgroundColor: #f7f9eb;
-    --priaryColor: #ca7207;
-    --secondaryColor: #e7edce;
-    --accent: #b16406;
+  --textColor: #000000;
+  --backgroundColor: #f7f9eb;
+  --priaryColor: #ca7207;
+  --secondaryColor: #e7edce;
+  --accent: #b16406;
 }
 
 @mixin dark-mode {
-    --textColor: #c4c4c4;
-    --backgroundColor: #151409;
-    --priaryColor: #1b6f27;
-    --secondaryColor: #132711;
-    --accent: #20832f;
+  --textColor: #c4c4c4;
+  --backgroundColor: #151409;
+  --priaryColor: #1b6f27;
+  --secondaryColor: #132711;
+  --accent: #20832f;
 }
 
 body {
-    @include light-mode;
+  @include light-mode;
 
-    &:not(.light) {
-        @media (prefers-color-scheme: dark) {
-            @include dark-mode;
-        }
+  &:not(.light) {
+    @media (prefers-color-scheme: dark) {
+      @include dark-mode;
     }
+  }
 }
 
 body.light,
 body:has(#theme-indicator.light) {
-    @include light-mode;
+  @include light-mode;
 }
 
 body.dark,
 body:has(#theme-indicator.dark) {
-    @include dark-mode;
+  @include dark-mode;
 }
