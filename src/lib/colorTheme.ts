@@ -1,5 +1,6 @@
 import { browser } from "$app/environment";
 import { writable } from "svelte/store";
+import { object } from "zod";
 
 export enum ColorTheme {
   Light = "light",
@@ -61,7 +62,7 @@ declare const cookieStore: {
   set(options: SetCookie): Promise<void>;
 };
 
-if (browser) {
+if (browser && typeof cookieStore == "object") {
   (async () => {
     const storedTheme =
       ((await cookieStore.get("theme"))?.value as ColorTheme) ??
