@@ -1,11 +1,11 @@
-import postgres from "postgres";
-import { drizzle } from "drizzle-orm/postgres-js";
-import { DATABASE_URL } from "$env/static/private";
+import postgres from 'postgres';
+import { drizzle } from 'drizzle-orm/postgres-js';
+import { DATABASE_URL } from '$env/static/private';
 
-const db = global.db || drizzle(postgres(DATABASE_URL + "?sslmode=require"));
+const db = global.db || drizzle(postgres(DATABASE_URL + '?sslmode=require'));
 
-if (process.env.NODE_ENV === "development") {
-  global.db = db;
+if (process.env.NODE_ENV === 'development') {
+    global.db = db;
 }
 
 export { db };
