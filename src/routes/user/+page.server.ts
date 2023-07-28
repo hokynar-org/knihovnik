@@ -2,10 +2,13 @@ import bcrypt from "bcryptjs";
 import { z } from "zod";
 import { superValidate } from "sveltekit-superforms/server";
 import { fail, redirect } from "@sveltejs/kit";
-import { borrow_asks, sessions, users } from "$lib/server/db/schema";
+import { borrow_asks, users } from "$lib/server/db/schema";
 import { db } from "$lib/server/db/drizzle";
 import { eq } from "drizzle-orm";
+import { JWT_SECRET } from "$env/static/private";
+import jwt from "jsonwebtoken";
 import type { PageServerLoad, Actions } from "./$types.d.ts";
+import type { Session } from "$lib/types.js";
 
 const schema = z.object({
   user_name: z.string().min(2),
@@ -28,7 +31,7 @@ export const load = (async ({ locals, cookies }) => {
   const found_borrow_asks = await db
     .select()
     .from(borrow_asks)
-    .where(eq(borrow_asks.lender_id, locals.user.id));
+    .where(eq(borrow_asks.lender_id, Number(locals.user.id)));
 
   return {
     borrow_asks: found_borrow_asks,
@@ -46,15 +49,6 @@ export const actions: Actions = {
     if (!form.valid) {
       return fail(400, { form });
     }
-    const user_session = cookies.get("session");
-    const db_session = await db
-      .select()
-      .from(sessions)
-      .where(eq(sessions.auth_token, String(user_session)));
-
-    if (db_session.length == 0) {
-      throw redirect(303, "/login");
-    }
 
     await db
       .update(users)
@@ -63,10 +57,33 @@ export const actions: Actions = {
         full_name: form.data.full_name,
         pronouns: form.data.pronouns,
       })
-      .where(eq(users.id, Number(db_session[0].user_id)));
+      .where(eq(users.id, Number(locals.user.id)));
+      const session_jwt = cookies.get('session_jwt') as string;
+      const session = jwt.verify(session_jwt,JWT_SECRET) as Session;
+      const user_safe = session.user_safe;
+      const new_session:Session = {
+        session_end: Date.now()+(session.session_stay?7*24*60*60*1000:4*60*60*1000),
+        session_stay: session.session_stay,
+        user_safe: {
+          id:user_safe.id,
+          email:user_safe.email,
+          role:user_safe.role,
+          user_name: form.data.user_name,
+          full_name: form.data.full_name,
+          pronouns: form.data.pronouns,
+        },
+      }
+      const new_session_jwt = jwt.sign(new_session, JWT_SECRET);
+      cookies.set("session_jwt", String(new_session_jwt), {
+        path: "/",
+        httpOnly: true,
+        sameSite: "strict",
+        secure: process.env.NODE_ENV === "production",
+      });
 
     throw redirect(303, "/user");
   },
+
   update_password: async ({ request, cookies, locals }) => {
     if (!locals.user) {
       throw redirect(302, "/login");
@@ -76,26 +93,11 @@ export const actions: Actions = {
     if (!form.valid) {
       return fail(400, { form });
     }
-    const session = cookies.get("session");
-
-    if (!session) {
-      return fail(400, { form });
-    }
-
-    const user_session = cookies.get("session");
-    const db_sessions = await db
-      .select()
-      .from(sessions)
-      .where(eq(sessions.auth_token, String(user_session)));
-
-    if (db_sessions.length == 0) {
-      throw redirect(303, "/login");
-    }
 
     const found_users = await db
       .select()
       .from(users)
-      .where(eq(users.id, Number(db_sessions[0].user_id)));
+      .where(eq(users.id, Number(locals.user.id)));
 
     if (found_users.length == 0) {
       throw redirect(303, "/login");
@@ -114,7 +116,7 @@ export const actions: Actions = {
       .set({
         password_hash: await bcrypt.hash(form.data.new_password, 10),
       })
-      .where(eq(users.id, Number(db_sessions[0].user_id)));
+      .where(eq(users.id, Number(locals.user.id)));
 
     throw redirect(303, "/user");
   },

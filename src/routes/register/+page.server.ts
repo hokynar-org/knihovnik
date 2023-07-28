@@ -8,6 +8,7 @@ import { eq } from "drizzle-orm";
 import { sendRegistrationEmail } from "$lib/server/mail";
 import { JWT_SECRET } from "$env/static/private";
 import type { PageServerLoad, Actions } from "./$types";
+import type { UserRegister } from "$lib/types";
 
 const schema = z.object({
   user_name: z.string().min(2),
@@ -65,7 +66,7 @@ export const actions: Actions = {
       return message(form, "You already have an account", { status: 400 });
     }
 
-    const new_user = form.data;
+    const new_user = form.data as UserRegister;
     const url =
       "https://knihovnik.vercel.app/api/register?" +
       "user=" +

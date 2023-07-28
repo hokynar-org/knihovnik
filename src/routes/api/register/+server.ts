@@ -6,14 +6,14 @@ import { fail, redirect } from "@sveltejs/kit";
 import { eq } from "drizzle-orm";
 import { JWT_SECRET } from "$env/static/private";
 import type { RequestHandler } from "./$types";
+import type { UserRegister } from "$lib/types";
 
 export const GET = (async ({ url }) => {
-  const register_jwt = url.searchParams.get("user");
+  const register_jwt = url.searchParams.get("user") as string;
   let jwt_user;
 
   try {
-    // FIXME: I don't think this returns a string
-    jwt_user = jwt.verify(register_jwt, JWT_SECRET);
+    jwt_user = jwt.verify(register_jwt, JWT_SECRET) as UserRegister;
   } catch (error) {
     throw redirect(303, "/");
   } finally {

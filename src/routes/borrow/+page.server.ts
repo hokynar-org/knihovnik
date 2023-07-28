@@ -66,11 +66,13 @@ export const actions: Actions = {
       if (item.holder_id == locals.user.id) {
         return fail(400, { message: "Invalid request" });
       }
+
       await db.insert(borrow_asks).values({
-        lender_id: item.holder_id,
-        borrower_id: locals.user.id,
-        item_id: item.id,
+        lender_id: item.holder_id as number,
+        borrower_id: locals.user.id as number,
+        item_id: item.id as number,
       });
+
     } catch (error) {
       console.error(error);
       return fail(500, {

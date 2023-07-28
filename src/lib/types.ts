@@ -8,11 +8,29 @@ export interface Community {
 
 export interface User {
   id: Number;
-  dateCreated: Date;
-  username: string;
+  full_name: string
+  user_name: string;
+  password_hash: string;
+  email: string;
+  pronouns: string;
+  role:string;
+}
+
+export interface UserRegister {
+  full_name: string
+  user_name: string;
   password: string;
   email: string;
-  communities: Community[];
+  pronouns: string;
+}
+
+export interface PrivateUserSafe {
+  id: Number;
+  full_name: string
+  user_name: string;
+  email: string;
+  pronouns: string;
+  role:string;
 }
 
 export interface PublicUserSafe {
@@ -26,4 +44,10 @@ export interface PublicItemSafe {
   description: string;
   id: number;
   user_id: number;
+}
+
+export interface Session {
+  user_safe: PrivateUserSafe,
+  session_stay: boolean,
+  session_end: number,
 }

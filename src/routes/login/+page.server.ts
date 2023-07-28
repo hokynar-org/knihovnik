@@ -1,12 +1,15 @@
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 import { z } from "zod";
 import { superValidate, message } from "sveltekit-superforms/server";
 import { fail, type Actions, redirect } from "@sveltejs/kit";
-import { users, sessions } from "$lib/server/db/schema";
+import { users } from "$lib/server/db/schema";
 import { eq } from "drizzle-orm";
 import { db } from "$lib/server/db/drizzle";
 import type { PgUUID } from "drizzle-orm/pg-core";
 import type { PageServerLoad } from "./$types";
+import { JWT_SECRET } from "$env/static/private";
+import type { Session, User } from "$lib/types";
 
 const schema = z.object({
   email: z.string().email(),
@@ -46,7 +49,7 @@ export const actions: Actions = {
     if (found_users.length == 0) {
       return message(form, "Invalid email or password", { status: 400 });
     }
-    const user = found_users[0];
+    const user = found_users[0] as User;
     const password_auth = await bcrypt.compare(
       password,
       String(user.password_hash)
@@ -55,35 +58,19 @@ export const actions: Actions = {
     if (!password_auth) {
       return message(form, "Invalid email or password", { status: 400 });
     }
-    let session;
-    try {
-      session = await db
-        .insert(sessions)
-        .values({
-          auth_token: crypto.randomUUID(),
-          user_id: user.id,
-        })
-        .returning();
-    } catch (error) {
-      return message(form, "Internal Error", { status: 500 });
-    }
 
-    if (form.data.stay) {
-      cookies.set("session", String(session[0].auth_token), {
-        path: "/",
-        httpOnly: true,
-        sameSite: "strict",
-        secure: process.env.NODE_ENV === "production",
-        maxAge: 60 * 60 * 24 * 30,
-      });
-    } else {
-      cookies.set("session", String(session[0].auth_token), {
-        path: "/",
-        httpOnly: true,
-        sameSite: "strict",
-        secure: process.env.NODE_ENV === "production",
-      });
-    }
+    const { password_hash: password_hash, ...user_safe } = user;
+
+    const session:Session = {user_safe:user_safe, session_stay:form.data.stay, session_end:Date.now()+(form.data.stay?7*24*60*60*1000:4*60*60*1000)}
+
+    const session_jwt = jwt.sign(session, JWT_SECRET);
+
+    cookies.set("session_jwt", String(session_jwt), {
+      path: "/",
+      httpOnly: true,
+      sameSite: "strict",
+      secure: process.env.NODE_ENV === "production",
+    });
     throw redirect(303, "/");
   },
 } satisfies Actions;
