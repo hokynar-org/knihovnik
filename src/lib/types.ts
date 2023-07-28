@@ -52,3 +52,10 @@ export interface Session {
   session_stay: boolean;
   session_end: number;
 }
+
+export interface NotificationBorrowRequest {
+    lender: PublicUserSafe,
+    item: PublicItemSafe,
+    time_stamp: number,
+    id: number,
+}
