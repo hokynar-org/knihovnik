@@ -8,7 +8,7 @@ import { eq } from "drizzle-orm";
 import { JWT_SECRET } from "$env/static/private";
 import jwt from "jsonwebtoken";
 import type { PageServerLoad, Actions } from "./$types.d.ts";
-import type { Session } from "$lib/types.js";
+import type { PrivateUserSafe, PublicUserSafe, Session, User } from "$lib/types.js";
 
 const schema = z.object({
   user_name: z.string().min(2),
@@ -39,17 +39,14 @@ export const load = (async ({ locals, cookies }) => {
     const borrower = await db.select()
       .from(users)
       .where(eq(users.id, Number(borrowRequest.borrower_id)));
-
+    const { password_hash: password_hash, role: role, email:email, ...borrower_safe } = borrower[0] as User;
     const item = await db.select()
       .from(items)
       .where(eq(items.id, Number(borrowRequest.item_id)));
-
-    notifications.push({ borrowRequest: borrowRequest, item: item[0], borrower: borrower[0] });
+    notifications.push({ borrowRequest: borrowRequest, item: item[0], borrower: borrower_safe as PrivateUserSafe });
   }
 
-  console.log(notifications);
   return {
-    borrow_asks: foundBorrowRequests,
     notifications: notifications,
     form: form,
     form_password: formPassword,

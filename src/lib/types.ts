@@ -36,6 +36,7 @@ export interface PrivateUserSafe {
 export interface PublicUserSafe {
   user_name: string;
   full_name: string;
+  pronouns: string;
   id: number;
 }
 

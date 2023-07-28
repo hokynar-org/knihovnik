@@ -28,8 +28,10 @@ export const load = (async ({ locals }) => {
     const public_user_safe: PublicUserSafe = {
       user_name: String(user.user_name),
       full_name: String(user.full_name),
+      pronouns:String(user.pronouns),
       id: Number(user.id),
     };
+
     const public_item_safe: PublicItemSafe = {
       name: String(item.name),
       description: String(item.description),
