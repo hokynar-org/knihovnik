@@ -53,9 +53,17 @@ export interface Session {
   session_end: number;
 }
 
+export interface BorrowRequest {
+  id: number,
+  item_id: number,
+  lender_id: number,
+  borrower_id: number,
+  status: string,
+  timestamp: number,
+}
+
 export interface NotificationBorrowRequest {
-    lender: PublicUserSafe,
+    borrower: PublicUserSafe,
     item: PublicItemSafe,
-    time_stamp: number,
-    id: number,
+    request: BorrowRequest,
 }

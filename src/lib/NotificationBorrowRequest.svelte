@@ -1,0 +1,85 @@
+<script lang="ts">
+  import { on } from 'ws';
+  import type { BorrowRequest, NotificationBorrowRequest } from './types';
+  import { onMount } from 'svelte';
+  import { error } from '@sveltejs/kit';
+  export let notification: NotificationBorrowRequest;
+  $: item = notification.item;
+  $: borrower = notification.borrower;
+  $: request = notification.request;
+  let status = Promise.resolve(request);
+  let mounted = false;
+  onMount(() => {
+    mounted = true;
+  });
+  async function accept() {
+    const response = await fetch(
+      '/api/borrow_request/' + request.id + '/accept',
+      {
+        method: 'POST',
+      },
+    );
+    if (!response.ok) {
+      throw new Error(String(response.status));
+    }
+    return (await response.json()) as BorrowRequest;
+  }
+  async function deny() {
+    const response = await fetch(
+      '/api/borrow_request/' + request.id + '/deny',
+      {
+        method: 'POST',
+      },
+    );
+    if (!response.ok) {
+      throw new Error(String(response.status));
+    }
+    return (await response.json()) as BorrowRequest;
+  }
+
+  async function cancel() {
+    const response = await fetch(
+      '/api/borrow_request/' + request.id + '/cancel',
+      {
+        method: 'POST',
+      },
+    );
+    if (!response.ok) {
+      throw new Error(String(response.status));
+    }
+    return (await response.json()) as BorrowRequest;
+  }
+</script>
+
+<div>
+  User {borrower.full_name} wants {item.name}
+  {#if request.status == 'PENDING'}
+    <button
+      on:click={() => {
+        status = accept().then((value) => {
+          request = value;
+          return value;
+        });
+      }}>Accept</button
+    >
+    <button
+      on:click={() => {
+        status = deny().then((value) => {
+          request = value;
+          return value;
+        });
+      }}>Deny</button
+    >
+  {/if}
+  {#if request.status == 'ACCEPTED'}
+    <button
+      on:click={() => {
+        status = cancel().then((value) => {
+          request = value;
+          return value;
+        });
+      }}>Cancel</button
+    >
+  {/if}
+  {request.status}
+</div>

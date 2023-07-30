@@ -1,6 +1,6 @@
 import { fail, redirect, type Actions } from '@sveltejs/kit';
 import { db } from '$lib/server/db/drizzle';
-import { borrow_request, items, users } from '$lib/server/db/schema';
+import { borrow_requests, items, users } from '$lib/server/db/schema';
 import { eq } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
 import type { PublicItemSafe, PublicUserSafe } from '$lib/types';
@@ -69,7 +69,7 @@ export const actions: Actions = {
         return fail(400, { message: 'Invalid request' });
       }
 
-      await db.insert(borrow_request).values({
+      await db.insert(borrow_requests).values({
         lender_id: item.holder_id as number,
         borrower_id: locals.user.id as number,
         item_id: item.id as number,
