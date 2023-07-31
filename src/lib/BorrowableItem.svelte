@@ -11,7 +11,11 @@
   // export let fromWho: string = " persn";
   export let mapUrl: string = 'https://mapy.cz/s/3sQ5y';
   export let lendorUrl: string = 'https://www.youtube.com/watch?v=8czrx7GJa5c';
-  export let offer: { item: PublicItemSafe; user: PublicUserSafe };
+  export let offer: {
+    item: PublicItemSafe;
+    user: PublicUserSafe;
+    borrow_request: BorrowRequest | undefined;
+  };
   export let user_id: number;
   async function borrow() {
     const response = await fetch(
@@ -45,14 +49,19 @@
       <div class="lendor">
         <a href={lendorUrl}> <Fa icon={faUser} />{offer.user.user_name}</a>
       </div>
-      {#if user_id != offer.user.id}
+      {#if user_id != offer.user.id && !offer.borrow_request}
         <div class="borrow">
           <button
             on:click={() => {
-              borrow();
+              borrow().then((value) => {
+                offer.borrow_request = value;
+              });
             }}>Borrow</button
           >
         </div>
+      {/if}
+      {#if offer.borrow_request}
+        {offer.borrow_request.status}
       {/if}
     </div>
   </div>
