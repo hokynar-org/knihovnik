@@ -67,3 +67,12 @@ export interface NotificationBorrowRequest {
     item: PublicItemSafe,
     request: BorrowRequest,
 }
+
+export interface Item {
+  id: number,
+  name: string,
+  description: string,
+  image_src: string,
+  owner_id: number,
+  holder_id: number,
+}

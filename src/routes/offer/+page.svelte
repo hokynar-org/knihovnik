@@ -4,12 +4,13 @@
   export let data;
 
   const item_form = superForm(data.item_form).form;
+  const user_items = data.user_items;
 </script>
 
 <div>
   {data.user_items.length}
 </div>
-<div class="container">
+<div>
   <form method="POST" action="?/new_item">
     <label for="name">Name</label>
     <input type="name" name="name" bind:value={$item_form.name} />
@@ -25,8 +26,8 @@
     <div><button>Submit</button></div>
   </form>
 </div>
-{#each data.user_items as item (item.id)}
-  <div class="container">
+{#each user_items as item (item.id)}
+  <div>
     <article>
       <header>
         {item.name}
