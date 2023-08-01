@@ -4,6 +4,7 @@
   import { toggleTheme } from '$lib/colorTheme';
   import type { PageData } from './$types';
   import NotificationBorrowRequest from '$lib/NotificationBorrowRequest.svelte';
+  import NotificationBorrowRequest_a from '$lib/NotificationBorrowRequest a.svelte';
 
   export let data: PageData;
 
@@ -21,6 +22,10 @@
 
 {#each data.notifications as notification}
   <NotificationBorrowRequest {notification} />
+{/each}
+
+{#each data.notifications_a as notification}
+  <NotificationBorrowRequest_a {notification} />
 {/each}
 
 <div class="center-content">

@@ -33,7 +33,7 @@ export const load = (async ({ locals }) => {
     .from(borrow_requests)
     .where(eq(borrow_requests.lender_id, Number(locals.user.id)));
 
-  const notifications: any[] = [];
+  const request_notifications: any[] = [];
 
   for (const borrowRequest of foundBorrowRequests) {
     const borrower = await db
@@ -50,7 +50,34 @@ export const load = (async ({ locals }) => {
       .select()
       .from(items)
       .where(eq(items.id, Number(borrowRequest.item_id)));
-    notifications.push({
+    request_notifications.push({
+      request: borrowRequest,
+      item: item[0],
+      borrower: borrower_safe as PrivateUserSafe,
+    });
+  }
+
+  const request_notifications_a: any[] = [];
+  const foundBorrowRequests_a = await db
+    .select()
+    .from(borrow_requests)
+    .where(eq(borrow_requests.borrower_id, Number(locals.user.id)));
+  for (const borrowRequest of foundBorrowRequests_a) {
+    const borrower = await db
+      .select()
+      .from(users)
+      .where(eq(users.id, Number(borrowRequest.borrower_id)));
+    const {
+      password_hash: _password_hash,
+      role: _role,
+      email: _email,
+      ...borrower_safe
+    } = borrower[0] as User;
+    const item = await db
+      .select()
+      .from(items)
+      .where(eq(items.id, Number(borrowRequest.item_id)));
+      request_notifications_a.push({
       request: borrowRequest,
       item: item[0],
       borrower: borrower_safe as PrivateUserSafe,
@@ -58,7 +85,8 @@ export const load = (async ({ locals }) => {
   }
 
   return {
-    notifications: notifications,
+    notifications_a: request_notifications_a,
+    notifications: request_notifications,
     form: form,
     form_password: formPassword,
   };

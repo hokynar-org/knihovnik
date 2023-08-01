@@ -1,10 +1,11 @@
 import { redirect, type Actions, fail } from '@sveltejs/kit';
 import { db } from '$lib/server/db/drizzle';
-import { items } from '$lib/server/db/schema';
+import { borrow_requests, items } from '$lib/server/db/schema';
 import { eq } from 'drizzle-orm';
 import { z } from 'zod';
 import { superValidate } from 'sveltekit-superforms/server';
 import type { PageServerLoad } from './$types';
+import type { Item } from '$lib/types';
 
 const item_form_schema = z.object({
   name: z.string().min(2),
@@ -15,7 +16,7 @@ export const load = (async ({ locals }) => {
   if (!locals.user) {
     throw redirect(302, '/login');
   }
-  const user_items = await db
+  const user_items:Array<Item> = await db
     .select()
     .from(items)
     .where(eq(items.owner_id, Number(locals.user.id)));
@@ -70,6 +71,7 @@ export const actions: Actions = {
       if (item.owner_id != locals.user.id) {
         return fail(400, { message: 'Invalid request' });
       }
+      await db.delete(borrow_requests).where(eq(borrow_requests.item_id, Number(id)));
       await db.delete(items).where(eq(items.id, Number(id)));
     } catch (err) {
       console.error(err);
