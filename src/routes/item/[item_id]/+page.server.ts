@@ -10,7 +10,6 @@ export const load: PageServerLoad = (async ({ locals,params }) => {
         throw redirect(302, '/');
       }
     const item_id=params.item_id;
-    // const result = await db.select().from(users);
     const result = await db.select({
         user:{
             id:users.id,
@@ -39,10 +38,6 @@ export const load: PageServerLoad = (async ({ locals,params }) => {
     if(result.length==0){
         throw error(404)
     }
-    const offer:Offer={
-        user:result[0].owner_safe,
-        item:result[0].item_safe,
-        borrow_request:result[0].borrow_request,
-    }
+    const offer:Offer=result[0];
     return {offer:offer}
   }) satisfies PageServerLoad;
