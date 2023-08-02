@@ -62,12 +62,6 @@ export interface BorrowRequest {
   timestamp: number,
 }
 
-export interface NotificationBorrowRequest {
-    borrower: PublicUserSafe,
-    item: PublicItemSafe,
-    request: BorrowRequest,
-}
-
 export interface Item {
   id: number,
   name: string,
@@ -81,4 +75,10 @@ export interface Offer {
   user:PublicUserSafe,
   item:PublicItemSafe,
   borrow_request:BorrowRequest | null,
+}
+
+export interface NotificationBorrowRequest {
+  user: PublicUserSafe,
+  item: PublicItemSafe,
+  borrow_request: BorrowRequest,
 }

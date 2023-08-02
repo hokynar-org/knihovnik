@@ -5,8 +5,8 @@
   import { error } from '@sveltejs/kit';
   export let notification: NotificationBorrowRequest;
   $: item = notification.item;
-  $: borrower = notification.borrower;
-  $: request = notification.request;
+  $: borrower = notification.user;
+  $: request = notification.borrow_request;
   let status = Promise.resolve(request);
   let mounted = false;
   onMount(() => {
@@ -52,7 +52,7 @@
 </script>
 
 <div>
-  User {borrower.full_name} wants {item.name}
+  User {borrower.full_name} wants <a href="/item/{item.id}">{item.name}</a>
   {#if request.status == 'PENDING'}
     <button
       on:click={() => {

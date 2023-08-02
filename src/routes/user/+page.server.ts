@@ -4,11 +4,11 @@ import { superValidate } from 'sveltekit-superforms/server';
 import { fail, redirect } from '@sveltejs/kit';
 import { borrow_requests, items, users } from '$lib/server/db/schema';
 import { db } from '$lib/server/db/drizzle';
-import { eq } from 'drizzle-orm';
+import { eq, or } from 'drizzle-orm';
 import { JWT_SECRET } from '$env/static/private';
 import jwt from 'jsonwebtoken';
 import type { PageServerLoad, Actions } from './$types.d.ts';
-import type { PrivateUserSafe, Session, User } from '$lib/types.js';
+import type { NotificationBorrowRequest, Offer, PrivateUserSafe, Session, User } from '$lib/types.js';
 
 const schema = z.object({
   user_name: z.string().min(2),
@@ -28,65 +28,65 @@ export const load = (async ({ locals }) => {
 
   const form = await superValidate(schema);
   const formPassword = await superValidate(schemaPassword);
-  const foundBorrowRequests = await db
-    .select()
-    .from(borrow_requests)
-    .where(eq(borrow_requests.lender_id, Number(locals.user.id)));
-
   const request_notifications: any[] = [];
-
-  for (const borrowRequest of foundBorrowRequests) {
-    const borrower = await db
-      .select()
-      .from(users)
-      .where(eq(users.id, Number(borrowRequest.borrower_id)));
-    const {
-      password_hash: _password_hash,
-      role: _role,
-      email: _email,
-      ...borrower_safe
-    } = borrower[0] as User;
-    const item = await db
-      .select()
-      .from(items)
-      .where(eq(items.id, Number(borrowRequest.item_id)));
-    request_notifications.push({
-      request: borrowRequest,
-      item: item[0],
-      borrower: borrower_safe as PrivateUserSafe,
-    });
-  }
-
-  const request_notifications_a: any[] = [];
-  const foundBorrowRequests_a = await db
-    .select()
-    .from(borrow_requests)
-    .where(eq(borrow_requests.borrower_id, Number(locals.user.id)));
-  for (const borrowRequest of foundBorrowRequests_a) {
-    const borrower = await db
-      .select()
-      .from(users)
-      .where(eq(users.id, Number(borrowRequest.borrower_id)));
-    const {
-      password_hash: _password_hash,
-      role: _role,
-      email: _email,
-      ...borrower_safe
-    } = borrower[0] as User;
-    const item = await db
-      .select()
-      .from(items)
-      .where(eq(items.id, Number(borrowRequest.item_id)));
-      request_notifications_a.push({
-      request: borrowRequest,
-      item: item[0],
-      borrower: borrower_safe as PrivateUserSafe,
-    });
-  }
+  const offers:Array<NotificationBorrowRequest> = await db
+  .select({
+    user:{
+        id:users.id,
+        full_name:users.full_name,
+        user_name:users.user_name,
+        pronouns:users.pronouns,
+    },
+    item:{
+        name: items.name,
+        description: items.description,
+        id: items.id,
+        user_id:items.owner_id,
+    },
+    borrow_request:{
+        status: borrow_requests.status,
+        id: borrow_requests.id,
+        borrower_id: borrow_requests.borrower_id,
+        lender_id:borrow_requests.lender_id,
+        item_id:borrow_requests.item_id,
+        timestamp:borrow_requests.timestamp,
+    },
+  })
+  .from(borrow_requests)
+  .where(eq(borrow_requests.lender_id, Number(locals.user.id)))
+  .innerJoin(items,eq(items.id, borrow_requests.item_id))
+  .innerJoin(users,eq(users.id, borrow_requests.borrower_id));
+  const offers_a:Array<NotificationBorrowRequest> = await db
+  .select({
+    user:{
+        id:users.id,
+        full_name:users.full_name,
+        user_name:users.user_name,
+        pronouns:users.pronouns,
+    },
+    item:{
+        name: items.name,
+        description: items.description,
+        id: items.id,
+        user_id:items.owner_id,
+    },
+    borrow_request:{
+        status: borrow_requests.status,
+        id: borrow_requests.id,
+        borrower_id: borrow_requests.borrower_id,
+        lender_id:borrow_requests.lender_id,
+        item_id:borrow_requests.item_id,
+        timestamp:borrow_requests.timestamp,
+    },
+  })
+  .from(borrow_requests)
+  .where(eq(borrow_requests.borrower_id, Number(locals.user.id)))
+  .innerJoin(items,eq(items.id, borrow_requests.item_id))
+  .innerJoin(users,eq(users.id, borrow_requests.lender_id));
 
   return {
-    notifications_a: request_notifications_a,
-    notifications: request_notifications,
+    notifications: offers,
+    notifications_a: offers,
     form: form,
     form_password: formPassword,
   };
