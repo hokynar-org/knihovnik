@@ -86,7 +86,7 @@ export const load = (async ({ locals }) => {
 
   return {
     notifications: offers,
-    notifications_a: offers,
+    notifications_a: offers_a,
     form: form,
     form_password: formPassword,
   };
