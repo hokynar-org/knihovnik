@@ -25,12 +25,7 @@ export const load = (async ({ locals }) => {
   if (!locals.user) {
     throw redirect(302, '/login');
   }
-
-  const form = await superValidate(schema);
-  const formPassword = await superValidate(schemaPassword);
-  const request_notifications: any[] = [];
-  const offers:Array<NotificationBorrowRequest> = await db
-  .select({
+  const select_type = {
     user:{
         id:users.id,
         full_name:users.full_name,
@@ -51,42 +46,25 @@ export const load = (async ({ locals }) => {
         item_id:borrow_requests.item_id,
         timestamp:borrow_requests.timestamp,
     },
-  })
+  };
+  const form = await superValidate(schema);
+  const formPassword = await superValidate(schemaPassword);
+  const offers:Array<NotificationBorrowRequest> = db
+  .select(select_type)
   .from(borrow_requests)
   .where(eq(borrow_requests.lender_id, Number(locals.user.id)))
   .innerJoin(items,eq(items.id, borrow_requests.item_id))
   .innerJoin(users,eq(users.id, borrow_requests.borrower_id));
-  const offers_a:Array<NotificationBorrowRequest> = await db
-  .select({
-    user:{
-        id:users.id,
-        full_name:users.full_name,
-        user_name:users.user_name,
-        pronouns:users.pronouns,
-    },
-    item:{
-        name: items.name,
-        description: items.description,
-        id: items.id,
-        user_id:items.owner_id,
-    },
-    borrow_request:{
-        status: borrow_requests.status,
-        id: borrow_requests.id,
-        borrower_id: borrow_requests.borrower_id,
-        lender_id:borrow_requests.lender_id,
-        item_id:borrow_requests.item_id,
-        timestamp:borrow_requests.timestamp,
-    },
-  })
+  const offers_a:Array<NotificationBorrowRequest> = db
+  .select(select_type)
   .from(borrow_requests)
   .where(eq(borrow_requests.borrower_id, Number(locals.user.id)))
   .innerJoin(items,eq(items.id, borrow_requests.item_id))
   .innerJoin(users,eq(users.id, borrow_requests.lender_id));
-
+  const results= await Promise.all([offers,offers_a,])
   return {
-    notifications: offers,
-    notifications_a: offers_a,
+    notifications: results[0],
+    notifications_a: results[1],
     form: form,
     form_password: formPassword,
   };
