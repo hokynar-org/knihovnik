@@ -1,8 +1,7 @@
 <script lang="ts">
   import Fa from 'svelte-fa';
   import { faLocationDot, faUser } from '@fortawesome/free-solid-svg-icons';
-  import type { BorrowRequest, PublicItemSafe, PublicUserSafe } from './types';
-
+  import type { BorrowRequest, Offer } from './types';
   export let image: string = '/mia.jpeg';
   export let imageAltText: string = 'cute black cat';
   // export let what: string = "Kočka";
@@ -11,11 +10,7 @@
   // export let fromWho: string = " persn";
   export let mapUrl: string = 'https://mapy.cz/s/3sQ5y';
   export let lendorUrl: string = 'https://www.youtube.com/watch?v=8czrx7GJa5c';
-  export let offer: {
-    item: PublicItemSafe;
-    user: PublicUserSafe;
-    borrow_request: BorrowRequest | undefined;
-  };
+  export let offer: Offer;
   export let user_id: number;
   async function borrow() {
     const response = await fetch(
@@ -38,7 +33,7 @@
   <div class="text">
     <div class="nameAndDesc">
       <h4>
-        {offer.item.name}
+        <a href="/item/{offer.item.id}">{offer.item.name}</a>
       </h4>
       <div class="descr">{offer.item.description}</div>
     </div>

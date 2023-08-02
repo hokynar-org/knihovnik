@@ -3,52 +3,37 @@ import { db } from '$lib/server/db/drizzle';
 import { borrow_requests, items, users } from '$lib/server/db/schema';
 import { and, eq } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
-import type { BorrowRequest, PublicItemSafe, PublicUserSafe } from '$lib/types';
+import type { Offer } from '$lib/types';
 
 export const load = (async ({ locals }) => {
   if (!locals.user) {
     throw redirect(302, '/login');
   }
-  const all_items = await db.select().from(items);
-  const offers: Array<{user: PublicUserSafe; item: PublicItemSafe; borrow_request:BorrowRequest|undefined}> = [];
-  const user=locals.user;
-  for (let i = 0; i < all_items.length; i++) {
-    const item = all_items[i];
-
-    const found_users = await db
-      .select()
-      .from(users)
-      .where(eq(users.id, Number(item.owner_id)));
-    if (found_users.length == 0) {
-      continue;
+  const offers:Array<Offer> = await db.select({
+        user:{
+            id:users.id,
+            full_name:users.full_name,
+            user_name:users.user_name,
+            pronouns:users.pronouns,
+        },
+        item:{
+            name: items.name,
+            description: items.description,
+            id: items.id,
+            user_id:items.owner_id,
+        },
+        borrow_request:{
+            status: borrow_requests.status,
+            id: borrow_requests.id,
+            borrower_id: borrow_requests.borrower_id,
+            lender_id:borrow_requests.lender_id,
+            item_id:borrow_requests.item_id,
+            timestamp:borrow_requests.timestamp,
+        },
     }
-    const owner = found_users[0];
-
-    const found_borrow_requests = await db.select()
-      .from(borrow_requests)
-      .where(and(
-        eq(borrow_requests.borrower_id,Number(user.id)),
-        eq(borrow_requests.item_id,Number(item.id))
-      ))
-
-    const borrow_request:BorrowRequest|undefined = found_borrow_requests.length>0?found_borrow_requests[0]:undefined
-
-    const public_user_safe: PublicUserSafe = {
-      user_name: String(owner.user_name),
-      full_name: String(owner.full_name),
-      pronouns: String(owner.pronouns),
-      id: Number(owner.id),
-    };
-
-    const public_item_safe: PublicItemSafe = {
-      name: String(item.name),
-      description: String(item.description),
-      id: Number(item.id),
-      user_id: Number(user.id),
-    };
-
-    offers[i] = { user: public_user_safe, item: public_item_safe, borrow_request:borrow_request};
-  }
+  ).from(items)
+  .innerJoin(users, eq(items.owner_id,users.id))
+  .leftJoin(borrow_requests,and(eq(borrow_requests.borrower_id,Number(locals.user.id)),eq(items.id,borrow_requests.item_id)));
   return {
     offers: offers,
   };

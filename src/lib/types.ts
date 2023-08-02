@@ -76,3 +76,9 @@ export interface Item {
   owner_id: number,
   holder_id: number,
 }
+
+export interface Offer {
+  user:PublicUserSafe,
+  item:PublicItemSafe,
+  borrow_request:BorrowRequest | null,
+}
