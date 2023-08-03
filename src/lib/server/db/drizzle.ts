@@ -3,7 +3,7 @@ import { drizzle, type NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { DATABASE_URL } from '$env/static/private';
 
 declare let global: typeof globalThis & {
-  db: ReturnType<typeof drizzle> | undefined;
+  db: NodePgDatabase | undefined;
 };
 
 const db: NodePgDatabase =
