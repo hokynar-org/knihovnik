@@ -1,7 +1,6 @@
 <script lang="ts">
   import { superForm } from 'sveltekit-superforms/client';
   import { page } from '$app/stores';
-  import { toggleTheme } from '$lib/colorTheme';
   import { notifications, notifications_a } from '$lib/store';
   import type { PageData } from './$types';
   import NotificationBorrowRequest from '$lib/NotificationBorrowRequest.svelte';
@@ -11,8 +10,11 @@
 
   const form = superForm(data.form).form;
   const form_password = superForm(data.form_password).form;
-  $notifications = data.notifications;
-  $notifications_a = data.notifications_a;
+
+  // FIXME: not sure what this should do?
+  // $notifications = data.notifications;
+  // $notifications_a = data.notifications_a;
+
   $form.user_name = $page.data.user.user_name;
   $form.full_name = $page.data.user.full_name;
   $form.pronouns = $page.data.user.pronouns;
@@ -66,6 +68,8 @@
       <button>Update password</button>
     </form>
 
-    <button on:click={toggleTheme}>Toggle color theme</button>
+    <button on:click={() => data.darkMode.update((v) => !v)}>
+      Toggle color theme
+    </button>
   </div>
 </div>

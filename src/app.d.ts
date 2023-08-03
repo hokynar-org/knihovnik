@@ -2,7 +2,6 @@
 // for information about these interfaces
 
 import type { PrivateUserSafe } from '$lib/types';
-import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 
 declare global {
   namespace App {
@@ -10,8 +9,6 @@ declare global {
       user: PrivateUserSafe;
     }
   }
-
-  const db: PostgresJsDatabase;
 }
 
 export {};

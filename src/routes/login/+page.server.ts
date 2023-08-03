@@ -6,9 +6,9 @@ import { type Actions, redirect } from '@sveltejs/kit';
 import { users } from '$lib/server/db/schema';
 import { eq } from 'drizzle-orm';
 import { db } from '$lib/server/db/drizzle';
-import type { PageServerLoad } from './$types';
 import { JWT_SECRET } from '$env/static/private';
-import type { Session, User } from '$lib/types';
+import type { PageServerLoad } from './$types';
+import type { Session } from '$lib/types';
 
 const schema = z.object({
   email: z.string().email(),
@@ -48,7 +48,7 @@ export const actions: Actions = {
     if (found_users.length == 0) {
       return message(form, 'Invalid email or password', { status: 400 });
     }
-    const user = found_users[0] as User;
+    const user = found_users[0];
     const password_auth = await bcrypt.compare(
       password,
       String(user.password_hash),
