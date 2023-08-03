@@ -29,7 +29,7 @@
     "@types/js-cookie": "^3.0.3",
     "@types/jsonwebtoken": "^9.0.2",
     "@types/nodemailer": "^6.4.8",
-    "@types/ws": "^8.5.5",
+    "@types/pg": "^8.10.2",
     "@typescript-eslint/eslint-plugin": "^6.2.0",
     "@typescript-eslint/parser": "^6.2.0",
     "autoprefixer": "^10.4.14",
@@ -68,11 +68,10 @@
     "drizzle-orm": "^0.27.2",
     "js-cookie": "^3.0.5",
     "jsonwebtoken": "^9.0.0",
-    "postgres": "^3.3.5",
+    "pg": "^8.11.2",
     "sass": "^1.63.6",
     "svelte-fa": "^3.0.4",
     "ts-node": "^10.9.1",
-    "uuid": "^9.0.0",
-    "ws": "^8.13.0"
+    "uuid": "^9.0.0"
   }
 }

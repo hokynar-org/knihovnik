@@ -1,9 +1,8 @@
 <script lang="ts">
-  import { on } from 'ws';
   import type { BorrowRequest, NotificationBorrowRequest } from './types';
   import { onMount } from 'svelte';
-  import { error } from '@sveltejs/kit';
   export let notification: NotificationBorrowRequest;
+
   $: item = notification.item;
   $: borrower = notification.user;
   $: request = notification.borrow_request;
