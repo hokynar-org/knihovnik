@@ -1,16 +1,11 @@
-@use 'reset.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-:root {
-  body {
-    color: var(--textColor);
-    background-color: var(--backgroundColor);
-  }
-
-  h4 {
-    color: var(--accentColor);
-    font-size: 24px;
-    margin-bottom: 5px;
-  }
+h4 {
+  color: var(--accentColor);
+  font-size: 24px;
+  margin-bottom: 5px;
 }
 
 // --- Dark & Light Mode ---
@@ -33,6 +28,9 @@
 
 body {
   @include light-mode;
+
+  color: var(--textColor);
+  background-color: var(--backgroundColor);
 
   &:not(.light) {
     @media (prefers-color-scheme: dark) {
