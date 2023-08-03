@@ -38,7 +38,7 @@
   article {
     display: flex;
     margin: 20px;
-    background-color: var(--color-secondary);
+    background-color: rgb(var(--color-secondary));
     border-radius: 10px;
     padding: var(--padding);
     max-height: calc(var(--image-height) + 2 * var(--padding));
@@ -60,12 +60,12 @@
     flex: 4;
     input {
       width: 100%;
-      background-color: var(--color-bg);
+      background-color: rgb(var(--color-background));
       border-width: 0;
     }
     textarea {
       width: 100%;
-      background-color: var(--color-bg);
+      background-color: rgb(var(--color-background));
       resize: none;
       border-width: 0;
     }

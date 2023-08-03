@@ -132,7 +132,7 @@
     flex: 4;
     a {
       text-decoration: none;
-      color: var(--primaryColor);
+      color: rgb(var(--color-primary));
       :hover {
         background-color: var(--color-secondary);
       }

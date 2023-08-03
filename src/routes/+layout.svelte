@@ -83,14 +83,12 @@
     grid-area: nav;
     display: flex;
     flex-direction: column;
-    background-color: var(--primaryColor);
     padding: 20px;
 
     a {
       text-decoration: none;
-      color: var(--primaryColor);
       :hover {
-        background-color: var(--color-secondary);
+        background-color: rgb(var(--color-secondary));
       }
     }
     @mixin marginsForNavs {
@@ -105,7 +103,7 @@
     .userInfo {
       display: flex;
       @include marginsForNavs;
-      background-color: var(--color-secondary);
+      background-color: rgb(var(--color-secondary));
       text-overflow: ellipsis;
       overflow: hidden;
     }

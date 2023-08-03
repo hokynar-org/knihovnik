@@ -71,7 +71,7 @@
   article {
     display: flex;
     margin: 20px;
-    background-color: var(--color-secondary);
+    background-color: rgb(var(--color-secondary));
     border-radius: 10px;
     padding: var(--padding);
     max-height: calc(var(--image-height) + 2 * var(--padding));
@@ -93,9 +93,9 @@
     flex: 4;
     a {
       text-decoration: none;
-      color: var(--primaryColor);
+      color: rgb(var(--color-primary));
       :hover {
-        background-color: var(--color-secondary);
+        background-color: rgb(var(--color-secondary));
       }
     }
   }

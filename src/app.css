@@ -4,7 +4,7 @@
 
 /* FIXME: does this belong here? */
 h4 {
-  color: var(--color-accent);
+  color: rgb(var(--color-accent));
   font-size: 24px;
   margin-bottom: 5px;
 }
