@@ -19,24 +19,24 @@ export const POST = (async ({ request, params, locals, url, route }) => {
     throw error(400);
   }
   const old_borrow_request=found_borrow_requests[0];
-  if(old_borrow_request.status!='PENDING' && old_borrow_request.status!='ACCEPTED'){
-    throw error(400);
-  }
-  if(old_borrow_request.status=='PENDING'){
+  // if(old_borrow_request.status!='PENDING' && old_borrow_request.status!='ACCEPTED'){
+  //   throw error(400);
+  // }
+  // if(old_borrow_request.status=='PENDING'){
     if(old_borrow_request.borrower_id!=user_id){
       throw error(401);
     }
     const new_borrow_requests = await db.delete(borrow_requests).where(eq(borrow_requests.id, Number(borrow_request_id))).returning();
     return json(new_borrow_requests[0]);
-  }
+  // }
 
-  if(old_borrow_request.status=='ACCEPTED'){
-    if(old_borrow_request.borrower_id!=user_id && old_borrow_request.lender_id!=user_id){
-      throw error(401);
-    }
-    const new_borrow_requests = await db.update(borrow_requests).set({status:'CANCELED'}).where(eq(borrow_requests.id, Number(borrow_request_id))).returning();
-    return json(new_borrow_requests[0]);
-  }
+  // if(old_borrow_request.status=='ACCEPTED'){
+  //   if(old_borrow_request.borrower_id!=user_id && old_borrow_request.lender_id!=user_id){
+  //     throw error(401);
+  //   }
+  //   const new_borrow_requests = await db.update(borrow_requests).set({status:'CANCELED'}).where(eq(borrow_requests.id, Number(borrow_request_id))).returning();
+  //   return json(new_borrow_requests[0]);
+  // }
   console.log("F")
   throw error(500);
 }) satisfies RequestHandler;

@@ -2,9 +2,8 @@
   import './style.scss';
 
   import { browser } from '$app/environment';
-  import { page } from '$app/stores';
+  import { navigating, page } from '$app/stores';
   import { colorTheme } from '$lib/colorTheme';
-
   $: user = $page.data.user;
 
   // $: if (browser) {
@@ -27,24 +26,23 @@
     <a href="/"><h2>Knihovnik</h2></a>
     {#if user}
       {@const isAdmin = user.role == 'ADMIN'}
-
       <div class="userInfo">
         {user.user_name}
       </div>
-      {#if isAdmin}
+      <!-- {#if isAdmin}
         <a href="/admin" data-sveltekit-preload-data="hover">
           <h3>Admin</h3>
         </a>
-      {/if}
+      {/if} -->
       <a href="/borrow" data-sveltekit-preload-data="hover">
         <h3>Borrow</h3>
       </a>
       <a href="/offer" data-sveltekit-preload-data="hover">
         <h3>Offer</h3>
       </a>
-      <a href="/community" data-sveltekit-preload-data="hover">
+      <!-- <a href="/community" data-sveltekit-preload-data="hover">
         <h3>Community</h3>
-      </a>
+      </a> -->
       <a href="/user" data-sveltekit-preload-data="hover">
         <h3>User</h3>
       </a>
@@ -58,6 +56,9 @@
       <a href="/login" data-sveltekit-preload-data="hover">
         <h3>Login</h3>
       </a>
+    {/if}
+    {#if $navigating?.to}
+      navigating to {$navigating?.to.route.id}
     {/if}
   </nav>
   <main>
@@ -119,5 +120,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    position: relative;
   }
 </style>

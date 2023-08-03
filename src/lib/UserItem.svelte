@@ -1,45 +1,25 @@
 <script lang="ts">
   import Fa from 'svelte-fa';
-  import { faLocationDot, faUser } from '@fortawesome/free-solid-svg-icons';
-  import type { BorrowRequest, Offer } from './types';
+  import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
+  import type { Item } from './types';
   export let image: string = '/mia.jpeg';
   export let imageAltText: string = 'cute black cat';
+  import { user_items } from '$lib/store';
   // export let what: string = "Kočka";
   // export let description: string = "Kočka je černá a je to kočka.";
   export let where: string = 'Kolodějova 123';
   // export let fromWho: string = " persn";
   export let mapUrl: string = 'https://mapy.cz/s/3sQ5y';
-  export let lendorUrl: string = 'https://www.youtube.com/watch?v=8czrx7GJa5c';
-  export let offer: Offer;
-  export let user_id: number;
-  async function borrow() {
-    const response = await fetch(
-      '/api/borrow_request/' + '?item_id=' + offer.item.id,
-      {
-        method: 'POST',
-      },
-    );
+  export let item: Item;
+  async function deleteItem() {
+    const response = await fetch('/api/item/' + item.id + '/remove', {
+      method: 'POST',
+    });
     if (!response.ok) {
       throw new Error(String(response.status));
     }
-    return (await response.json()) as BorrowRequest;
   }
-  async function cancel() {
-    if (!offer.borrow_request) {
-      throw new Error('Nothing to cancel');
-    }
-    const response = await fetch(
-      '/api/borrow_request/' + offer.borrow_request.id + '/cancel',
-      {
-        method: 'POST',
-      },
-    );
-    if (!response.ok) {
-      throw new Error(String(response.status));
-    }
-    return (await response.json()) as BorrowRequest;
-  }
-  let disabled = false;
+  let deleting = false;
 </script>
 
 <article>
@@ -49,46 +29,33 @@
   <div class="text">
     <div class="nameAndDesc">
       <h4>
-        <a href="/item/{offer.item.id}">{offer.item.name}</a>
+        <a href="/item/{item.id}">{item.name}</a>
       </h4>
-      <div class="descr">{offer.item.description}</div>
+      <div class="descr">{item.description}</div>
     </div>
     <div class="contact">
       <div class="place" data-tooltip="hai">
         <a href={mapUrl}> <Fa icon={faLocationDot} /> {where} </a>
       </div>
-      <div class="lendor">
-        <a href={lendorUrl}> <Fa icon={faUser} />{offer.user.user_name}</a>
+      <div class="borrow">
+        <button
+          on:click={() => {
+            deleting = true;
+            deleteItem().then((value) => {
+              const index = $user_items.indexOf(item);
+              console.log($user_items);
+              if (index > -1) {
+                $user_items.splice(index, 1);
+                $user_items = $user_items; // důležité pro Svelte
+              }
+              console.log($user_items);
+            });
+          }}
+          disabled={deleting}
+        >
+          Delete</button
+        >
       </div>
-      {#if user_id != offer.user.id && !offer.borrow_request}
-        <div class="borrow">
-          <button
-            on:click={() => {
-              disabled = true;
-              borrow().then((value) => {
-                offer.borrow_request = value;
-                disabled = false;
-              });
-            }}
-            {disabled}>Borrow</button
-          >
-        </div>
-      {/if}
-      {#if offer.borrow_request}
-        <div class="cancel">
-          <button
-            on:click={() => {
-              disabled = true;
-              cancel().then((value) => {
-                offer.borrow_request = null;
-                disabled = false;
-              });
-            }}
-            {disabled}>Cancel</button
-          >
-        </div>
-        {offer.borrow_request.status}
-      {/if}
     </div>
   </div>
 </article>
@@ -154,9 +121,6 @@
     -webkit-box-orient: vertical;
   }
   .place {
-    @include placeAndLendor;
-  }
-  .lendor {
     @include placeAndLendor;
   }
 </style>

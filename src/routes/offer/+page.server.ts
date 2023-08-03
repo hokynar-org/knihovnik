@@ -37,6 +37,7 @@ export const actions: Actions = {
     if (!form.valid) {
       return fail(400, { form });
     }
+    
     try {
       await db.insert(items).values({
         name: form.data.name as string,

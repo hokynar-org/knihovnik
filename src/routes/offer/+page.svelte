@@ -1,15 +1,13 @@
 <script lang="ts">
   import { superForm } from 'sveltekit-superforms/client';
-
+  import UserItem from '$lib/UserItem.svelte';
+  import NewItem from '$lib/NewItem.svelte';
   export let data;
-
+  import { user_items } from '$lib/store';
   const item_form = superForm(data.item_form).form;
-  const user_items = data.user_items;
+  $user_items = data.user_items;
 </script>
 
-<div>
-  {data.user_items.length}
-</div>
 <div>
   <form method="POST" action="?/new_item">
     <label for="name">Name</label>
@@ -26,20 +24,19 @@
     <div><button>Submit</button></div>
   </form>
 </div>
-{#each user_items as item (item.id)}
-  <div>
-    <article>
-      <header>
-        {item.name}
-      </header>
-      <body>
-        {item.description}
-      </body>
-    </article>
-    <form method="POST" action="?/remove_item&id={item.id}">
-      <div>
-        <button>Remove</button>
-      </div>
-    </form>
-  </div>
-{/each}
+<!-- <div class="container">
+  <NewItem />
+</div> -->
+
+<div class="container">
+  {#each $user_items as item (item.id)}
+    <UserItem {item} />
+  {/each}
+</div>
+
+<style lang="scss">
+  .container {
+    position: relative;
+    width: 100%;
+  }
+</style>
