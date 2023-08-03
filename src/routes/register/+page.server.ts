@@ -7,6 +7,7 @@ import { db } from '$lib/server/db/drizzle';
 import { eq } from 'drizzle-orm';
 import { sendRegistrationEmail } from '$lib/server/mail';
 import { JWT_SECRET } from '$env/static/private';
+import { env } from '$env/dynamic/private';
 import type { PageServerLoad, Actions } from './$types';
 import type { UserRegister } from '$lib/types';
 
@@ -15,7 +16,7 @@ const schema = z.object({
   full_name: z.string().min(1),
   password: z.string().min(4),
   pronouns: z.string(),
-  email: z.string().email(),
+  email: z.string().email().toLowerCase(),
 });
 
 export const load = (async ({ locals }) => {
@@ -39,8 +40,10 @@ export const actions: Actions = {
         status: 400,
       });
     }
+
     let user;
     let email;
+
     try {
       user = await db
         .select()
@@ -67,11 +70,15 @@ export const actions: Actions = {
     }
 
     const new_user = form.data as UserRegister;
+
     const url =
-      'https://knihovnik.vercel.app/api/register?' +
+      (env['ORIGIN'] ?? 'https://knihovnik.vercel.app') +
+      '/api/register?' +
       'user=' +
       jwt.sign(new_user, JWT_SECRET);
+
     await sendRegistrationEmail(new_user.full_name, new_user.email, url);
+
     throw redirect(303, '/register/success');
   },
 } satisfies Actions;
