@@ -3,12 +3,14 @@
   import type { BorrowRequest, NotificationBorrowRequest } from './types';
   import { onMount } from 'svelte';
   import { error } from '@sveltejs/kit';
+  import { notifications_a } from '$lib/store';
   export let notification: NotificationBorrowRequest;
   $: item = notification.item;
   $: borrower = notification.user;
   $: request = notification.borrow_request;
   let status = Promise.resolve(request);
   let mounted = false;
+  let disabled = false;
   onMount(() => {
     mounted = true;
   });
@@ -31,11 +33,22 @@
   You requested <a href="/item/{item.id}">{item.name}</a> from {borrower.full_name}
   <button
     on:click={() => {
-      status = cancel().then((value) => {
-        request = value;
-        return value;
-      });
-    }}>Cancel</button
+      disabled = true;
+      cancel()
+        .then((value) => {
+          request = value;
+          const index = $notifications_a.indexOf(notification);
+          if (index > -1) {
+            $notifications_a.splice(index, 1);
+            $notifications_a = $notifications_a; // důležité pro Svelte
+          }
+          disabled = false;
+        })
+        .catch((reson) => {
+          disabled = false;
+        });
+    }}
+    {disabled}>Cancel</button
   >
   {request.status}
 </div>

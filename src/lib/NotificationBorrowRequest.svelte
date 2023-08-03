@@ -9,6 +9,7 @@
   $: request = notification.borrow_request;
   let status = Promise.resolve(request);
   let mounted = false;
+  let disabled = false;
   onMount(() => {
     mounted = true;
   });
@@ -37,18 +38,18 @@
     return (await response.json()) as BorrowRequest;
   }
 
-  async function cancel() {
-    const response = await fetch(
-      '/api/borrow_request/' + request.id + '/cancel',
-      {
-        method: 'POST',
-      },
-    );
-    if (!response.ok) {
-      throw new Error(String(response.status));
-    }
-    return (await response.json()) as BorrowRequest;
-  }
+  // async function cancel() {
+  //   const response = await fetch(
+  //     '/api/borrow_request/' + request.id + '/cancel',
+  //     {
+  //       method: 'POST',
+  //     },
+  //   );
+  //   if (!response.ok) {
+  //     throw new Error(String(response.status));
+  //   }
+  //   return (await response.json()) as BorrowRequest;
+  // }
 </script>
 
 <div>
@@ -56,30 +57,53 @@
   {#if request.status == 'PENDING'}
     <button
       on:click={() => {
-        status = accept().then((value) => {
-          request = value;
-          return value;
-        });
-      }}>Accept</button
+        disabled = true;
+        status = accept()
+          .then((value) => {
+            request = value;
+            disabled = false;
+            return value;
+          })
+          .catch((reson) => {
+            disabled = false;
+            return request;
+          });
+      }}
+      {disabled}>Accept</button
     >
     <button
       on:click={() => {
-        status = deny().then((value) => {
-          request = value;
-          return value;
-        });
-      }}>Deny</button
+        disabled = true;
+        status = deny()
+          .then((value) => {
+            request = value;
+            disabled = false;
+            return value;
+          })
+          .catch((reson) => {
+            disabled = false;
+            return request;
+          });
+      }}
+      {disabled}>Deny</button
     >
   {/if}
-  {#if request.status == 'ACCEPTED'}
+  <!-- {#if request.status == 'ACCEPTED'}
     <button
       on:click={() => {
-        status = cancel().then((value) => {
-          request = value;
-          return value;
-        });
-      }}>Cancel</button
+        status = cancel()
+          .then((value) => {
+            request = value;
+            disabled = false;
+            return value;
+          })
+          .catch((reson) => {
+            disabled = false;
+            return request;
+          });
+      }}
+      {disabled}>Cancel</button
     >
-  {/if}
+  {/if} -->
   {request.status}
 </div>

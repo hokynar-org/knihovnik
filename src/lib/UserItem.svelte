@@ -19,7 +19,7 @@
       throw new Error(String(response.status));
     }
   }
-  let deleting = false;
+  let disabled = false;
 </script>
 
 <article>
@@ -40,18 +40,20 @@
       <div class="borrow">
         <button
           on:click={() => {
-            deleting = true;
-            deleteItem().then((value) => {
-              const index = $user_items.indexOf(item);
-              console.log($user_items);
-              if (index > -1) {
-                $user_items.splice(index, 1);
-                $user_items = $user_items; // důležité pro Svelte
-              }
-              console.log($user_items);
-            });
+            disabled = true;
+            deleteItem()
+              .then((value) => {
+                const index = $user_items.indexOf(item);
+                if (index > -1) {
+                  $user_items.splice(index, 1);
+                  $user_items = $user_items; // důležité pro Svelte
+                }
+              })
+              .catch((reson) => {
+                disabled = false;
+              });
           }}
-          disabled={deleting}
+          {disabled}
         >
           Delete</button
         >

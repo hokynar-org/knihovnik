@@ -65,10 +65,14 @@
           <button
             on:click={() => {
               disabled = true;
-              borrow().then((value) => {
-                offer.borrow_request = value;
-                disabled = false;
-              });
+              borrow()
+                .then((value) => {
+                  offer.borrow_request = value;
+                  disabled = false;
+                })
+                .catch((reson) => {
+                  disabled = false;
+                });
             }}
             {disabled}>Borrow</button
           >
@@ -79,10 +83,14 @@
           <button
             on:click={() => {
               disabled = true;
-              cancel().then((value) => {
-                offer.borrow_request = null;
-                disabled = false;
-              });
+              cancel()
+                .then((value) => {
+                  offer.borrow_request = null;
+                  disabled = false;
+                })
+                .catch((reson) => {
+                  disabled = false;
+                });
             }}
             {disabled}>Cancel</button
           >
