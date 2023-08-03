@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* FIXME: does this belong here? */
+h4 {
+  color: var(--color-accent);
+  font-size: 24px;
+  margin-bottom: 5px;
+}
+
+/* --- Dark & Light Mode --- */
+/* https://tailwindcss.com/docs/customizing-colors#using-css-variables */
+@layer base {
+  :root {
+    --color-foreground: 0 0 0;
+    --color-background: 247 249 235;
+    --color-primary: 202 114 7;
+    --color-secondary: 231 237 206;
+    --color-accent: 177 100 6;
+  }
+
+  :root .dark {
+    --color-foreground: 196 196 196;
+    --color-background: 21 20 9;
+    --color-primary: 27 111 39;
+    --color-secondary: 19 39 17;
+    --color-accent: 32 131 47;
+  }
+}

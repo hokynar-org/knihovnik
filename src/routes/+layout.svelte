@@ -1,17 +1,19 @@
 <script lang="ts">
-  import './style.scss';
+  import '../app.css';
 
+  import { navigating } from '$app/stores';
   import { browser } from '$app/environment';
-  import { navigating, page } from '$app/stores';
-  import { colorTheme } from '$lib/colorTheme';
-  $: user = $page.data.user;
 
-  // $: if (browser) {
-  //   document.body.className = $colorTheme;
-  // }
+  export let data;
 
-  if (!browser) {
-    $colorTheme = $page.data.theme;
+  $: darkMode = data.darkMode;
+  $: user = data.user;
+
+  // TODO: remove this later
+  if (browser) {
+    (window as any).toggleDarkMode = () => {
+      darkMode.update((v) => !v);
+    };
   }
 </script>
 
@@ -19,9 +21,7 @@
   <title>Knihovník</title>
 </svelte:head>
 
-<div id="theme-indicator" class={$colorTheme} />
-
-<div class="scaffold">
+<div id="root" class="text-foreground bg-background" class:dark={$darkMode}>
   <nav>
     <a href="/"><h2>Knihovnik</h2></a>
     {#if user}
@@ -67,7 +67,7 @@
 </div>
 
 <style lang="scss">
-  .scaffold {
+  #root {
     display: grid;
     grid-template-columns: 1fr;
     grid-template-areas: 'nav' 'main';
@@ -90,7 +90,7 @@
       text-decoration: none;
       color: var(--primaryColor);
       :hover {
-        background-color: var(--secondaryColor);
+        background-color: var(--color-secondary);
       }
     }
     @mixin marginsForNavs {
@@ -105,7 +105,7 @@
     .userInfo {
       display: flex;
       @include marginsForNavs;
-      background-color: var(--secondaryColor);
+      background-color: var(--color-secondary);
       text-overflow: ellipsis;
       overflow: hidden;
     }

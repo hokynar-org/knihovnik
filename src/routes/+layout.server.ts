@@ -1,8 +1,10 @@
 import type { LayoutServerLoad } from './$types';
 
-export const load: LayoutServerLoad = async ({ locals, cookies }) => {
+export const load = (async ({ locals, cookies }) => {
+  const darkMode = cookies.get('dark');
+
   return {
-    theme: cookies.get('theme'),
+    darkMode: darkMode === 'true' ? true : darkMode === 'false' ? false : null,
     user: locals.user,
   };
-};
+}) satisfies LayoutServerLoad;
