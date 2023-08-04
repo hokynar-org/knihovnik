@@ -1,4 +1,4 @@
-import { Pool } from 'pg';
+import Pg from 'pg';
 import { drizzle, type NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { DATABASE_URL } from '$env/static/private';
 
@@ -9,7 +9,7 @@ declare let global: typeof globalThis & {
 const db: NodePgDatabase =
   global.db ||
   drizzle(
-    new Pool({
+    new Pg.Pool({
       connectionString: DATABASE_URL + '?sslmode=require',
     }),
   );
