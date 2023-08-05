@@ -89,7 +89,6 @@ export const actions: Actions = {
       if (userId !== undefined) {
         await db.delete(users).where(eq(users.id, userId));
       }
-      console.log(err);
       const suffix = userId !== undefined ? '-followup' : '-insert';
 
       return message(form, `Internal Error (reg${suffix})`, { status: 500 });

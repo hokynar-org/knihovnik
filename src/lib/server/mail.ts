@@ -34,7 +34,7 @@ export async function sendRegistrationEmail(
   const html = `Potvrďte svojí registraci na adrese:<br><a href="${url}">${url}</a>`;
 
   const transporter = createTransport({ ...options });
-  const log =await transporter.sendMail({
+  await transporter.sendMail({
     from: {
       name: 'Knihovník Bot',
       address: options.from,
@@ -50,5 +50,4 @@ export async function sendRegistrationEmail(
     //   })
     // ),
   });
-  console.log(log);
 }
