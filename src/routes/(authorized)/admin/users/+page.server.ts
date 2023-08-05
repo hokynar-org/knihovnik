@@ -1,5 +1,5 @@
-import { eq } from 'drizzle-orm';
-import { items, users } from '$lib/server/db/schema';
+import { eq, or } from 'drizzle-orm';
+import { borrow_requests, items, users } from '$lib/server/db/schema';
 import { db } from '$lib/server/db/drizzle';
 import { fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
@@ -34,6 +34,7 @@ export const actions: Actions = {
     }
 
     try {
+      await db.delete(borrow_requests).where(or(eq(borrow_requests.lender_id, Number(id)),eq(borrow_requests.borrower_id, Number(id))));
       await db.delete(items).where(eq(items.owner_id, Number(id)));
       await db.delete(users).where(eq(users.id, Number(id)));
     } catch (err) {
