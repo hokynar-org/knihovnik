@@ -80,7 +80,7 @@ export const actions: Actions = {
         .returning({ id: users.id })
         .then((r) => r[0].id);
 
-      await sendRegistrationEmail(
+       await sendRegistrationEmail(
         rest.full_name,
         rest.email,
         `${host}/api/register?hash=${confirm_hash}`,
@@ -89,7 +89,7 @@ export const actions: Actions = {
       if (userId !== undefined) {
         await db.delete(users).where(eq(users.id, userId));
       }
-
+      console.log(err);
       const suffix = userId !== undefined ? '-followup' : '-insert';
 
       return message(form, `Internal Error (reg${suffix})`, { status: 500 });
