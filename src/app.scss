@@ -1,6 +1,12 @@
+@use 'sass:color';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@function tailwindify($color) {
+  @return color.red($color) color.green($color) color.blue($color);
+}
 
 /* FIXME: does this belong here? */
 h4 {
@@ -13,8 +19,11 @@ h4 {
 /* https://tailwindcss.com/docs/customizing-colors#using-css-variables */
 @layer base {
   :root {
+    $bg: rgb(247 249 235);
+
     --color-foreground: 0 0 0;
-    --color-background: 247 249 235;
+    --color-background: #{tailwindify($bg)};
+    --color-surface: #{tailwindify(color.adjust($bg, $lightness: -1%))};
     --color-surface: 244 247 228;
     --color-primary: 202 114 7;
     --color-secondary: 231 237 206;
@@ -23,9 +32,11 @@ h4 {
   }
 
   :root .dark {
+    $bg: rgb(21 20 9);
+
     --color-foreground: 196 196 196;
-    --color-background: 21 20 9;
-    --color-surface: 29 27 12;
+    --color-background: #{tailwindify($bg)};
+    --color-surface: #{tailwindify(color.adjust($bg, $lightness: +1%))};
     --color-primary: 27 111 39;
     --color-secondary: 19 39 17;
     --color-accent: 32 131 47;
