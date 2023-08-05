@@ -33,9 +33,9 @@ export const items = pgTable('items', {
 
 export const borrow_requests = pgTable('borrow_requests', {
   id: serial('id').primaryKey(),
-  item_id: integer('item_id').references(() => items.id),
-  lender_id: integer('lender_id').references(() => users.id),
-  borrower_id: integer('borrower_id').references(() => users.id),
+  item_id: integer('item_id').references(() => items.id).notNull(),
+  lender_id: integer('lender_id').references(() => users.id).notNull(),
+  borrower_id: integer('borrower_id').references(() => users.id).notNull(),
   status: text('status').default('PENDING'),
   timestamp: timestamp('timestamp').defaultNow(),
 });

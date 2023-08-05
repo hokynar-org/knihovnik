@@ -2,9 +2,10 @@ import { db } from '$lib/server/db/drizzle';
 import { borrow_requests, items, users } from '$lib/server/db/schema';
 import { and, eq } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
+import type { Offer } from '$lib/types';
 
 export const load = (async ({ locals }) => {
-  const offers = await db
+  const offers:Offer[] = await db
     .select({
       user: {
         id: users.id,
@@ -16,7 +17,7 @@ export const load = (async ({ locals }) => {
         name: items.name,
         description: items.description,
         id: items.id,
-        user_id: items.owner_id,
+        owner_id: items.owner_id,
       },
       borrow_request: {
         status: borrow_requests.status,

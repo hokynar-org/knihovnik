@@ -2,12 +2,6 @@ import { z } from 'zod';
 import { createTransport } from 'nodemailer';
 import { MAIL_AUTH } from '$env/static/private';
 
-// export interface MailImage {
-//   id: string;
-//   alt: string;
-//   content: URL;
-// }
-
 const smtp_schema = z.object({
   from: z.string().email(),
   host: z.string(),
@@ -43,11 +37,5 @@ export async function sendRegistrationEmail(
     subject: 'Registrace do Knihovníka',
     text,
     html,
-    // attachments: images.map(
-    //   ({ content, id }, i): Attachment => ({
-    //     path: content.toString(),
-    //     cid: toCid(id),
-    //   })
-    // ),
   });
 }

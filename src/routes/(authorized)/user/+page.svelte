@@ -11,9 +11,8 @@
   const form = superForm(data.form).form;
   const form_password = superForm(data.form_password).form;
 
-  // FIXME: not sure what this should do?
-  // $notifications = data.notifications;
-  // $notifications_a = data.notifications_a;
+  $notifications = data.notifications;
+  $notifications_a = data.notifications_a;
 
   $form.user_name = $page.data.user.user_name;
   $form.full_name = $page.data.user.full_name;
@@ -24,13 +23,15 @@
 
   <SuperDebug data={$form_password} /> -->
 
-{#each $notifications as notification}
-  <NotificationBorrowRequest {notification} />
-{/each}
+<div>
+  {#each $notifications as notification}
+    <NotificationBorrowRequest {notification} />
+  {/each}
 
-{#each $notifications_a as notification}
-  <NotificationBorrowRequest_a {notification} />
-{/each}
+  {#each $notifications_a as notification}
+    <NotificationBorrowRequest_a {notification} />
+  {/each}
+</div>
 
 <div class="center-content">
   <h4>

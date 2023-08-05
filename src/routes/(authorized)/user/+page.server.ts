@@ -9,6 +9,7 @@ import { JWT_SECRET } from '$env/static/private';
 import jwt from 'jsonwebtoken';
 import type { PageServerLoad, Actions } from './$types.d.ts';
 import type { Session } from '$lib/types.js';
+import { notifications } from '$lib/store.js';
 
 const schema = z.object({
   user_name: z.string().min(2),
@@ -33,7 +34,7 @@ export const load = (async ({ locals }) => {
       name: items.name,
       description: items.description,
       id: items.id,
-      user_id: items.owner_id,
+      owner_id: items.owner_id,
     },
     borrow_request: {
       status: borrow_requests.status,
