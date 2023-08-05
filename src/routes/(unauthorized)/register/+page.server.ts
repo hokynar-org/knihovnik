@@ -90,7 +90,9 @@ export const actions: Actions = {
         await db.delete(users).where(eq(users.id, userId));
       }
 
-      return message(form, 'Internal Error (reg)', { status: 500 });
+      const suffix = userId !== undefined ? '-followup' : '-insert';
+
+      return message(form, `Internal Error (reg${suffix})`, { status: 500 });
     }
 
     throw redirect(303, '/register/success');
