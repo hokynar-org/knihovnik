@@ -58,6 +58,10 @@ export const actions: Actions = {
       return message(form, 'Invalid email or password', { status: 400 });
     }
 
+    if (user.confirm_hash) {
+      throw redirect(303, '/register/success');
+    }
+
     const { password_hash: _pwdhash, ...user_safe } = user;
 
     const session: Session = {
