@@ -2,12 +2,7 @@ import { redirect } from '@sveltejs/kit';
 import type { LayoutServerLoad } from './$types';
 
 export const load = (async ({ locals }) => {
-  if (!locals.user) {
-    throw redirect(302, '/login');
-  } else {
-    if (locals.user.role != 'ADMIN') {
-      console.log(locals.user.role);
-      throw redirect(302, '/');
-    }
+  if (locals.user?.role !== 'ADMIN') {
+    throw redirect(302, '/');
   }
 }) satisfies LayoutServerLoad;

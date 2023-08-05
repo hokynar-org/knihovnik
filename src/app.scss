@@ -31,7 +31,8 @@ h4 {
     --color-muted: 180 180 180;
   }
 
-  :root .dark {
+  :root .dark,
+  :root.dark {
     $bg: rgb(21 20 9);
 
     --color-foreground: 196 196 196;

@@ -50,7 +50,6 @@ export type PublicItemSafe = Pick<
 export interface Session {
   user_safe: PrivateUserSafe;
   session_stay: boolean;
-  session_end: number;
 }
 
 export type BorrowRequest = InferModel<typeof borrow_requests>;

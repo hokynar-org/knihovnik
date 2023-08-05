@@ -22,9 +22,6 @@ const schemaPassword = z.object({
 });
 
 export const load = (async ({ locals }) => {
-  if (!locals.user) {
-    throw redirect(302, '/login');
-  }
   const select_type = {
     user: {
       id: users.id,
@@ -47,6 +44,7 @@ export const load = (async ({ locals }) => {
       timestamp: borrow_requests.timestamp,
     },
   };
+
   const form = await superValidate(schema);
   const formPassword = await superValidate(schemaPassword);
 
@@ -79,10 +77,13 @@ export const actions: Actions = {
     if (!locals.user) {
       throw redirect(303, '/login');
     }
+
     const form = await superValidate(request, schema);
+
     if (!form.valid) {
       return fail(400, { form });
     }
+
     await db
       .update(users)
       .set({
@@ -91,30 +92,36 @@ export const actions: Actions = {
         pronouns: form.data.pronouns,
       })
       .where(eq(users.id, Number(locals.user.id)));
-    const session_jwt = cookies.get('session_jwt') as string;
-    const session = jwt.verify(session_jwt, JWT_SECRET) as Session;
+
+    const session = jwt.verify(
+      cookies.get('session_jwt')!,
+      JWT_SECRET,
+    ) as Session;
+
     const user_safe = session.user_safe;
+
     const new_session: Session = {
-      session_end:
-        Date.now() +
-        (session.session_stay ? 7 * 24 * 60 * 60 * 1000 : 4 * 60 * 60 * 1000),
       session_stay: session.session_stay,
       user_safe: {
-        id: user_safe.id,
-        email: user_safe.email,
-        role: user_safe.role,
+        ...user_safe,
         user_name: form.data.user_name,
         full_name: form.data.full_name,
         pronouns: form.data.pronouns,
       },
     };
-    const new_session_jwt = jwt.sign(new_session, JWT_SECRET);
-    cookies.set('session_jwt', String(new_session_jwt), {
-      path: '/',
-      httpOnly: true,
-      sameSite: 'strict',
-      secure: process.env.NODE_ENV === 'production',
-    });
+
+    cookies.set(
+      'session_jwt',
+      jwt.sign(new_session, JWT_SECRET, {
+        expiresIn: session.session_stay ? '7 days' : '4 hours',
+      }),
+      {
+        path: '/',
+        httpOnly: true,
+        sameSite: 'strict',
+        secure: process.env.NODE_ENV === 'production',
+      },
+    );
 
     throw redirect(303, '/user');
   },
@@ -123,6 +130,7 @@ export const actions: Actions = {
     if (!locals.user) {
       throw redirect(302, '/login');
     }
+
     const form = await superValidate(request, schemaPassword);
 
     if (!form.valid) {

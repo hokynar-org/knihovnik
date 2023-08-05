@@ -30,10 +30,6 @@ export const actions: Actions = {
       return message(form, 'Enter valid email and password', { status: 400 });
     }
 
-    await new Promise((resolve) => {
-      setTimeout(resolve, 1_000);
-    });
-
     const { email, password } = form.data;
     let user;
 
@@ -74,12 +70,11 @@ export const actions: Actions = {
     const session: Session = {
       user_safe: user_safe,
       session_stay: form.data.stay,
-      session_end:
-        Date.now() +
-        (form.data.stay ? 7 * 24 * 60 * 60 * 1000 : 4 * 60 * 60 * 1000),
     };
 
-    const session_jwt = jwt.sign(session, JWT_SECRET);
+    const session_jwt = jwt.sign(session, JWT_SECRET, {
+      expiresIn: session.session_stay ? '7 days' : '4 hours',
+    });
 
     cookies.set('session_jwt', String(session_jwt), {
       path: '/',

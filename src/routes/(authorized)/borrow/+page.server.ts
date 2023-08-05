@@ -1,14 +1,9 @@
-import { redirect } from '@sveltejs/kit';
 import { db } from '$lib/server/db/drizzle';
 import { borrow_requests, items, users } from '$lib/server/db/schema';
 import { and, eq } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
 
 export const load = (async ({ locals }) => {
-  if (!locals.user) {
-    throw redirect(302, '/login');
-  }
-
   const offers = await db
     .select({
       user: {

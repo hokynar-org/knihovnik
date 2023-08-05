@@ -13,13 +13,11 @@ const item_form_schema = z.object({
 });
 
 export const load = (async ({ locals }) => {
-  if (!locals.user) {
-    throw redirect(302, '/login');
-  }
-  const user_items:Array<Item> = await db
+  const user_items: Array<Item> = await db
     .select()
     .from(items)
     .where(eq(items.owner_id, Number(locals.user.id)));
+
   return {
     user_items: user_items,
     item_form: superValidate(item_form_schema),
@@ -30,14 +28,14 @@ export const actions: Actions = {
   // Add new item
   new_item: async ({ request, locals }) => {
     if (!locals.user) {
-      throw redirect(302, '/');
+      throw redirect(302, '/login');
     }
 
     const form = await superValidate(request, item_form_schema);
     if (!form.valid) {
       return fail(400, { form });
     }
-    
+
     try {
       await db.insert(items).values({
         name: form.data.name as string,
@@ -55,7 +53,9 @@ export const actions: Actions = {
     if (!locals.user) {
       throw redirect(302, '/login');
     }
+
     const id = url.searchParams.get('id');
+
     if (!id) {
       return fail(400, { message: 'Invalid request' });
     }
@@ -72,7 +72,9 @@ export const actions: Actions = {
       if (item.owner_id != locals.user.id) {
         return fail(400, { message: 'Invalid request' });
       }
-      await db.delete(borrow_requests).where(eq(borrow_requests.item_id, Number(id)));
+      await db
+        .delete(borrow_requests)
+        .where(eq(borrow_requests.item_id, Number(id)));
       await db.delete(items).where(eq(items.id, Number(id)));
     } catch (err) {
       console.error(err);

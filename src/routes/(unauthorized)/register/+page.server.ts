@@ -86,6 +86,8 @@ export const actions: Actions = {
         `${host}/api/register?hash=${confirm_hash}`,
       );
     } catch (err) {
+      console.error(err);
+
       if (userId !== undefined) {
         await db.delete(users).where(eq(users.id, userId));
       }

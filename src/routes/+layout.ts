@@ -8,12 +8,18 @@ export const load = async ({ data }) => {
 
   if (browser) {
     darkMode.subscribe((next) => {
+      document.documentElement.classList.toggle('dark', next);
       Cookies.set('dark', String(next));
     });
 
     if (data.darkMode === null) {
       darkMode.set(prefersDarkMode() ?? false);
     }
+
+    // TODO: remove this
+    (window as any).toggleDarkMode = () => {
+      darkMode.update((v) => !v);
+    };
   }
 
   return { ...data, darkMode };

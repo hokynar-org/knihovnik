@@ -1,14 +1,11 @@
-import { error, redirect } from '@sveltejs/kit';
-import type { PageServerLoad } from './$types';
+import { error } from '@sveltejs/kit';
 import { borrow_requests, items, users } from '$lib/server/db/schema';
 import { db } from '$lib/server/db/drizzle';
 import { and, eq } from 'drizzle-orm';
+import type { PageServerLoad } from './$types';
 import type { Offer } from '$lib/types';
 
 export const load: PageServerLoad = (async ({ locals, params }) => {
-  if (!locals.user || !params.item_id) {
-    throw redirect(302, '/');
-  }
   const item_id = params.item_id;
   const result = await db
     .select({
