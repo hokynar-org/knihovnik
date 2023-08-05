@@ -18,20 +18,14 @@ const schema = z.object({
   email: z.string().email().toLowerCase(),
 });
 
-export const load = (async ({ locals }) => {
-  if (locals.user) {
-    throw redirect(302, '/');
-  }
-
+export const load = (async () => {
   const form = await superValidate(schema);
+
   return { form };
 }) satisfies PageServerLoad;
 
 export const actions: Actions = {
-  default: async ({ request, locals }) => {
-    if (locals.user) {
-      throw redirect(303, '/');
-    }
+  default: async ({ request }) => {
     const form = await superValidate(request, schema);
 
     if (!form.valid) {
@@ -66,7 +60,7 @@ export const actions: Actions = {
       }
     } catch (error) {
       console.error(error);
-      return message(form, 'Internal Error', { status: 500 });
+      return message(form, 'Internal Error (check)', { status: 500 });
     }
 
     const host = env['ORIGIN'] ?? 'https://knihovnik.vercel.app';
@@ -96,7 +90,7 @@ export const actions: Actions = {
         await db.delete(users).where(eq(users.id, userId));
       }
 
-      return message(form, 'Internal Error', { status: 500 });
+      return message(form, 'Internal Error (reg)', { status: 500 });
     }
 
     throw redirect(303, '/register/success');

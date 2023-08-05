@@ -16,39 +16,38 @@ const schema = z.object({
   stay: z.boolean(),
 });
 
-export const load: PageServerLoad = (async ({ locals }) => {
-  if (locals.user) {
-    throw redirect(302, '/');
-  }
+export const load: PageServerLoad = (async () => {
   const form = await superValidate(schema);
 
   return { form };
 }) satisfies PageServerLoad;
 
 export const actions: Actions = {
-  login: async ({ cookies, request, locals }) => {
-    if (locals.user) {
-      throw redirect(303, '/');
-    }
-
+  login: async ({ cookies, request }) => {
     const form = await superValidate(request, schema);
 
     if (!form.valid) {
       return message(form, 'Enter valid email and password', { status: 400 });
     }
 
-    const email = form.data.email;
-    const password = form.data.password;
-    let found_users;
+    const { email, password } = form.data;
+    let user;
+
     try {
-      found_users = await db.select().from(users).where(eq(users.email, email));
+      const found_users = await db
+        .select()
+        .from(users)
+        .where(eq(users.email, email));
+
+      if (found_users.length == 0) {
+        return message(form, 'Invalid email or password', { status: 400 });
+      }
+
+      user = found_users[0];
     } catch (error) {
       return message(form, 'Internal Error', { status: 500 });
     }
-    if (found_users.length == 0) {
-      return message(form, 'Invalid email or password', { status: 400 });
-    }
-    const user = found_users[0];
+
     const password_auth = await bcrypt.compare(
       password,
       String(user.password_hash),
@@ -62,7 +61,11 @@ export const actions: Actions = {
       throw redirect(303, '/register/success');
     }
 
-    const { password_hash: _pwdhash, ...user_safe } = user;
+    const {
+      password_hash: _pwdhash,
+      confirm_hash: _chash,
+      ...user_safe
+    } = user;
 
     const session: Session = {
       user_safe: user_safe,

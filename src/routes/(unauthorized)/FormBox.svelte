@@ -3,7 +3,7 @@
 </script>
 
 <div
-  class="md:min-w-[420px] md:mt-48 p-4 md:bg-surface border-0 border-muted rounded-xl"
+  class="box md:min-w-[420px] p-4 md:bg-surface border-0 border-muted rounded-xl"
 >
   <h1 class="text-center text-4xl">Knihovník</h1>
   {#if subtitle}
@@ -13,3 +13,11 @@
     <slot />
   </main>
 </div>
+
+<style lang="scss">
+  @media screen and (min-width: 768px) {
+    .box {
+      margin-top: min(10svmin, theme('margin.48'));
+    }
+  }
+</style>
