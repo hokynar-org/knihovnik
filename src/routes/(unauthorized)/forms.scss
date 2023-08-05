@@ -9,7 +9,6 @@ form {
 /* Style the form group */
 .form-group {
   position: relative;
-  margin-bottom: 0.5rem;
 }
 
 /* Style form elements */
@@ -22,12 +21,6 @@ input {
   transition: all 0.2s ease;
 
   color: inherit;
-}
-
-p {
-  color: red;
-  padding: 0.2rem;
-  font-size: small;
 }
 
 input:focus + label,
