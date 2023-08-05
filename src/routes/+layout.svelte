@@ -1,5 +1,5 @@
 <script lang="ts">
-  import '../app.css';
+  import '../app.scss';
 
   import { browser } from '$app/environment';
 
@@ -18,10 +18,13 @@
   <title>Knihovník</title>
 </svelte:head>
 
-<div
-  id="root"
-  class="min-h-screen text-foreground bg-background"
-  class:dark={$darkMode}
->
+<div id="root" class="text-foreground bg-background" class:dark={$darkMode}>
   <slot />
 </div>
+
+<style>
+  #root {
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+</style>
