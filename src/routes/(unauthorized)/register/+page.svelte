@@ -4,11 +4,15 @@
   import ModeSwitcher from '../ModeSwitcher.svelte';
 
   export let data;
+  let loading = false;
 
-  const { form, errors, message, constraints, enhance } = superForm(data.form);
+  const { form, errors, message, constraints, enhance } = superForm(data.form, {
+    onSubmit: () => (loading = true),
+    onResult: () => (loading = false),
+  });
 </script>
 
-<FormBox subtitle="Register">
+<FormBox subtitle="Register" {loading}>
   <form class="space-y-4" method="POST" use:enhance>
     <div class="form-group">
       <input

@@ -5,10 +5,15 @@
 
   export let data;
 
-  const { form, enhance, message } = superForm(data.form);
+  let loading = false;
+
+  const { form, enhance, message } = superForm(data.form, {
+    onSubmit: () => (loading = true),
+    onResult: () => (loading = false),
+  });
 </script>
 
-<FormBox subtitle="Login">
+<FormBox subtitle="Login" {loading}>
   <form class="space-y-4" method="POST" action="?/login" use:enhance>
     <div class="form-group">
       <input

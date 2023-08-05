@@ -30,6 +30,10 @@ export const actions: Actions = {
       return message(form, 'Enter valid email and password', { status: 400 });
     }
 
+    await new Promise((resolve) => {
+      setTimeout(resolve, 1_000);
+    });
+
     const { email, password } = form.data;
     let user;
 
