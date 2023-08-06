@@ -1,3 +1,20 @@
+<script lang="ts" context="module">
+  import { z } from 'zod';
+
+  export const schema = z.object({
+    user_name: z.string().min(2),
+    full_name: z.string().min(1),
+    password: z.string().min(4),
+    // confirm: z.string().nonempty(),
+    pronouns: z.string(),
+    email: z.string().email().toLowerCase(),
+  });
+  // .refine((d) => d.password === d.confirm, {
+  //   message: 'Passwords do not match',
+  //   path: ['confirm'],
+  // });
+</script>
+
 <script lang="ts">
   import { superForm } from 'sveltekit-superforms/client';
   import FormBox from '../FormBox.svelte';
@@ -9,77 +26,98 @@
   const { form, errors, message, constraints, enhance } = superForm(data.form, {
     onSubmit: () => (loading = true),
     onResult: () => (loading = false),
+    validators: schema,
   });
 </script>
 
 <FormBox subtitle="Register" {loading}>
-  <form class="space-y-4" method="POST" use:enhance>
-    <div class="form-group">
+  <form class="space-y-2" method="POST" use:enhance>
+    <label class="label">
+      <span>E-mail</span>
       <input
+        class="input"
+        class:input-error={$errors.email}
         type="email"
         name="email"
+        autocomplete="username"
         bind:value={$form.email}
-        id="email"
-        placeholder=" "
         {...$constraints.email}
       />
-      <label for="email">E-mail</label>
-      <p>{$errors.email ?? ''}</p>
-    </div>
+      <p class="text-error-500">{$errors.email ?? ''}</p>
+    </label>
 
-    <div class="form-group">
+    <label class="label">
+      <span>Password</span>
       <input
+        class="input"
+        class:input-error={$errors.password}
         type="password"
         name="password"
+        autocomplete="new-password"
         bind:value={$form.password}
-        id="password"
-        placeholder=" "
         {...$constraints.password}
       />
-      <label for="password">Password</label>
-      <p>{$errors.password ?? ''}</p>
-    </div>
+      <p class="text-error-500">{$errors.password ?? ''}</p>
+    </label>
 
-    <div class="form-group">
+    <!-- <label class="label">
+      <span>Confirm password</span>
       <input
+        class="input"
+        class:input-error={$errors.confirm}
+        type="password"
+        name="confirm"
+        autocomplete="new-password"
+        bind:value={$form.confirm}
+        {...$constraints.confirm}
+      />
+      <p class="text-error-500">{$errors.confirm ?? ''}</p>
+    </label> -->
+
+    <label class="label">
+      <span>Username</span>
+      <input
+        class="input"
+        class:input-error={$errors.user_name}
         type="text"
         name="user_name"
+        autocomplete="nickname"
         bind:value={$form.user_name}
-        id="user_name"
-        placeholder=" "
         {...$constraints.user_name}
       />
-      <label for="user_name">Username</label>
-      <p>{$errors.user_name ?? ''}</p>
-    </div>
+      <p class="text-error-500">{$errors.user_name ?? ''}</p>
+    </label>
 
-    <div class="form-group">
+    <label class="label">
+      <span>Name</span>
       <input
+        class="input"
+        class:input-error={$errors.full_name}
         type="text"
         name="full_name"
+        autocomplete="name"
         bind:value={$form.full_name}
-        id="full_name"
-        placeholder=" "
         {...$constraints.full_name}
       />
-      <label for="full_name">Name</label>
-      <p>{$errors.full_name ?? ''}</p>
-    </div>
+      <p class="text-error-500">{$errors.full_name ?? ''}</p>
+    </label>
 
-    <div class="form-group">
+    <label class="label">
+      <span>Prefferred pronouns</span>
       <input
+        class="input"
+        class:input-error={$errors.pronouns}
         type="text"
         name="pronouns"
         bind:value={$form.pronouns}
-        id="pronouns"
-        placeholder=" "
         {...$constraints.pronouns}
       />
-      <label for="pronouns">Prefferred pronouns</label>
-      <p>{$errors.pronouns ?? ''}</p>
-    </div>
+      <p class="text-error-500">{$errors.pronouns ?? ''}</p>
+    </label>
 
-    <button type="submit">Submit</button>
+    <div class="flex justify-end !mt-4">
+      <button class="btn variant-filled-primary" type="submit"> Submit </button>
+    </div>
   </form>
 
   {#if $message}

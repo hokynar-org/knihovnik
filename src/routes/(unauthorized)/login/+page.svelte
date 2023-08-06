@@ -14,35 +14,45 @@
 </script>
 
 <FormBox subtitle="Login" {loading}>
-  <form class="space-y-4" method="POST" action="?/login" use:enhance>
-    <div class="form-group">
+  <form class="space-y-2" method="POST" action="?/login" use:enhance>
+    <label class="label">
+      <span>E-mail</span>
       <input
+        class="input"
         type="email"
         name="email"
         bind:value={$form.email}
         id="email"
         placeholder=" "
       />
-      <label for="email">E-mail</label>
-    </div>
+    </label>
 
-    <div class="form-group">
+    <label class="label">
+      <span>Password</span>
       <input
+        class="input"
         type="password"
         name="password"
         bind:value={$form.password}
         id="password"
         placeholder=" "
       />
-      <label for="password">Password</label>
-    </div>
+    </label>
 
-    <div class="form-group">
-      <label for="stay"></label>
-      <input type="checkbox" name="stay" bind:checked={$form.stay} id="stay" />
-    </div>
+    <label class="flex items-center w-full">
+      <input
+        type="checkbox"
+        class="checkbox mr-2"
+        name="stay"
+        bind:checked={$form.stay}
+        id="stay"
+      />
+      <p>Stay logged in</p>
 
-    <button type="submit">Login</button>
+      <button class="ml-auto btn variant-filled-primary" type="submit">
+        Login
+      </button>
+    </label>
   </form>
 
   {#if $message}

@@ -1,4 +1,10 @@
 <script lang="ts">
+  // Your selected Skeleton theme:
+  import '../theme.css';
+
+  // This contains the bulk of Skeletons required styles:
+  import '@skeletonlabs/skeleton/styles/skeleton.css';
+
   import '../app.scss';
 </script>
 
@@ -6,13 +12,4 @@
   <title>Knihovník</title>
 </svelte:head>
 
-<div id="root" class="text-foreground bg-background">
-  <slot />
-</div>
-
-<style>
-  #root {
-    min-height: 100vh;
-    min-height: 100dvh;
-  }
-</style>
+<slot />

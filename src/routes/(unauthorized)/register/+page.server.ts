@@ -1,5 +1,4 @@
 import bcrypt from 'bcryptjs';
-import { z } from 'zod';
 import { message, setError, superValidate } from 'sveltekit-superforms/server';
 import { redirect } from '@sveltejs/kit';
 import { users } from '$lib/server/db/schema';
@@ -7,16 +6,9 @@ import { db } from '$lib/server/db/drizzle';
 import { eq, sql } from 'drizzle-orm';
 import { sendRegistrationEmail } from '$lib/server/mail';
 import { env } from '$env/dynamic/private';
+import { schema } from './+page.svelte';
 import type { PageServerLoad, Actions } from './$types';
 import type { UserRegister } from '$lib/types';
-
-const schema = z.object({
-  user_name: z.string().min(2),
-  full_name: z.string().min(1),
-  password: z.string().min(4),
-  pronouns: z.string(),
-  email: z.string().email().toLowerCase(),
-});
 
 export const load = (async () => {
   const form = await superValidate(schema);
@@ -41,11 +33,11 @@ export const actions: Actions = {
         .where(eq(users.user_name, form.data.user_name));
 
       if (user[0].count > 0) {
-        setError(form, 'user_name', 'This user name has already been taken');
-
-        return message(form, 'This user name has already been taken', {
-          status: 400,
-        });
+        return setError(
+          form,
+          'user_name',
+          'This username has already been taken',
+        );
       }
 
       const email = await db
@@ -54,9 +46,7 @@ export const actions: Actions = {
         .where(eq(users.email, form.data.email));
 
       if (email[0].count > 0) {
-        setError(form, 'email', 'You already have an account');
-
-        return message(form, 'You already have an account', { status: 400 });
+        return setError(form, 'email', 'You already have an account');
       }
     } catch (error) {
       console.error(error);
@@ -80,7 +70,7 @@ export const actions: Actions = {
         .returning({ id: users.id })
         .then((r) => r[0].id);
 
-       await sendRegistrationEmail(
+      await sendRegistrationEmail(
         rest.full_name,
         rest.email,
         `${host}/api/register?hash=${confirm_hash}`,
