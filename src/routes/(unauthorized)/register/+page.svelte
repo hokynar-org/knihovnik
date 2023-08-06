@@ -112,7 +112,7 @@
         bind:value={$form.pronouns}
         {...$constraints.pronouns}
       />
-      <p class="text-error-500">{$errors.pronouns ?? ''}</p>
+      <p class="text-error-400-500-token">{$errors.pronouns ?? ''}</p>
     </label>
 
     <div class="flex justify-end !mt-4">
@@ -124,7 +124,11 @@
     <p class="p-1 text-red-500 text-md text-center">{$message}</p>
   {/if}
 
-  <ModeSwitcher href="/login" text="Already have an account? Log in!" />
+  <ModeSwitcher
+    href="/login"
+    text="Already have an account? Log in!"
+    darkMode={data.darkMode}
+  />
 </FormBox>
 
 <style lang="scss">

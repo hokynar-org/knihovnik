@@ -17,9 +17,9 @@
   </main>
   {#if loading}
     <div
-      class="absolute inset-0 rounded-xl bg-surface opacity-90 flex center items-center justify-center"
+      class="absolute inset-0 rounded-xl bg-surface-100-800-token opacity-90 flex center items-center justify-center"
     >
-      <Spinner color="rgb(var(--color-foreground))" />
+      <Spinner color="rgb(var(--color-primary-500))" />
     </div>
   {/if}
 </div>
