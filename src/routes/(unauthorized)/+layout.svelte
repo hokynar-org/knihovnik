@@ -1,4 +1,4 @@
-<div id="root" class="flex flex-col items-center">
+<div class="min-h-full flex flex-col items-center">
   <slot />
 
   <footer class="mt-auto text-center text-surface-500-400-token p-2">
