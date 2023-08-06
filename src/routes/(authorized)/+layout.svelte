@@ -1,5 +1,12 @@
 <script lang="ts">
   import { navigating } from '$app/stores';
+  import Spinner from '$lib/components/Spinner.svelte';
+  import {
+    AppBar,
+    AppRail,
+    AppRailAnchor,
+    AppShell,
+  } from '@skeletonlabs/skeleton';
 
   export let data;
 
@@ -10,97 +17,43 @@
   <title>Knihovník</title>
 </svelte:head>
 
-<div id="root" class="grid items-start">
-  <nav>
-    <a href="/"><h2>Knihovnik</h2></a>
-    {#if user}
+<AppShell>
+  <svelte:fragment slot="header">
+    <AppBar>
+      <AppRailAnchor href="/">Knihovník</AppRailAnchor>
+    </AppBar>
+  </svelte:fragment>
+  <svelte:fragment slot="sidebarLeft">
+    <AppRail>
       {@const isAdmin = user.role == 'ADMIN'}
-      <div class="userInfo">
-        {user.user_name}
-      </div>
-      <!-- {#if isAdmin}
-        <a href="/admin" data-sveltekit-preload-data="hover">
-          <h3>Admin</h3>
-        </a>
-      {/if} -->
-      <a href="/borrow" data-sveltekit-preload-data="hover">
-        <h3>Borrow</h3>
-      </a>
-      <a href="/offer" data-sveltekit-preload-data="hover">
-        <h3>Offer</h3>
-      </a>
-      <!-- <a href="/community" data-sveltekit-preload-data="hover">
-        <h3>Community</h3>
-      </a> -->
-      <a href="/user" data-sveltekit-preload-data="hover">
-        <h3>User</h3>
-      </a>
-      <a href="/logout" data-sveltekit-preload-data="hover">
-        <h3>Logout</h3>
-      </a>
-    {:else}
-      <a href="/register" data-sveltekit-preload-data="hover">
-        <h3>Register</h3>
-      </a>
-      <a href="/login" data-sveltekit-preload-data="hover">
-        <h3>Login</h3>
-      </a>
-    {/if}
-    {#if $navigating?.to}
-      navigating to {$navigating?.to.route.id}
-    {/if}
-  </nav>
-  <main>
+      {#if isAdmin}
+        <AppRailAnchor href="/admin">
+          <span>Admin</span>
+        </AppRailAnchor>
+      {/if}
+      <AppRailAnchor href="/borrow">
+        <span>Borrow</span>
+      </AppRailAnchor>
+      <AppRailAnchor href="/offer">
+        <span>Offer</span>
+      </AppRailAnchor>
+      <AppRailAnchor href="/user">
+        <span>User</span>
+      </AppRailAnchor>
+      <AppRailAnchor href="/logout">
+        <span>Logout</span>
+      </AppRailAnchor>
+      <!-- TODO: User info -->
+    </AppRail>
+  </svelte:fragment>
+  <main class="flex flex-col items-center relative p-2 h-full">
     <slot />
+    {#if $navigating}
+      <div
+        class="absolute inset-0 bg-surface-backdrop-token grid place-items-center"
+      >
+        <Spinner />
+      </div>
+    {/if}
   </main>
-</div>
-
-<style lang="scss">
-  #root {
-    grid-template-columns: 1fr;
-
-    @media screen and (min-width: 768px) {
-      grid-template-columns: 1fr 4fr;
-    }
-  }
-
-  nav {
-    display: flex;
-    flex-direction: column;
-    padding: 20px;
-
-    a {
-      text-decoration: none;
-      :hover {
-        background-color: rgb(var(--color-secondary));
-      }
-    }
-    @mixin marginsForNavs {
-      margin: 2px;
-      padding: 10px;
-      border-radius: 10px;
-    }
-    h2 {
-      @include marginsForNavs;
-      font-size: 2em;
-    }
-    .userInfo {
-      display: flex;
-      @include marginsForNavs;
-      background-color: rgb(var(--color-secondary));
-      text-overflow: ellipsis;
-      overflow: hidden;
-    }
-    h3 {
-      @include marginsForNavs;
-    }
-  }
-
-  main {
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-  }
-</style>
+</AppShell>
