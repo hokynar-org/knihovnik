@@ -1,16 +1,21 @@
 <script lang="ts">
-  import { navigating } from '$app/stores';
+  import { navigating, page } from '$app/stores';
   import Spinner from '$lib/components/Spinner.svelte';
   import {
-    AppBar,
-    AppRail,
-    AppRailAnchor,
-    AppShell,
-  } from '@skeletonlabs/skeleton';
+    faDoorOpen,
+    faHandshake,
+    faRightLeft,
+    faToolbox,
+    faUser,
+  } from '@fortawesome/free-solid-svg-icons';
+  import { AppBar, AppRail, AppShell } from '@skeletonlabs/skeleton';
+  import MenuItem from './MenuItem.svelte';
 
   export let data;
 
   $: user = data.user;
+
+  $page.url.pathname;
 </script>
 
 <svelte:head>
@@ -20,32 +25,28 @@
 <AppShell>
   <svelte:fragment slot="header">
     <AppBar>
-      <AppRailAnchor href="/">Knihovník</AppRailAnchor>
+      <a class="text-2xl font-bold" href="/">Knihovník</a>
+      <!-- TODO: User info -->
     </AppBar>
   </svelte:fragment>
+
   <svelte:fragment slot="sidebarLeft">
+    {@const current = $page.url.pathname}
     <AppRail>
-      {@const isAdmin = user.role == 'ADMIN'}
-      {#if isAdmin}
-        <AppRailAnchor href="/admin">
-          <span>Admin</span>
-        </AppRailAnchor>
-      {/if}
-      <AppRailAnchor href="/borrow">
-        <span>Borrow</span>
-      </AppRailAnchor>
-      <AppRailAnchor href="/offer">
-        <span>Offer</span>
-      </AppRailAnchor>
-      <AppRailAnchor href="/user">
-        <span>User</span>
-      </AppRailAnchor>
-      <AppRailAnchor href="/logout">
-        <span>Logout</span>
-      </AppRailAnchor>
-      <!-- TODO: User info -->
+      <MenuItem href="/borrow" icon={faHandshake} {current}>Borrow</MenuItem>
+      <MenuItem href="/offer" icon={faRightLeft} {current}>Offer</MenuItem>
+      <MenuItem href="/user" icon={faUser} {current}>User</MenuItem>
+
+      <svelte:fragment slot="trail">
+        {@const isAdmin = user.role == 'ADMIN'}
+        {#if isAdmin}
+          <MenuItem href="/admin" icon={faToolbox} {current}>Admin</MenuItem>
+        {/if}
+        <MenuItem href="/logout" icon={faDoorOpen} {current}>Logout</MenuItem>
+      </svelte:fragment>
     </AppRail>
   </svelte:fragment>
+
   <main class="flex flex-col items-center relative p-2 h-full">
     <slot />
     {#if $navigating}
