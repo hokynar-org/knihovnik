@@ -33,7 +33,7 @@
   {/each}
 </div>
 
-<div class="container">
+<div class="container max-w-6xl mx-auto">
   <h3 class="h3 my-2">
     Change info for user {$page.data.user.email}
   </h3>

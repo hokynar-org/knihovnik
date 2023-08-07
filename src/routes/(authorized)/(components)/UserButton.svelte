@@ -22,7 +22,7 @@
   use:popup={{
     event: 'click',
     target: 'profile',
-    placement: 'bottom',
+    placement: 'bottom-end',
   }}
 >
   <Avatar
