@@ -33,44 +33,80 @@
   {/each}
 </div>
 
-<div class="center-content">
-  <h4>
+<div class="container">
+  <h3 class="h3 my-2">
     Change info for user {$page.data.user.email}
-  </h4>
-  <div>
-    <form method="POST" action="?/update">
-      <label for="user_name">Username</label>
-      <input type="text" name="user_name" bind:value={$form.user_name} />
+  </h3>
 
-      <label for="full_name">Name</label>
-      <input type="text" name="full_name" bind:value={$form.full_name} />
+  <div class="space-y-8">
+    <form
+      method="POST"
+      action="?/update"
+      class="grid grid-cols-1 md:grid-cols-2 gap-4"
+    >
+      <label class="label">
+        <span>Username</span>
+        <input
+          class="input"
+          type="text"
+          name="user_name"
+          bind:value={$form.user_name}
+        />
+      </label>
 
-      <label for="pronouns">Prefered pronouns</label>
-      <input type="text" name="pronouns" bind:value={$form.pronouns} />
+      <label class="label">
+        <span>Name</span>
+        <input
+          class="input"
+          type="text"
+          name="full_name"
+          bind:value={$form.full_name}
+        />
+      </label>
 
-      <button>Save changes</button>
+      <label class="label">
+        <span>Prefered pronouns</span>
+        <input
+          class="input"
+          type="text"
+          name="pronouns"
+          bind:value={$form.pronouns}
+        />
+      </label>
+
+      <div class="self-end justify-self-center col-span-full">
+        <button class="btn variant-filled-primary">Save changes</button>
+      </div>
     </form>
 
-    <form method="POST" action="?/update_password">
-      <label for="old_password">Old Password</label>
-      <input
-        type="password"
-        name="old_password"
-        bind:value={$form_password.new_password}
-      />
+    <form
+      method="POST"
+      action="?/update_password"
+      class="grid grid-cols-1 md:grid-cols-2 gap-4"
+    >
+      <label class="label">
+        <span>Old Password</span>
+        <input
+          class="input"
+          type="password"
+          name="old_password"
+          bind:value={$form_password.new_password}
+        />
+      </label>
 
-      <label for="new_password">New Password</label>
-      <input
-        type="password"
-        name="new_password"
-        bind:value={$form_password.old_password}
-      />
+      <label class="label">
+        <span>New Password</span>
+        <input
+          class="input"
+          type="password"
+          name="new_password"
+          bind:value={$form_password.old_password}
+        />
+      </label>
 
-      <button>Update password</button>
+      <div class="self-end justify-self-center col-span-full">
+        <button class="btn variant-filled-primary">Update password</button>
+      </div>
     </form>
-
-    <button on:click={() => data.darkMode.update((v) => !v)}>
-      Toggle color theme
-    </button>
   </div>
 </div>

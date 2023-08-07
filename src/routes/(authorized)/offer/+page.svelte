@@ -2,9 +2,12 @@
   import { superForm } from 'sveltekit-superforms/client';
   import UserItem from '$lib/UserItem.svelte';
   import NewItem from '$lib/NewItem.svelte';
-  export let data;
   import { user_items } from '$lib/store';
+
+  export let data;
+
   const item_form = superForm(data.item_form).form;
+
   $user_items = data.user_items;
 </script>
 
@@ -28,15 +31,8 @@
   <NewItem />
 </div> -->
 
-<div class="container">
+<div class="relative w-full">
   {#each $user_items as item (item.id)}
     <UserItem {item} />
   {/each}
 </div>
-
-<style lang="scss">
-  .container {
-    position: relative;
-    width: 100%;
-  }
-</style>

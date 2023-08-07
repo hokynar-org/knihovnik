@@ -12,14 +12,7 @@ export const load = async ({ data }) => {
       Cookies.set('dark', String(next));
     });
 
-    if (data.darkMode === null) {
-      darkMode.set(prefersDarkMode() ?? false);
-    }
-
-    // TODO: remove this
-    (window as any).toggleDarkMode = () => {
-      darkMode.update((v) => !v);
-    };
+    if (data.darkMode === null) darkMode.set(prefersDarkMode() ?? false);
   }
 
   return { ...data, darkMode };

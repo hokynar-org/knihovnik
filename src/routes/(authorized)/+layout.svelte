@@ -1,51 +1,73 @@
 <script lang="ts">
   import { navigating, page } from '$app/stores';
   import Spinner from '$lib/components/Spinner.svelte';
+  import { faBars, faBell } from '@fortawesome/free-solid-svg-icons';
   import {
-    faDoorOpen,
-    faHandshake,
-    faRightLeft,
-    faToolbox,
-    faUser,
-  } from '@fortawesome/free-solid-svg-icons';
-  import { AppBar, AppRail, AppShell } from '@skeletonlabs/skeleton';
-  import MenuItem from './MenuItem.svelte';
+    AppBar,
+    AppShell,
+    drawerStore,
+    storePopup,
+  } from '@skeletonlabs/skeleton';
+  import {
+    computePosition,
+    autoUpdate,
+    offset,
+    shift,
+    flip,
+    arrow,
+  } from '@floating-ui/dom';
+  import Fa from 'svelte-fa';
+  import UserButton from './(components)/UserButton.svelte';
+  import Sidebar from './(components)/Sidebar.svelte';
+  import AppDrawer from './(components)/AppDrawer.svelte';
 
   export let data;
 
   $: user = data.user;
 
-  $page.url.pathname;
+  storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow });
 </script>
 
 <svelte:head>
   <title>Knihovník</title>
 </svelte:head>
 
+<AppDrawer user={data.user} />
 <AppShell>
   <svelte:fragment slot="header">
-    <AppBar>
-      <a class="text-2xl font-bold" href="/">Knihovník</a>
+    <AppBar padding="p-2">
+      <svelte:fragment slot="lead">
+        <a class="text-2xl font-bold hidden md:block" href="/"> Knihovník </a>
+        <button
+          class="p-2 block md:hidden"
+          on:click={() =>
+            drawerStore.open({ id: 'mobile-menu', width: 'w-max-content' })}
+        >
+          <Fa icon={faBars} size="lg" />
+        </button>
+      </svelte:fragment>
+
+      <div slot="trail" class="flex space-x-2">
+        <button
+          class="btn-icon"
+          on:click={() =>
+            drawerStore.open({
+              id: 'alerts',
+              width: 'md:!w-72',
+              position: 'right',
+            })}
+        >
+          <Fa icon={faBell} />
+        </button>
+        <UserButton user={data.user} darkMode={data.darkMode} />
+      </div>
       <!-- TODO: User info -->
     </AppBar>
   </svelte:fragment>
 
-  <svelte:fragment slot="sidebarLeft">
-    {@const current = $page.url.pathname}
-    <AppRail>
-      <MenuItem href="/borrow" icon={faHandshake} {current}>Borrow</MenuItem>
-      <MenuItem href="/offer" icon={faRightLeft} {current}>Offer</MenuItem>
-      <MenuItem href="/user" icon={faUser} {current}>User</MenuItem>
-
-      <svelte:fragment slot="trail">
-        {@const isAdmin = user.role == 'ADMIN'}
-        {#if isAdmin}
-          <MenuItem href="/admin" icon={faToolbox} {current}>Admin</MenuItem>
-        {/if}
-        <MenuItem href="/logout" icon={faDoorOpen} {current}>Logout</MenuItem>
-      </svelte:fragment>
-    </AppRail>
-  </svelte:fragment>
+  <div class="h-full hidden md:block" slot="sidebarLeft">
+    <Sidebar current={$page.url.pathname} isAdmin={user.role == 'ADMIN'} />
+  </div>
 
   <main class="flex flex-col items-center relative p-2 h-full">
     <slot />
