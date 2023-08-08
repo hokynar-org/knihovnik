@@ -1,7 +1,7 @@
 import { error, fail, json, redirect } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { db } from '$lib/server/db/drizzle';
-import {borrow_requests, items} from '$lib/server/db/schema'
+import {borrow_requests, items, request_actions} from '$lib/server/db/schema'
 import { and, eq } from 'drizzle-orm';
 import type { BorrowRequest, Item } from '$lib/types';
 
@@ -27,11 +27,17 @@ export const POST = (async ({ locals, url}) => {
     if(found_borrow_requests.length>0) {
         throw error(400);
     }
-    const new_borrow_requests = await db.insert(borrow_requests).values({
+    const new_borrow_requests:BorrowRequest[] = await db.insert(borrow_requests).values({
         lender_id: item.holder_id as number,
         borrower_id: user.id as number,
         item_id: item.id as number,
-      }).returning();
-    const borrow_request=new_borrow_requests[0];
+        }).returning();
+    const borrow_request:BorrowRequest=new_borrow_requests[0];
+    await db.insert(request_actions).values({
+        borrow_request_id:borrow_request.id,
+        user_id:user.id,
+        type: 'CREATE',
+        message: '',
+        }).returning();
     return json(borrow_request);
 }) satisfies RequestHandler;
