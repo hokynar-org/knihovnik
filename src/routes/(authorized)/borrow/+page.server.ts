@@ -3,6 +3,7 @@ import { borrow_requests, items, users } from '$lib/server/db/schema';
 import { and, eq } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
 import type { Offer } from '$lib/types';
+import { redirect } from '@sveltejs/kit';
 
 export const load = (async ({ locals }) => {
   const offers:Offer[] = await db

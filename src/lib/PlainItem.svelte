@@ -1,7 +1,7 @@
 <script lang="ts">
   import Fa from 'svelte-fa';
   import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
-  import type { PublicItemSafe } from './types';
+  import type { Item, PublicItemSafe } from './types';
   export let image: string = '/mia.jpeg';
   export let imageAltText: string = 'cute black cat';
   import { user_items } from '$lib/store';
@@ -11,15 +11,6 @@
   // export let fromWho: string = " persn";
   export let mapUrl: string = 'https://mapy.cz/s/3sQ5y';
   export let item: PublicItemSafe;
-  async function deleteItem() {
-    const response = await fetch('/api/item/' + item.id + '/remove', {
-      method: 'POST',
-    });
-    if (!response.ok) {
-      throw new Error(String(response.status));
-    }
-  }
-  let disabled = false;
 </script>
 
 <article>
@@ -36,27 +27,6 @@
     <div class="contact">
       <div class="place" data-tooltip="hai">
         <a href={mapUrl}> <Fa icon={faLocationDot} /> {where} </a>
-      </div>
-      <div class="borrow">
-        <button
-          on:click={() => {
-            disabled = true;
-            deleteItem()
-              .then((value) => {
-                const index = $user_items.indexOf(item);
-                if (index > -1) {
-                  $user_items.splice(index, 1);
-                  $user_items = $user_items; // důležité pro Svelte
-                }
-              })
-              .catch((reson) => {
-                disabled = false;
-              });
-          }}
-          {disabled}
-        >
-          Delete</button
-        >
       </div>
     </div>
   </div>
