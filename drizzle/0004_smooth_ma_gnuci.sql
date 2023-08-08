@@ -1,1 +1,0 @@
-ALTER TABLE "request_actions" RENAME COLUMN "borrow_requests_id" TO "borrow_request_id";

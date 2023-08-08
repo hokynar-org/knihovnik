@@ -1,1 +1,0 @@
-ALTER TABLE "request_actions" ALTER COLUMN "borrow_requests_id" SET NOT NULL;

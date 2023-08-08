@@ -5,36 +5,8 @@
     {
       "idx": 0,
       "version": "5",
-      "when": 1691448386523,
-      "tag": "0000_modern_lake",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1691448456056,
-      "tag": "0001_swift_namorita",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "5",
-      "when": 1691448493822,
-      "tag": "0002_yummy_genesis",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "5",
-      "when": 1691454372972,
-      "tag": "0003_large_risque",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "5",
-      "when": 1691454848513,
-      "tag": "0004_smooth_ma_gnuci",
+      "when": 1691457497549,
+      "tag": "0000_slim_rattler",
       "breakpoints": true
     }
   ]

@@ -52,7 +52,8 @@
 </script>
 
 <div>
-  User {borrower.full_name} wants <a href="/item/{item.id}">{item.name}</a>
+  <a href="/borrow_request/{request.id}">*</a>User {borrower.full_name} wants
+  <a href="/item/{item.id}">{item.name}</a>
   {#if request.status == 'PENDING'}
     <button
       on:click={() => {

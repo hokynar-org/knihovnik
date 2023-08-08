@@ -29,6 +29,7 @@
 </script>
 
 <div>
+  <a href="/borrow_request/{request.id}">*</a>
   You requested <a href="/item/{item.id}">{item.name}</a> from {borrower.full_name}
   <button
     on:click={() => {

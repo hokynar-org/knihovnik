@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS "items" (
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "request_actions" (
 	"id" serial PRIMARY KEY NOT NULL,
-	"borrow_requests_id" integer,
+	"borrow_request_id" integer NOT NULL,
 	"user_id" integer NOT NULL,
 	"type" text NOT NULL,
 	"message" text,

@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "pg",
-  "id": "8c84b46c-bb78-4d7d-a84c-16a9941bf605",
+  "id": "5c76f0ee-35c5-41d6-9acf-2113ff5d632a",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "borrow_requests": {
@@ -252,11 +252,11 @@
           "primaryKey": true,
           "notNull": true
         },
-        "borrow_requests_id": {
-          "name": "borrow_requests_id",
+        "borrow_request_id": {
+          "name": "borrow_request_id",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "user_id": {
           "name": "user_id",
