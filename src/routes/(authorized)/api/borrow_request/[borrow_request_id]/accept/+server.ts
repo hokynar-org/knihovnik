@@ -1,7 +1,7 @@
 import { error, fail, json, redirect } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { db } from '$lib/server/db/drizzle';
-import {borrow_requests} from '$lib/server/db/schema'
+import {borrow_requests, request_actions} from '$lib/server/db/schema'
 import { eq } from 'drizzle-orm';
 import type { BorrowRequest } from '$lib/types';
 
@@ -25,6 +25,17 @@ export const POST = (async ({ request, params, locals, url, route }) => {
   if(old_borrow_request.lender_id!=user_id){
     throw error(401);
   }
-  const new_borrow_requests = await db.update(borrow_requests).set({status:'ACCEPTED'}).where(eq(borrow_requests.id, Number(borrow_request_id))).returning();
-  return json(new_borrow_requests[0]);
+  try {
+    const new_borrow_requests = db.update(borrow_requests).set({status:'ACCEPTED'}).where(eq(borrow_requests.id, Number(borrow_request_id))).returning();
+    const new_requests_actions = db.insert(request_actions).values({
+      borrow_request_id:Number(borrow_request_id),
+      user_id:user_id,
+      type: 'ACCEPT',
+      message: '',
+      }).returning();
+    const results=await Promise.all([new_borrow_requests,new_requests_actions])
+    return json(results[0][0]);
+  } catch (err) {
+    throw error(500);
+  }
 }) satisfies RequestHandler;
