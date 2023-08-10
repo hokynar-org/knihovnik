@@ -5,6 +5,8 @@ import {
   varchar,
   integer,
   timestamp,
+  boolean,
+  json,
 } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 
@@ -72,5 +74,11 @@ export const item_visibility = pgTable('item_visibility', {
   community_id: integer('community_id').references(() => community.id),
 });
 
-
-
+export const notifications = pgTable('notifications',{
+  id: serial('id').primaryKey(),
+  user_id: integer('item_id').references(() => items.id).notNull(),
+  text: text('text'),
+  url: text('url'),
+  timestamp: timestamp('timestamp').defaultNow().notNull(),
+  read: boolean('read').default(false).notNull(),
+});

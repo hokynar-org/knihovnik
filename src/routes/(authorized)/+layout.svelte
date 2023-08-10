@@ -20,10 +20,12 @@
   import UserButton from './(components)/UserButton.svelte';
   import Sidebar from './(components)/Sidebar.svelte';
   import AppDrawer from './(components)/AppDrawer.svelte';
+  import { notifications } from '$lib/store';
 
   export let data;
 
   $: user = data.user;
+  $: $notifications = data.notifications;
 
   storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow });
 </script>

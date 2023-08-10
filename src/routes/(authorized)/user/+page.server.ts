@@ -49,25 +49,7 @@ export const load = (async ({ locals }) => {
   const form = await superValidate(schema);
   const formPassword = await superValidate(schemaPassword);
 
-  const offers = db
-    .select(select_type)
-    .from(borrow_requests)
-    .where(eq(borrow_requests.lender_id, Number(locals.user.id)))
-    .innerJoin(items, eq(items.id, borrow_requests.item_id))
-    .innerJoin(users, eq(users.id, borrow_requests.borrower_id));
-
-  const offers_a = db
-    .select(select_type)
-    .from(borrow_requests)
-    .where(eq(borrow_requests.borrower_id, Number(locals.user.id)))
-    .innerJoin(items, eq(items.id, borrow_requests.item_id))
-    .innerJoin(users, eq(users.id, borrow_requests.lender_id));
-
-  const results = await Promise.all([offers, offers_a]);
-
   return {
-    notifications: results[0],
-    notifications_a: results[1],
     form: form,
     form_password: formPassword,
   };

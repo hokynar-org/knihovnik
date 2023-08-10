@@ -5,6 +5,8 @@
   import type { PrivateUserSafe } from '$lib/types';
 
   export let user: PrivateUserSafe;
+  import { notifications } from '$lib/store';
+  import Notification from '$lib/Notification.svelte';
 </script>
 
 <Drawer>
@@ -14,7 +16,13 @@
   {:else if id === 'alerts'}
     <menu class="p-2">
       <h2 class="h2">Alerts</h2>
-      <ol></ol>
+      <ol>
+        {#each $notifications as notification}
+          <li>
+            <Notification {notification} />
+          </li>
+        {/each}
+      </ol>
     </menu>
   {:else}
     ?

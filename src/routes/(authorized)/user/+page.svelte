@@ -1,37 +1,18 @@
 <script lang="ts">
   import { superForm } from 'sveltekit-superforms/client';
   import { page } from '$app/stores';
-  import { notifications, notifications_a } from '$lib/store';
+  import { notifications } from '$lib/store';
   import type { PageData } from './$types';
-  import NotificationBorrowRequest from '$lib/NotificationBorrowRequest.svelte';
-  import NotificationBorrowRequest_a from '$lib/NotificationBorrowRequest a.svelte';
 
   export let data: PageData;
 
   const form = superForm(data.form).form;
   const form_password = superForm(data.form_password).form;
 
-  $notifications = data.notifications;
-  $notifications_a = data.notifications_a;
-
   $form.user_name = $page.data.user.user_name;
   $form.full_name = $page.data.user.full_name;
   $form.pronouns = $page.data.user.pronouns;
 </script>
-
-<!-- <SuperDebug data={$form} />
-
-  <SuperDebug data={$form_password} /> -->
-
-<div>
-  {#each $notifications as notification}
-    <NotificationBorrowRequest {notification} />
-  {/each}
-
-  {#each $notifications_a as notification}
-    <NotificationBorrowRequest_a {notification} />
-  {/each}
-</div>
 
 <div class="container max-w-6xl mx-auto">
   <h3 class="h3 my-2">

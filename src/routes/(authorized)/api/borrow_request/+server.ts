@@ -1,7 +1,7 @@
 import { error, fail, json, redirect } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { db } from '$lib/server/db/drizzle';
-import {borrow_requests, items, request_actions} from '$lib/server/db/schema'
+import {borrow_requests, items, notifications, request_actions} from '$lib/server/db/schema'
 import { and, eq } from 'drizzle-orm';
 import type { BorrowRequest, Item } from '$lib/types';
 
@@ -39,5 +39,10 @@ export const POST = (async ({ locals, url}) => {
         type: 'CREATE',
         message: '',
         }).returning();
+    await db.insert(notifications).values({
+            user_id: borrow_request.lender_id,
+            text: "Užival " + borrow_request.borrower_id + " chce " + item.name,
+            url: '/borrow_request/'+String(borrow_request.id),
+          })
     return json(borrow_request);
 }) satisfies RequestHandler;
