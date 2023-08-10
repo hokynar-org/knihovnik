@@ -76,7 +76,7 @@ export const item_visibility = pgTable('item_visibility', {
 
 export const notifications = pgTable('notifications',{
   id: serial('id').primaryKey(),
-  user_id: integer('item_id').references(() => items.id).notNull(),
+  user_id: integer('user_id').references(() => users.id).notNull(),
   text: text('text'),
   url: text('url'),
   timestamp: timestamp('timestamp').defaultNow().notNull(),
