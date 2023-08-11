@@ -6,6 +6,7 @@
     AppBar,
     AppShell,
     drawerStore,
+    filter,
     storePopup,
   } from '@skeletonlabs/skeleton';
   import {
@@ -54,12 +55,18 @@
           class="btn-icon"
           on:click={() =>
             drawerStore.open({
-              id: 'alerts',
+              id: 'notifications',
               width: 'md:!w-72',
               position: 'right',
+              rounded: '!rounded-none',
             })}
         >
-          <Fa icon={faBell} />
+          <Fa icon={faBell} size="lg" />
+          <div class="text-lg">
+            {$notifications.filter((notification) => {
+              return !notification.read;
+            }).length}
+          </div>
         </button>
         <UserButton user={data.user} darkMode={data.darkMode} />
       </div>

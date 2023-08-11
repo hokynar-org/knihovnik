@@ -1,12 +1,12 @@
 import { db } from '$lib/server/db/drizzle';
-import { borrow_requests, request_actions, items, users } from '$lib/server/db/schema';
+import { borrow_requests, request_actions, items, users, notifications } from '$lib/server/db/schema';
 import { and, eq } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
 import type { BorrowRequest, PublicItemSafe, PublicUserSafe, RequestAction } from '$lib/types';
 import { alias } from 'drizzle-orm/pg-core';
 import { error, redirect } from '@sveltejs/kit';
 
-export const load = (async ({ locals,params }) => {
+export const load = (async ({ locals,params, url}) => {
   if(!params.borrow_request_id){
     throw error(404);
   }
@@ -66,7 +66,9 @@ export const load = (async ({ locals,params }) => {
   const request_actions_results:Promise<RequestAction[]> = db
   .select()
   .from(request_actions).where(eq(request_actions.borrow_request_id,borrow_request_id));
-  const results = await Promise.all([borrow_request_reusults,request_actions_results]);
+  
+  const read_notifications = db.update(notifications).set({read:true}).where(eq(notifications.url,url.pathname))
+  const results = await Promise.all([borrow_request_reusults,request_actions_results,read_notifications]);
   if(results[0].length==0){
     throw error(404);
   }
