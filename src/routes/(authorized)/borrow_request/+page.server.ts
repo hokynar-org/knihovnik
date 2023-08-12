@@ -1,28 +1,28 @@
 import { db } from '$lib/server/db/drizzle';
 import { borrow_requests, request_actions, items, users, notifications } from '$lib/server/db/schema';
-import { and, eq } from 'drizzle-orm';
+import { and, eq,or } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
 import type { BorrowRequest, PublicItemSafe, PublicUserSafe, RequestAction } from '$lib/types';
 import { alias } from 'drizzle-orm/pg-core';
 import { error, redirect } from '@sveltejs/kit';
 
-export const load = (async ({ locals,params, url}) => {
-  if(!params.borrow_request_id){
-    throw error(404);
+export const load = (async ({ locals }) => {
+  if(!locals.user){
+    throw error(401)
   }
-  const borrow_request_id=Number(params.borrow_request_id)
+  const user_id = locals.user.id;
   const borrower = alias(users, "borrower");
   const lender = alias(users, "lender");
   const owner = alias(users, "owner");
 
-  const borrow_request_reusults:Promise<{
+  const borrow_request_reusults:{
     borrower:PublicUserSafe,
     lender:PublicUserSafe,
     owner:PublicUserSafe,
     item:PublicItemSafe,
     borrow_request:BorrowRequest
-  }[]>
-   = db
+  }[]
+   = await db
   .select({
     borrower: {
       id: borrower.id,
@@ -57,31 +57,13 @@ export const load = (async ({ locals,params, url}) => {
       timestamp: borrow_requests.timestamp,
     },
   })
-  .from(borrow_requests).where(eq(borrow_requests.id,borrow_request_id))
+  .from(borrow_requests).where(or(eq(borrow_requests.lender_id,user_id),eq(borrow_requests.borrower_id,user_id)))
   .innerJoin(items,eq(borrow_requests.item_id,items.id))
   .innerJoin(borrower,eq(borrow_requests.borrower_id,borrower.id))
   .innerJoin(lender,eq(borrow_requests.lender_id,lender.id))
   .innerJoin(owner,eq(items.owner_id,owner.id))
-  
-  const request_actions_results:Promise<RequestAction[]> = db
-  .select()
-  .from(request_actions).where(eq(request_actions.borrow_request_id,borrow_request_id));
 
-  // const read_notifications = db.update(notifications).set({read:true}).where(and(eq(notifications.user_id,locals.user.id),eq(notifications.url,url.pathname)))
-  // const results = await Promise.all([borrow_request_reusults,request_actions_results,read_notifications]);
-  const results = await Promise.all([borrow_request_reusults,request_actions_results]);
-  if(results[0].length==0){
-    throw error(404);
-  }
-  if(locals.user.id!=results[0][0].lender.id && locals.user.id!=results[0][0].borrower.id && locals.user.id!=results[0][0].owner.id){
-    throw error(401);
-  }
   return {
-    borrower:results[0][0].borrower,
-    lender:results[0][0].lender,
-    owner:results[0][0].owner,
-    item:results[0][0].item,
-    borrow_request:results[0][0].borrow_request,
-    request_actions: results[1],
+    borrow_requests:borrow_request_reusults
   };
 }) satisfies PageServerLoad;
