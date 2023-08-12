@@ -2,6 +2,7 @@
   import { navigating, page } from '$app/stores';
   import Spinner from '$lib/components/Spinner.svelte';
   import { faBars, faBell } from '@fortawesome/free-solid-svg-icons';
+  import Pusher from 'pusher-js';
   import {
     AppBar,
     AppShell,
@@ -22,13 +23,25 @@
   import Sidebar from './(components)/Sidebar.svelte';
   import AppDrawer from './(components)/AppDrawer.svelte';
   import { notifications } from '$lib/store';
+  import type { Notification } from '$lib/types';
 
   export let data;
 
   $: user = data.user;
   $: $notifications = data.notifications;
-
   storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow });
+  const pusher = new Pusher(data.pusher.key, {
+    cluster: data.pusher.cluster,
+    userAuthentication: {
+      endpoint: 'api/pusher/auth',
+      transport: 'ajax',
+    },
+  });
+  pusher.signin();
+  pusher.user.bind('notification', (data: Notification) => {
+    $notifications.push(data);
+    $notifications = $notifications;
+  });
 </script>
 
 <svelte:head>

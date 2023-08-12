@@ -4,6 +4,7 @@ import { db } from '$lib/server/db/drizzle';
 import {borrow_requests, items, notifications, request_actions, users} from '$lib/server/db/schema'
 import { and, eq } from 'drizzle-orm';
 import type { BorrowRequest, Item, PublicItemSafe } from '$lib/types';
+import { pusher } from '$lib/server/pusher';
 
 export const POST = (async ({ locals, url}) => {
     if (!locals.user) {

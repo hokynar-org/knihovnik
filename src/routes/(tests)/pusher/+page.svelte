@@ -1,11 +1,19 @@
 <script lang="ts">
   import Pusher from 'pusher-js';
-  const APP_KEY = '1647023';
-  const APP_CLUSTER = 'eu';
-  const pusher = new Pusher(APP_KEY, {
-    cluster: APP_CLUSTER,
+  import { onMount } from 'svelte';
+  export let data;
+  const pusher = new Pusher(data.key, {
+    cluster: data.cluster,
+    userAuthentication: {
+      endpoint: 'api/pusher/auth',
+      transport: 'ajax',
+    },
   });
-  console.log(pusher);
-  const ch = pusher.connect();
-  //   console.log(ch);
+  let jis = '';
+  pusher.user.bind('event-name', () => {
+    jis = 'fffffff';
+  });
+  pusher.signin();
 </script>
+
+{jis}
