@@ -3,6 +3,7 @@ import type { RequestHandler } from './$types';
 import { db } from '$lib/server/db/drizzle';
 import {borrow_requests, items} from '$lib/server/db/schema'
 import { eq } from 'drizzle-orm';
+import type { Item } from '$lib/types';
 
 export const POST = (async ({locals, params}) => {
     if (!locals.user) {
@@ -24,7 +25,7 @@ export const POST = (async ({locals, params}) => {
         throw error(401);
     }
     await db.delete(borrow_requests).where(eq(borrow_requests.item_id, Number(item_id)));
-    const deleted_item = await db.delete(items).where(eq(items.id, Number(item_id))).returning();
+    const deleted_item:Item[] = await db.delete(items).where(eq(items.id, Number(item_id))).returning();
 
     return json(deleted_item[0]);
 }) satisfies RequestHandler;

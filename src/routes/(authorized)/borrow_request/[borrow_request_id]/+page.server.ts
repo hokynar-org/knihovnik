@@ -67,8 +67,9 @@ export const load = (async ({ locals,params, url}) => {
   .select()
   .from(request_actions).where(eq(request_actions.borrow_request_id,borrow_request_id));
 
-  const read_notifications = db.update(notifications).set({read:true}).where(and(eq(notifications.user_id,locals.user.id),eq(notifications.url,url.pathname)))
-  const results = await Promise.all([borrow_request_reusults,request_actions_results,read_notifications]);
+  // const read_notifications = db.update(notifications).set({read:true}).where(and(eq(notifications.user_id,locals.user.id),eq(notifications.url,url.pathname)))
+  // const results = await Promise.all([borrow_request_reusults,request_actions_results,read_notifications]);
+  const results = await Promise.all([borrow_request_reusults,request_actions_results]);
   if(results[0].length==0){
     throw error(404);
   }

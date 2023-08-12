@@ -2,8 +2,9 @@ import Cookies from 'js-cookie';
 import { writable } from 'svelte/store';
 import { browser } from '$app/environment';
 import { prefersDarkMode } from '$lib/colorTheme';
+import type { LayoutLoad } from './$types';
 
-export const load = async ({ data }) => {
+export const load:LayoutLoad = async ({ data }) => {
   const darkMode = writable(data.darkMode ?? false);
 
   if (browser) {
