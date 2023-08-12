@@ -39,7 +39,7 @@
   });
   pusher.signin();
   pusher.user.bind('notification', (data: Notification) => {
-    $notifications = [data, ...$notifications];
+    $notifications = [...$notifications, data];
   });
 </script>
 
