@@ -4,6 +4,7 @@ import { db } from '$lib/server/db/drizzle';
 import {borrow_requests, items, notifications, request_actions} from '$lib/server/db/schema'
 import { eq } from 'drizzle-orm';
 import type { BorrowRequest } from '$lib/types';
+import { pusher } from '$lib/server/pusher';
 
 export const POST = (async ({ request, params, locals, url, route }) => {
   if (!locals.user) {
@@ -53,8 +54,9 @@ export const POST = (async ({ request, params, locals, url, route }) => {
         user_id: old_borrow_request.borrower_id,
         text: "User " + locals.user.user_name + " accepted your request for " + item.name,
         url: '/borrow_request/'+String(old_borrow_request.id),
-      });
-    const results=await Promise.all([new_borrow_requests,new_requests_actions,accept_notification])
+      }).returning();
+    const results=await Promise.all([new_borrow_requests,new_requests_actions,accept_notification]);
+    pusher.sendToUser(String(old_borrow_request.borrower_id), "notification", results[2][0]);
     return json(results[0][0]);
   } catch (err) {
     throw error(500);

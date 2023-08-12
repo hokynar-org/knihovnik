@@ -33,7 +33,7 @@
   const pusher = new Pusher(data.pusher.key, {
     cluster: data.pusher.cluster,
     userAuthentication: {
-      endpoint: 'api/pusher/auth',
+      endpoint: '../api/pusher/auth',
       transport: 'ajax',
     },
   });

@@ -4,6 +4,7 @@ import { db } from '$lib/server/db/drizzle';
 import {borrow_requests,items,notifications,request_actions} from '$lib/server/db/schema'
 import { eq } from 'drizzle-orm';
 import type { BorrowRequest } from '$lib/types';
+import { pusher } from '$lib/server/pusher';
 
 export const POST = (async ({ request, params, locals, url, route }) => {
   if (!locals.user) {
@@ -47,8 +48,9 @@ export const POST = (async ({ request, params, locals, url, route }) => {
     const cancel_notification:Promise<any> = db.insert(notifications).values({
       user_id: old_borrow_request.lender_id,
       text: "User " + locals.user.user_name + " no longer wants " + item.name,
-    });
+    }).returning();
     const results:any = await Promise.all([delete_borrow_requests,delete_request_actions,cancel_notification]);
+    pusher.sendToUser(String(old_borrow_request.lender_id), "notification", results[2][0]);
     return json(results[0][0]);
   } catch (err) {
     throw error(500);
