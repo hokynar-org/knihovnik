@@ -189,7 +189,7 @@
 </div>
 {borrow_request.status}
 <table>
-  {#each $request_actions as request_action}
+  {#each $request_actions as request_action (request_action.id)}
     <tr>
       <td>
         {request_action.type}
