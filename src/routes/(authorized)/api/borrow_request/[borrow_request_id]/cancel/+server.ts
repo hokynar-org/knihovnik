@@ -50,7 +50,7 @@ export const POST = (async ({ request, params, locals, url, route }) => {
       text: "User " + locals.user.user_name + " no longer wants " + item.name,
     }).returning();
     const results:any = await Promise.all([delete_borrow_requests,delete_request_actions,cancel_notification]);
-    pusher.sendToUser(String(old_borrow_request.lender_id), "notification", results[2][0]);
+    await pusher.sendToUser(String(old_borrow_request.lender_id), "notification", results[2][0]);
     return json(results[0][0]);
   } catch (err) {
     throw error(500);

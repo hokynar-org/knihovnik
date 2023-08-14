@@ -53,8 +53,8 @@ export const POST = (async ({ request, params, locals, url, route }) => {
         url: '/borrow_request/'+String(borrow_request.id),
       }).returning();
     const results:[RequestAction[],Notification[]] = await Promise.all([new_requests_actions,message_notification]);
-    pusher.sendToUser(String(user_id==borrow_request.lender_id?borrow_request.borrower_id:borrow_request.lender_id), "notification", results[1][0]);
-    pusher.trigger('private-borrow_request-' + borrow_request_id,'request_action',{borrow_request:undefined,action:results[0][0]})
+    await pusher.sendToUser(String(user_id==borrow_request.lender_id?borrow_request.borrower_id:borrow_request.lender_id), "notification", results[1][0]);
+    await pusher.trigger('private-borrow_request-' + borrow_request_id,'request_action',{borrow_request:undefined,action:results[0][0]})
     return json(results[0][0]);
   } catch (err) {
     throw error(500);

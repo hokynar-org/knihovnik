@@ -45,7 +45,7 @@ export const POST = (async ({ locals, url}) => {
             text: "User " + locals.user.user_name + " wants " + item.name,
             url: '/borrow_request/'+String(borrow_request.id),
           }).returning();
-    pusher.sendToUser(String(borrow_request.lender_id), "notification", notification[0]);
+    await pusher.sendToUser(String(borrow_request.lender_id), "notification", notification[0]);
 
     return json(borrow_request);
 }) satisfies RequestHandler;

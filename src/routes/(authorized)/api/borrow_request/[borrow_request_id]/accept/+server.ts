@@ -56,8 +56,8 @@ export const POST = (async ({ request, params, locals, url, route }) => {
         url: '/borrow_request/'+String(old_borrow_request.id),
       }).returning();
     const results=await Promise.all([new_borrow_requests,new_requests_actions,accept_notification]);
-    pusher.sendToUser(String(old_borrow_request.borrower_id), "notification", results[2][0]);
-    pusher.trigger('private-borrow_request-' + borrow_request_id,'request_action',{borrow_request:results[0][0],action:results[1][0]})
+    await pusher.sendToUser(String(old_borrow_request.borrower_id), "notification", results[2][0]);
+    await pusher.trigger('private-borrow_request-' + borrow_request_id,'request_action',{borrow_request:results[0][0],action:results[1][0]})
     return json(results[0][0]);
   } catch (err) {
     throw error(500);
