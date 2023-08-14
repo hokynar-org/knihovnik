@@ -1,9 +1,11 @@
 <script lang="ts">
   import type { PageData } from './$types';
-  import { request_actions } from '$lib/store';
+  import { request_actions, pusher } from '$lib/store';
   export let data: PageData;
   import PlainItem from '$lib/PlainItem.svelte';
   import { goto } from '$app/navigation';
+  import type { BorrowRequest, RequestAction } from '$lib/types';
+  import { onDestroy, onMount } from 'svelte';
   $: borrow_request = data.borrow_request;
   $: $request_actions = data.request_actions;
   $: lender = data.lender;
@@ -13,6 +15,27 @@
   $: user = data.user;
   let disabled = false;
   let message: string = '';
+  let fallback = false;
+  if ($pusher) {
+    const channel = $pusher.subscribe(
+      'private-borrow_request-' + String(data.borrow_request.id),
+    );
+    channel.bind(
+      'request_action',
+      (data: { borrow_request: BorrowRequest; action: RequestAction }) => {
+        $request_actions = [...$request_actions, data.action];
+        if (data.borrow_request) {
+          borrow_request = data.borrow_request;
+        }
+      },
+    );
+    onDestroy(() => {
+      channel.unsubscribe();
+    });
+  } else {
+    fallback = true;
+  }
+
   async function send_message() {
     const response = await fetch(
       '/api/borrow_request/' + borrow_request.id + '/message',
@@ -79,30 +102,54 @@
     <button
       on:click={() => {
         disabled = true;
-        deny()
-          .then((value) => {
-            borrow_request = value;
-            disabled = false;
-            return value;
-          })
-          .catch((reason) => {
-            disabled = false;
-          });
+        const res = deny();
+        if (fallback) {
+          res
+            .then((value) => {
+              borrow_request = value;
+              disabled = false;
+              return value;
+            })
+            .catch((reason) => {
+              disabled = false;
+            });
+        } else {
+          res
+            .then((value) => {
+              disabled = false;
+              return value;
+            })
+            .catch((reason) => {
+              disabled = false;
+            });
+        }
       }}
       {disabled}>Deny</button
     >
     <button
       on:click={() => {
         disabled = true;
-        accept()
-          .then((value) => {
-            borrow_request = value;
-            disabled = false;
-            return value;
-          })
-          .catch((reason) => {
-            disabled = false;
-          });
+        const res = accept();
+        if (fallback) {
+          res
+            .then((value) => {
+              borrow_request = value;
+              disabled = false;
+              return value;
+            })
+            .catch((reason) => {
+              disabled = false;
+            });
+        } else {
+          res
+            .then((value) => {
+              disabled = false;
+              return value;
+            })
+            .catch((reason) => {
+              disabled = false;
+            });
+        }
       }}
       {disabled}>Accept</button
     >
@@ -110,15 +157,27 @@
     <button
       on:click={() => {
         disabled = true;
-        cancel()
-          .then((value) => {
-            borrow_request = value;
-            disabled = false;
-            return value;
-          })
-          .catch((reason) => {
-            disabled = false;
-          });
+        const res = cancel();
+        if (fallback) {
+          res
+            .then((value) => {
+              borrow_request = value;
+              disabled = false;
+              return value;
+            })
+            .catch((reason) => {
+              disabled = false;
+            });
+        } else {
+          res
+            .then((value) => {
+              disabled = false;
+              return value;
+            })
+            .catch((reason) => {
+              disabled = false;
+            });
+        }
       }}
       {disabled}>Cancel</button
     >
@@ -152,8 +211,18 @@
 <input style={'color:black'} type="text" bind:value={message} />
 <button
   on:click={() => {
-    send_message().then((value) => {
-      $request_actions = [...$request_actions, value];
-    });
-  }}>Send</button
+    disabled = true;
+    const res = send_message();
+    if (fallback) {
+      res.then((value) => {
+        $request_actions = [...$request_actions, value];
+        disabled = false;
+      });
+    } else {
+      res.then((value) => {
+        disabled = false;
+      });
+    }
+  }}
+  {disabled}>Send</button
 >

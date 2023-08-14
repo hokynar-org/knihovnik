@@ -14,6 +14,7 @@ export const load = (async ({ locals,params, url}) => {
   const borrower = alias(users, "borrower");
   const lender = alias(users, "lender");
   const owner = alias(users, "owner");
+  
 
   const borrow_request_reusults:Promise<{
     borrower:PublicUserSafe,

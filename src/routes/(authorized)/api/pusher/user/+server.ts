@@ -14,8 +14,8 @@ export const POST = (async ({ request, params, locals, url, route }) => {
   const pusher_user = {
     id: String(user_id),
   };
-  const body = await (await request).text()
-  const socketId = body.split('=')[1]
+  const body = await (await request).text();
+  const socketId = body.split('=')[1];
   const authResponse = pusher.authenticateUser(socketId, pusher_user);
   return json(authResponse);
 }) satisfies RequestHandler;

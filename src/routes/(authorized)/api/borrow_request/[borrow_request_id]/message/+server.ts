@@ -3,7 +3,7 @@ import type { RequestHandler } from './$types';
 import { db } from '$lib/server/db/drizzle';
 import {borrow_requests, items, notifications, request_actions} from '$lib/server/db/schema'
 import { eq } from 'drizzle-orm';
-import type { Notification, RequestAction } from '$lib/types';
+import type { BorrowRequest, Notification, PublicItemSafe, RequestAction } from '$lib/types';
 import { pusher } from '$lib/server/pusher';
 
 export const POST = (async ({ request, params, locals, url, route }) => {
@@ -17,7 +17,7 @@ export const POST = (async ({ request, params, locals, url, route }) => {
   const message = body.message;
   const user_id = locals.user.id;
   const borrow_request_id = params.borrow_request_id as string;
-  const found_borrow_requests = await db.select({
+  const found_borrow_requests:{item:PublicItemSafe,borrow_request:BorrowRequest}[] = await db.select({
     item: {
       name: items.name,
       description: items.description,
@@ -52,8 +52,9 @@ export const POST = (async ({ request, params, locals, url, route }) => {
         text: "User " + locals.user.user_name + " messaged you concerning " + item.name,
         url: '/borrow_request/'+String(borrow_request.id),
       }).returning();
-    const results = await Promise.all([new_requests_actions,message_notification]);
+    const results:[RequestAction[],Notification[]] = await Promise.all([new_requests_actions,message_notification]);
     pusher.sendToUser(String(user_id==borrow_request.lender_id?borrow_request.borrower_id:borrow_request.lender_id), "notification", results[1][0]);
+    pusher.trigger('private-borrow_request-' + borrow_request_id,'request_action',{borrow_request:undefined,action:results[0][0]})
     return json(results[0][0]);
   } catch (err) {
     throw error(500);

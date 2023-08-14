@@ -22,7 +22,7 @@
   import UserButton from './(components)/UserButton.svelte';
   import Sidebar from './(components)/Sidebar.svelte';
   import AppDrawer from './(components)/AppDrawer.svelte';
-  import { notifications } from '$lib/store';
+  import { notifications, pusher } from '$lib/store';
   import type { Notification } from '$lib/types';
 
   export let data;
@@ -30,15 +30,19 @@
   $: user = data.user;
   $: $notifications = data.notifications;
   storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow });
-  const pusher = new Pusher(data.pusher.key, {
+  $pusher = new Pusher(data.pusher.key, {
     cluster: data.pusher.cluster,
     userAuthentication: {
-      endpoint: '../api/pusher/auth',
+      endpoint: '/api/pusher/user',
+      transport: 'ajax',
+    },
+    channelAuthorization: {
+      endpoint: '/api/pusher/borrow_request',
       transport: 'ajax',
     },
   });
-  pusher.signin();
-  pusher.user.bind('notification', (data: Notification) => {
+  $pusher.signin();
+  $pusher.user.bind('notification', (data: Notification) => {
     $notifications = [...$notifications, data];
   });
 </script>
