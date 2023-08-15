@@ -49,7 +49,13 @@
   <div class="text">
     <div class="nameAndDesc">
       <h4>
-        <a href="/item/{offer.item.id}">{offer.item.name}</a>
+        {#if offer.borrow_request}
+          <a href="/borrow_request/{offer.borrow_request.id}"
+            >{offer.item.name}</a
+          >
+        {:else}
+          <a href="/item/{offer.item.id}">{offer.item.name}</a>
+        {/if}
       </h4>
       <div class="descr">{offer.item.description}</div>
     </div>
@@ -78,7 +84,7 @@
           >
         </div>
       {/if}
-      {#if offer.borrow_request}
+      {#if offer.borrow_request && offer.borrow_request.status == 'PENDING'}
         <div class="cancel">
           <button
             on:click={() => {
@@ -95,6 +101,8 @@
             {disabled}>Cancel</button
           >
         </div>
+      {/if}
+      {#if offer.borrow_request}
         {offer.borrow_request.status}
       {/if}
     </div>

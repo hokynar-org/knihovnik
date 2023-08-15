@@ -85,6 +85,18 @@
     }
     return await response.json();
   }
+  async function confirm() {
+    const response = await fetch(
+      '/api/borrow_request/' + borrow_request.id + '/confirm',
+      {
+        method: 'POST',
+      },
+    );
+    if (!response.ok) {
+      throw new Error(String(response.status));
+    }
+    return await response.json();
+  }
   const id_to_user = (id: number) => {
     switch (id) {
       case lender.id:
@@ -182,6 +194,39 @@
       {disabled}>Cancel</button
     >
   {/if}
+{/if}
+{#if borrow_request.status == 'ACCEPTED' && $request_actions.filter((value) => {
+    if (value.type == 'CONFIRM' && value.user_id == user.id) {
+      return true;
+    }
+  }).length == 0}
+  <button
+    on:click={() => {
+      disabled = true;
+      const res = confirm();
+      if (fallback) {
+        res
+          .then((value) => {
+            borrow_request = value;
+            disabled = false;
+            return value;
+          })
+          .catch((reason) => {
+            disabled = false;
+          });
+      } else {
+        res
+          .then((value) => {
+            disabled = false;
+            return value;
+          })
+          .catch((reason) => {
+            disabled = false;
+          });
+      }
+    }}
+    {disabled}>Confirm</button
+  >
 {/if}
 
 <div>

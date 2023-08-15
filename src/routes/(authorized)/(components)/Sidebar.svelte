@@ -16,7 +16,7 @@
   <MenuItem href="/borrow" icon={faHandshake} {current}>Borrow</MenuItem>
   <MenuItem href="/offer" icon={faRightLeft} {current}>Offer</MenuItem>
   <MenuItem href="/borrow_request" icon={faEnvelopeOpen} {current}
-    >Borrow Requests</MenuItem
+    >Requests</MenuItem
   >
   <svelte:fragment slot="trail">
     {#if isAdmin}

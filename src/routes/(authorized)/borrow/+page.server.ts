@@ -1,6 +1,6 @@
 import { db } from '$lib/server/db/drizzle';
 import { borrow_requests, items, users } from '$lib/server/db/schema';
-import { and, eq } from 'drizzle-orm';
+import { and, eq,not } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
 import type { Offer } from '$lib/types';
 import { redirect } from '@sveltejs/kit';
@@ -29,12 +29,11 @@ export const load = (async ({ locals }) => {
         timestamp: borrow_requests.timestamp,
       },
     })
-    .from(items)
+    .from(items).where(eq(items.holder_id,items.owner_id))
     .innerJoin(users, eq(items.owner_id, users.id))
     .leftJoin(
       borrow_requests,
       and(
-        eq(borrow_requests.borrower_id, Number(locals.user.id)),
         eq(items.id, borrow_requests.item_id),
       ),
     );

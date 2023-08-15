@@ -7,5 +7,4 @@
 
 <div class="container">
   <BorrowableItem offer={data.offer} user_id={data.user.id} />
-  <BorrowableItem offer={data.offer} user_id={data.user.id} />
 </div>

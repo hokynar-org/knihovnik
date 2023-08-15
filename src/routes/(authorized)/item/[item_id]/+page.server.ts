@@ -37,7 +37,6 @@ export const load: PageServerLoad = (async ({ locals, params }) => {
     .leftJoin(
       borrow_requests,
       and(
-        eq(borrow_requests.borrower_id, Number(locals.user.id)),
         eq(items.id, borrow_requests.item_id),
       ),
     );
