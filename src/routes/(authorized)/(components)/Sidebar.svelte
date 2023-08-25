@@ -6,6 +6,8 @@
     faHandshake,
     faRightLeft,
     faToolbox,
+    faCube,
+    faHandHolding,
   } from '@fortawesome/free-solid-svg-icons';
 
   export let isAdmin: boolean;
@@ -18,6 +20,9 @@
   <MenuItem href="/borrow_request" icon={faEnvelopeOpen} {current}
     >Requests</MenuItem
   >
+  <MenuItem href="/borrowed" icon={faCube} {current}>Borrowed</MenuItem>
+  <MenuItem href="/lended" icon={faHandHolding} {current}>Lended</MenuItem>
+
   <svelte:fragment slot="trail">
     {#if isAdmin}
       <MenuItem href="/admin" icon={faToolbox} {current}>Admin</MenuItem>

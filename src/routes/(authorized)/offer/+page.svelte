@@ -3,12 +3,20 @@
   import UserItem from '$lib/UserItem.svelte';
   import NewItem from '$lib/NewItem.svelte';
   import { user_items } from '$lib/store';
-
+  import { FileDropzone } from '@skeletonlabs/skeleton';
+  import { onMount } from 'svelte';
+  let files: FileList;
   export let data;
 
   const item_form = superForm(data.item_form).form;
 
   $user_items = data.user_items;
+
+  onMount(() => {
+    setInterval(() => {
+      console.log(files);
+    }, 1000);
+  });
 </script>
 
 <div>
@@ -26,10 +34,8 @@
     />
     <div><button>Submit</button></div>
   </form>
+  <FileDropzone name="picture" bind:files />
 </div>
-<!-- <div class="container">
-  <NewItem />
-</div> -->
 
 <div class="relative w-full">
   {#each $user_items as item (item.id)}
