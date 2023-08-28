@@ -1,12 +1,12 @@
 <script lang="ts">
-  import BorrowableItem from '$lib/BorrowableItem.svelte';
+  import Item from '$lib/Item.svelte';
 
   export let data;
 </script>
 
 <div class="container">
   {#each data.offers as offer (offer.item.id)}
-    <BorrowableItem {offer} user_id={data.user.id} />
+    <Item item={offer.item} />
   {/each}
 </div>
 

@@ -2,7 +2,7 @@
   import type { PageData } from './$types';
   import { request_actions, pusher } from '$lib/store';
   export let data: PageData;
-  import PlainItem from '$lib/PlainItem.svelte';
+  import Item from '$lib/Item.svelte';
   import { goto } from '$app/navigation';
   import type { BorrowRequest, RequestAction } from '$lib/types';
   import { onDestroy, onMount } from 'svelte';
@@ -230,7 +230,7 @@
 {/if}
 
 <div>
-  <PlainItem {item} />
+  <Item {item} />
 </div>
 {borrow_request.status}
 <table>

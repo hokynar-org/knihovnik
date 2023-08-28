@@ -29,6 +29,7 @@
         <a href={mapUrl}> <Fa icon={faLocationDot} /> {where} </a>
       </div>
     </div>
+    <slot />
   </div>
 </article>
 

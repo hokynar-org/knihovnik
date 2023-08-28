@@ -1,7 +1,6 @@
 <script lang="ts">
   import { superForm } from 'sveltekit-superforms/client';
-  import UserItem from '$lib/UserItem.svelte';
-  import NewItem from '$lib/NewItem.svelte';
+  import Item from '$lib/Item.svelte';
   import { user_items } from '$lib/store';
   import { FileDropzone } from '@skeletonlabs/skeleton';
   import { onMount } from 'svelte';
@@ -42,6 +41,6 @@
 
 <div class="relative w-full">
   {#each $user_items as item (item.id)}
-    <UserItem {item} />
+    <Item {item}></Item>
   {/each}
 </div>
