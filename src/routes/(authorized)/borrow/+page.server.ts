@@ -35,8 +35,15 @@ export const load = (async ({ locals }) => {
     })
     .from(items).where(eq(items.holder_id,items.owner_id))
     .innerJoin(users, eq(items.owner_id, users.id))
-    .leftJoin(borrow_requests,eq(items.id, borrow_requests.item_id))
-    .where(or(eq(borrow_requests.lender_id,user.id),eq(borrow_requests.borrower_id,user.id)));
+    .leftJoin(borrow_requests,
+      and(
+        eq(items.id, borrow_requests.item_id),
+        or(
+          eq(borrow_requests.lender_id,user.id),
+          eq(borrow_requests.borrower_id,user.id)
+        )
+      )
+    );
   return {
     offers: offers,
   };
