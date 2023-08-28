@@ -4,6 +4,7 @@
   import { user_items } from '$lib/store';
   import { FileDropzone } from '@skeletonlabs/skeleton';
   import { onMount } from 'svelte';
+  import DeleteItem from '$lib/DeleteItem.svelte';
   let files: FileList;
   export let data;
 
@@ -42,7 +43,15 @@
 <div class="relative w-full">
   {#each $user_items as item (item.id)}
     <Item {item}>
-      <p>Ahoj</p>
+      <div>
+        <p>Location</p>
+      </div>
+      <div>
+        <button class="btn variant-filled-primary py-1 my-2">Edit</button>
+      </div>
+      <div>
+        <DeleteItem {item} {data} />
+      </div>
     </Item>
   {/each}
 </div>
