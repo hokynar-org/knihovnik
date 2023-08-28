@@ -21,28 +21,20 @@
 
 <div>
   <form method="POST" action="?/new_item">
-    <label for="name" class="text-lg dark:text-blue">Name</label>
-    <input
-      type="name"
-      name="name"
-      class="text-black px-1"
-      bind:value={$item_form.name}
-    />
+    <label for="name" class="text-xl mt-4 mb-2">Name</label>
+    <input type="text" name="name" class="input" bind:value={$item_form.name} />
 
-    <label for="description" class="text-lg mt-2">Description</label>
+    <label for="description" class="text-xl mt-4 mb-2">Description</label>
     <textarea
       id="description"
       name="description"
       rows="4"
-      class="text-black px-2 py-2"
+      class="input"
       bind:value={$item_form.description}
       style="resize: none;"
     />
-    <div class="flex content-center justify-center">
-      <button
-        class="px-3 py-2 my-2 text-lg rounded-container-token bg-primary-500"
-        >Submit</button
-      >
+    <div class="flex content-center justify-center my-3">
+      <button class="btn variant-filled-primary">Submit</button>
     </div>
   </form>
   <FileDropzone name="picture" bind:files />
