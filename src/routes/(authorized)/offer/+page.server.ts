@@ -9,7 +9,7 @@ import type { Item } from '$lib/types';
 
 const item_form_schema = z.object({
   name: z.string().min(2),
-  description: z.string().min(10),
+  description: z.string().min(0),
 });
 
 export const load = (async ({ locals }) => {
