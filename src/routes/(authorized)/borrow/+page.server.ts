@@ -1,11 +1,15 @@
 import { db } from '$lib/server/db/drizzle';
 import { borrow_requests, items, users } from '$lib/server/db/schema';
-import { and, eq,not } from 'drizzle-orm';
+import { and, eq,not, or } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
 import type { Offer } from '$lib/types';
 import { redirect } from '@sveltejs/kit';
 
 export const load = (async ({ locals }) => {
+  if(!locals.user){
+    redirect(301,"/")
+  }
+  const user=locals.user;
   const offers:Offer[] = await db
     .select({
       user: {
@@ -31,13 +35,8 @@ export const load = (async ({ locals }) => {
     })
     .from(items).where(eq(items.holder_id,items.owner_id))
     .innerJoin(users, eq(items.owner_id, users.id))
-    .leftJoin(
-      borrow_requests,
-      and(
-        eq(items.id, borrow_requests.item_id),
-      ),
-    );
-
+    .leftJoin(borrow_requests,eq(items.id, borrow_requests.item_id))
+    .where(or(eq(borrow_requests.lender_id,user.id),eq(borrow_requests.borrower_id,user.id)));
   return {
     offers: offers,
   };
