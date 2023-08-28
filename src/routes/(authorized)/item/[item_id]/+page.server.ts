@@ -1,12 +1,16 @@
-import { error } from '@sveltejs/kit';
+import { error, redirect } from '@sveltejs/kit';
 import { borrow_requests, items, users } from '$lib/server/db/schema';
 import { db } from '$lib/server/db/drizzle';
-import { and, eq } from 'drizzle-orm';
+import { and, eq, or } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
 import type { Offer } from '$lib/types';
 
 export const load: PageServerLoad = (async ({ locals, params }) => {
   const item_id = params.item_id;
+  if(!locals.user){
+    redirect(301,"/")
+  }
+  const user=locals.user;
   const result = await db
     .select({
       user: {
@@ -34,11 +38,14 @@ export const load: PageServerLoad = (async ({ locals, params }) => {
     .from(items)
     .where(eq(items.id, Number(item_id)))
     .innerJoin(users, eq(items.owner_id, users.id))
-    .leftJoin(
-      borrow_requests,
+    .leftJoin(borrow_requests,
       and(
         eq(items.id, borrow_requests.item_id),
-      ),
+        or(
+          eq(borrow_requests.lender_id,user.id),
+          eq(borrow_requests.borrower_id,user.id)
+        )
+      )
     );
 
   if (result.length == 0) {
