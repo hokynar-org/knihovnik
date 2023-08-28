@@ -21,10 +21,10 @@
 
 <div>
   <form method="POST" action="?/new_item">
-    <label for="name">Name</label>
+    <label for="name" class="text-lg">Name</label>
     <input type="name" name="name" bind:value={$item_form.name} />
 
-    <label for="description">Description</label>
+    <label for="description" class="text-lg mt-2">Description</label>
     <textarea
       id="description"
       name="description"
@@ -32,7 +32,12 @@
       bind:value={$item_form.description}
       style="resize: none;"
     />
-    <div><button>Submit</button></div>
+    <div class="flex content-center justify-center">
+      <button
+        class="px-3 py-2 my-2 text-lg rounded-container-token bg-primary-500"
+        >Submit</button
+      >
+    </div>
   </form>
   <FileDropzone name="picture" bind:files />
 </div>
