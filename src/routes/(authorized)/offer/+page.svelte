@@ -21,14 +21,20 @@
 
 <div>
   <form method="POST" action="?/new_item">
-    <label for="name" class="text-lg">Name</label>
-    <input type="name" name="name" bind:value={$item_form.name} />
+    <label for="name" class="text-lg dark:text-blue">Name</label>
+    <input
+      type="name"
+      name="name"
+      class="text-black px-1"
+      bind:value={$item_form.name}
+    />
 
     <label for="description" class="text-lg mt-2">Description</label>
     <textarea
       id="description"
       name="description"
       rows="4"
+      class="text-black px-2 py-2"
       bind:value={$item_form.description}
       style="resize: none;"
     />
