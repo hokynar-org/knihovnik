@@ -41,6 +41,8 @@
 
 <div class="relative w-full">
   {#each $user_items as item (item.id)}
-    <Item {item}></Item>
+    <Item {item}>
+      <p>Ahoj</p>
+    </Item>
   {/each}
 </div>

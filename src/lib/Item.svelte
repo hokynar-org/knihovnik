@@ -18,18 +18,15 @@
     <img src={image} alt={imageAltText} />
   </div>
   <div class="text">
-    <div class="nameAndDesc">
+    <div class="nameAndDesc mx-2">
       <h4>
         <a href="/item/{item.id}">{item.name}</a>
       </h4>
       <div class="descr">{item.description}</div>
     </div>
-    <div class="contact">
-      <div class="place" data-tooltip="hai">
-        <a href={mapUrl}> <Fa icon={faLocationDot} /> {where} </a>
-      </div>
+    <div class="mx-2">
+      <slot />
     </div>
-    <slot />
   </div>
 </article>
 
