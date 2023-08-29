@@ -1,10 +1,11 @@
 <script lang="ts">
-  import type { BorrowRequest, Offer, PublicUserSafe } from './types';
-  export let offer: Offer;
-  export let user: PublicUserSafe;
+  import type { BorrowRequest, PublicItemSafe, PublicUserSafe } from './types';
+  export let borrow_request: BorrowRequest | null;
+  export let item: PublicItemSafe;
+
   async function borrow() {
     const response = await fetch(
-      '/api/borrow_request/' + '?item_id=' + offer.item.id,
+      '/api/borrow_request/' + '?item_id=' + item.id,
       {
         method: 'POST',
       },
@@ -15,11 +16,11 @@
     return (await response.json()) as BorrowRequest;
   }
   async function cancel() {
-    if (!offer.borrow_request) {
+    if (!borrow_request) {
       throw new Error('Nothing to cancel');
     }
     const response = await fetch(
-      '/api/borrow_request/' + offer.borrow_request.id + '/cancel',
+      '/api/borrow_request/' + borrow_request.id + '/cancel',
       {
         method: 'POST',
       },
@@ -33,14 +34,14 @@
 </script>
 
 <div class="flex flex-col">
-  {#if user.id != offer.user.id && !offer.borrow_request}
+  {#if !borrow_request}
     <button
       class="btn variant-filled-primary py-1 my-2"
       on:click={() => {
         disabled = true;
         borrow()
           .then((value) => {
-            offer.borrow_request = value;
+            borrow_request = value;
             disabled = false;
           })
           .catch((reson) => {
@@ -49,15 +50,14 @@
       }}
       {disabled}>Borrow</button
     >
-  {/if}
-  {#if offer.borrow_request && offer.borrow_request.status == 'PENDING'}
+  {:else if borrow_request.status == 'PENDING'}
     <button
-      class="btn variant-filled-primary py-1 my-2"
+      class="btn variant-filled-error py-1 my-2"
       on:click={() => {
         disabled = true;
         cancel()
           .then((value) => {
-            offer.borrow_request = null;
+            borrow_request = null;
             disabled = false;
           })
           .catch((reason) => {
@@ -66,8 +66,7 @@
       }}
       {disabled}>Cancel</button
     >
-  {/if}
-  {#if offer.borrow_request}
-    {offer.borrow_request.status}
+  {:else}
+    {borrow_request.status}
   {/if}
 </div>

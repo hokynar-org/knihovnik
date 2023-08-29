@@ -1,23 +1,9 @@
 <script lang="ts">
-  import { superForm } from 'sveltekit-superforms/client';
   import { user_items } from '$lib/store';
-  import { onMount } from 'svelte';
   import type { PublicItemSafe } from './types';
-  let files: FileList;
-  export let data;
-
-  const item_form = superForm(data.item_form).form;
-
-  $user_items = data.user_items;
-
-  onMount(() => {
-    setInterval(() => {
-      console.log(files);
-    }, 1000);
-  });
+  export let item: PublicItemSafe;
 
   let disabled = false;
-  export let item: PublicItemSafe;
 
   async function deleteItem() {
     const response = await fetch('/api/item/' + item.id + '/remove', {

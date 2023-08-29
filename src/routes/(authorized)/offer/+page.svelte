@@ -50,7 +50,7 @@
         <button class="btn variant-filled-primary py-1 my-2">Edit</button>
       </div>
       <div>
-        <DeleteItem {item} {data} />
+        <DeleteItem {item} />
       </div>
     </Item>
   {/each}
