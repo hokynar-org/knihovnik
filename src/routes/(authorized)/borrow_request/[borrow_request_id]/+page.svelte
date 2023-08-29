@@ -112,6 +112,7 @@
 {#if borrow_request.status == 'PENDING'}
   {#if borrow_request.lender_id == user.id}
     <button
+      class="btn variant-filled-primary py-1 my-2"
       on:click={() => {
         disabled = true;
         const res = deny();
@@ -139,6 +140,7 @@
       {disabled}>Deny</button
     >
     <button
+      class="btn variant-filled-primary py-1 my-2"
       on:click={() => {
         disabled = true;
         const res = accept();
@@ -167,6 +169,7 @@
     >
   {:else if borrow_request.borrower_id == user.id}
     <button
+      class="btn variant-filled-primary py-1 my-2"
       on:click={() => {
         disabled = true;
         const res = cancel();
@@ -201,6 +204,7 @@
     }
   }).length == 0}
   <button
+    class="btn variant-filled-primary py-1 my-2"
     on:click={() => {
       disabled = true;
       const res = confirm();
@@ -233,41 +237,46 @@
   <Item {item} />
 </div>
 {borrow_request.status}
-<table>
-  {#each $request_actions as request_action (request_action.id)}
-    <tr>
-      <td>
-        {request_action.type}
-      </td>
-      <td>
-        {id_to_user(request_action.user_id)}
-      </td>
-      <td>
-        {request_action.timestamp
-          ? new Date(request_action.timestamp).toLocaleString()
-          : ''}
-      </td>
-      <td>
-        {request_action.message}
-      </td>
-    </tr>
-  {/each}
-</table>
-<input style={'color:black'} type="text" bind:value={message} />
-<button
-  on:click={() => {
-    disabled = true;
-    const res = send_message();
-    if (fallback) {
-      res.then((value) => {
-        $request_actions = [...$request_actions, value];
-        disabled = false;
-      });
-    } else {
-      res.then((value) => {
-        disabled = false;
-      });
-    }
-  }}
-  {disabled}>Send</button
->
+<div>
+  <table>
+    {#each $request_actions as request_action (request_action.id)}
+      <tr>
+        <td>
+          {request_action.type}
+        </td>
+        <td>
+          {id_to_user(request_action.user_id)}
+        </td>
+        <td>
+          {request_action.timestamp
+            ? new Date(request_action.timestamp).toLocaleString()
+            : ''}
+        </td>
+        <td>
+          {request_action.message}
+        </td>
+      </tr>
+    {/each}
+  </table>
+  <div class="flex">
+    <input class="input" type="text" bind:value={message} />
+    <button
+      class="btn variant-filled-primary py-1 my-2"
+      on:click={() => {
+        disabled = true;
+        const res = send_message();
+        if (fallback) {
+          res.then((value) => {
+            $request_actions = [...$request_actions, value];
+            disabled = false;
+          });
+        } else {
+          res.then((value) => {
+            disabled = false;
+          });
+        }
+      }}
+      {disabled}>Send</button
+    >
+  </div>
+</div>
