@@ -5,18 +5,12 @@
   import { FileDropzone } from '@skeletonlabs/skeleton';
   import { onMount } from 'svelte';
   import DeleteItem from '$lib/DeleteItem.svelte';
-  let files: FileList;
+  import FileUploader from '$lib/components/FileUploader.svelte';
   export let data;
 
   const item_form = superForm(data.item_form).form;
 
   $user_items = data.user_items;
-
-  onMount(() => {
-    setInterval(() => {
-      console.log(files);
-    }, 1000);
-  });
 </script>
 
 <div>
@@ -33,11 +27,11 @@
       bind:value={$item_form.description}
       style="resize: none;"
     />
+    <FileUploader />
     <div class="flex content-center justify-center my-3">
       <button class="btn variant-filled-primary">Submit</button>
     </div>
   </form>
-  <FileDropzone name="picture" bind:files />
 </div>
 
 <div class="relative w-full">

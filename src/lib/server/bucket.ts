@@ -46,7 +46,7 @@ const allowedFileTypes = new Set(<const>[
 export type FileFormat = typeof allowedFileTypes extends Set<infer T>
   ? T
   : never;
-export const isAllowedFileType = (mime: string): mime is FileFormat =>
+export const isAllowedFileType = (mime: unknown): mime is FileFormat =>
   allowedFileTypes.has(mime as any);
 
 export async function requestUpload(format: FileFormat): Promise<{
