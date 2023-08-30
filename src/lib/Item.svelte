@@ -8,7 +8,7 @@
 </script>
 
 <article
-  class="relative flex rounded-xl overflow-hidden bg-surface-300-600-token m-4"
+  class="relative flex rounded-xl overflow-hidden bg-surface-100-800-token m-4"
 >
   <div data-tooltip={imageAltText} data-placement="top">
     <img class="max-h-60" src={image} alt={imageAltText} />
