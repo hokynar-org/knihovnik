@@ -33,40 +33,45 @@
   let disabled = false;
 </script>
 
-<div class="flex flex-col">
-  {#if !borrow_request}
-    <button
-      class="btn variant-filled-primary py-1 my-2"
-      on:click={() => {
-        disabled = true;
-        borrow()
-          .then((value) => {
-            borrow_request = value;
-            disabled = false;
-          })
-          .catch((reson) => {
-            disabled = false;
-          });
-      }}
-      {disabled}>Borrow</button
-    >
-  {:else if borrow_request.status == 'PENDING'}
-    <button
-      class="btn variant-filled-error py-1 my-2"
-      on:click={() => {
-        disabled = true;
-        cancel()
-          .then((value) => {
-            borrow_request = null;
-            disabled = false;
-          })
-          .catch((reason) => {
-            disabled = false;
-          });
-      }}
-      {disabled}>Cancel</button
-    >
-  {:else}
-    {borrow_request.status}
-  {/if}
+<div class="flex flex-col justify-between h-full">
+  <div>
+    {#if !borrow_request}
+      <button
+        class="btn variant-filled-primary py-1 my-2 w-24"
+        on:click={() => {
+          disabled = true;
+          borrow()
+            .then((value) => {
+              borrow_request = value;
+              disabled = false;
+            })
+            .catch((reson) => {
+              disabled = false;
+            });
+        }}
+        {disabled}>Borrow</button
+      >
+    {:else if borrow_request.status == 'PENDING'}
+      <button
+        class="btn variant-filled-error py-1 my-2 w-24"
+        on:click={() => {
+          disabled = true;
+          cancel()
+            .then((value) => {
+              borrow_request = null;
+              disabled = false;
+            })
+            .catch((reason) => {
+              disabled = false;
+            });
+        }}
+        {disabled}>Cancel</button
+      >
+    {/if}
+  </div>
+  <div>
+    {#if borrow_request}
+      {borrow_request.status}
+    {/if}
+  </div>
 </div>
