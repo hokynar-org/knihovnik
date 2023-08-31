@@ -35,7 +35,11 @@ export const POST = (async ({ request, params, locals, url, route }) => {
   if(found_borrow_requests.length==0) {
     throw error(400);
   }
+
   const borrow_request=found_borrow_requests[0].borrow_request;
+  if(borrow_request.status!='ACCEPTED') {
+    throw error(401);
+  }
   const item = found_borrow_requests[0].item;
   if(borrow_request.lender_id!=user_id && borrow_request.borrower_id!=user_id){
     throw error(401);

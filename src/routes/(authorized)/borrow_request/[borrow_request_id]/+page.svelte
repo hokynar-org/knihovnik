@@ -269,7 +269,7 @@
           });
       }
     }}
-    {disabled}>Confirm</button
+    {disabled}>Abort</button
   >
 {/if}
 
