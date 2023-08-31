@@ -8,15 +8,18 @@
   import FileUploader from '$lib/components/FileUploader.svelte';
   export let data;
 
-  const item_form = superForm(data.item_form).form;
+  const { form, enhance } = superForm(data.item_form);
+  let files: string[] = [];
+  $: filesSerialized = files.join(',');
+  $: $form.files = filesSerialized;
 
   $user_items = data.user_items;
 </script>
 
 <div>
-  <form method="POST" action="?/new_item">
+  <form method="POST" action="?/new_item" class="max-w-xs min-w-xs" use:enhance>
     <label for="name" class="text-xl mt-4 mb-2">Name</label>
-    <input type="text" name="name" class="input" bind:value={$item_form.name} />
+    <input type="text" name="name" class="input" bind:value={$form.name} />
 
     <label for="description" class="text-xl mt-4 mb-2">Description</label>
     <textarea
@@ -24,10 +27,13 @@
       name="description"
       rows="4"
       class="input"
-      bind:value={$item_form.description}
+      bind:value={$form.description}
       style="resize: none;"
     />
-    <FileUploader />
+
+    <input name="files" bind:value={filesSerialized} class="hidden" />
+    <FileUploader bind:filenames={files} />
+
     <div class="flex content-center justify-center my-3">
       <button class="btn variant-filled-primary">Submit</button>
     </div>

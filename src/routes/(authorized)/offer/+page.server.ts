@@ -10,6 +10,7 @@ import type { Item } from '$lib/types';
 const item_form_schema = z.object({
   name: z.string().min(2),
   description: z.string().min(0),
+  files: z.string(),
 });
 
 export const load = (async ({ locals }) => {
@@ -35,6 +36,9 @@ export const actions: Actions = {
     if (!form.valid) {
       return fail(400, { form });
     }
+
+    const files = form.data.files.split(',');
+    console.log('files', files); // ! these are the images
 
     try {
       await db.insert(items).values({

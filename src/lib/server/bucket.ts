@@ -4,6 +4,7 @@ import {
   ListObjectsV2Command,
   GetObjectCommand,
   PutObjectCommand,
+  PutBucketCorsCommand,
 } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { v4 as uuid } from 'uuid';
@@ -33,10 +34,6 @@ export async function getFileUrl(filename: string) {
   );
 }
 
-export async function uploadFile(stream: ReadableStream<Uint8Array>) {
-  new PutObjectCommand({ Bucket: BUCKET_NAME, Key: undefined, Body: stream });
-}
-
 const allowedFileTypes = new Set(<const>[
   'image/webp',
   'image/jpeg',
@@ -60,9 +57,14 @@ export async function requestUpload(format: FileFormat): Promise<{
 
   const url = await getSignedUrl(
     S3,
-    new PutObjectCommand({ Bucket: BUCKET_NAME, Key: filename }),
+    new PutObjectCommand({
+      Bucket: BUCKET_NAME,
+      Key: filename,
+      ContentType: format,
+      ACL: 'bucket-owner-full-control',
+    }),
     {
-      expiresIn: 3600,
+      expiresIn: 5 * 60,
     },
   );
 

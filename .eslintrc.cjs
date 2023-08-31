@@ -38,6 +38,7 @@ module.exports = {
     ],
     'no-fallthrough': 'off',
     'svelte/no-at-html-tags': 'off',
+    camelcase: 'warn',
   },
   env: {
     browser: true,
