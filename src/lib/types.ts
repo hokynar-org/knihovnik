@@ -44,7 +44,7 @@ export interface PublicUserSafe {
 
 export type PublicItemSafe = Pick<
   Item,
-  'name' | 'description' | 'id' | 'owner_id'
+  'name' | 'description' | 'id' | 'owner_id' | 'image_src'
 >;
 
 export interface Session {

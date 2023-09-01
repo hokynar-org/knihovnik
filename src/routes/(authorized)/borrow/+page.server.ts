@@ -4,6 +4,7 @@ import { and, eq,not, or } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
 import type { Offer } from '$lib/types';
 import { redirect } from '@sveltejs/kit';
+import {getFileUrl} from '$lib/server/bucket'
 
 export const load = (async ({ locals }) => {
   if(!locals.user){
@@ -23,6 +24,7 @@ export const load = (async ({ locals }) => {
         description: items.description,
         id: items.id,
         owner_id: items.owner_id,
+        image_src: items.image_src
       },
       borrow_request: {
         status: borrow_requests.status,

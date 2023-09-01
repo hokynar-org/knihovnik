@@ -5,7 +5,7 @@ import { eq } from 'drizzle-orm';
 import { z } from 'zod';
 import { superValidate } from 'sveltekit-superforms/server';
 import type { PageServerLoad } from './$types';
-import type { Item } from '$lib/types';
+import type { Item, PublicItemSafe } from '$lib/types';
 
 const item_form_schema = z.object({
   name: z.string().min(2),
@@ -14,8 +14,14 @@ const item_form_schema = z.object({
 });
 
 export const load = (async ({ locals }) => {
-  const user_items: Array<Item> = await db
-    .select()
+  const user_items: Array<PublicItemSafe> = await db
+    .select({
+      name: items.name,
+      description: items.description,
+      id: items.id,
+      owner_id: items.owner_id,
+      image_src: items.image_src
+    })
     .from(items)
     .where(eq(items.owner_id, Number(locals.user.id)));
 
@@ -46,6 +52,7 @@ export const actions: Actions = {
         description: form.data.description as string,
         owner_id: locals.user.id as number,
         holder_id: locals.user.id as number,
+        image_src:files[0],
       });
     } catch (error) {
       console.error(error);

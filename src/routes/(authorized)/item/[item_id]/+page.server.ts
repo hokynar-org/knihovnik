@@ -26,6 +26,7 @@ export const load: PageServerLoad = (async ({ locals, params }) => {
         id: items.id,
         owner_id: items.owner_id,
         holder_id: items.holder_id,
+        image_src: items.image_src
       },
       borrow_request: {
         status: borrow_requests.status,
@@ -34,6 +35,7 @@ export const load: PageServerLoad = (async ({ locals, params }) => {
         lender_id: borrow_requests.lender_id,
         item_id: borrow_requests.item_id,
         timestamp: borrow_requests.timestamp,
+        
       },
     })
     .from(items)
@@ -86,6 +88,7 @@ export const load: PageServerLoad = (async ({ locals, params }) => {
       description: items.description,
       id: items.id,
       owner_id: items.owner_id,
+      image_src: items.image_src,
     },
     borrow_request: {
       status: borrow_requests.status,
