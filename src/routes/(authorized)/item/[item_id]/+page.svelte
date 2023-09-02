@@ -10,13 +10,10 @@
   $: holder = data.holder;
   $: last_requst = data.last_requst ? data.last_requst.borrow_request : null;
   $: borrow_requests = data.borrow_requests;
-  onMount(() => {
-    console.log({ user, holder, owner });
-  });
 </script>
 
 <div class="container">
-  <Item {item}>
+  <Item {item} {holder} {owner}>
     {#if holder}
       {#if user.id != holder.id}
         <BorrowItem borrow_request={last_requst} {item} />

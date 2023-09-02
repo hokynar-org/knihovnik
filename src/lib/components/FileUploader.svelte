@@ -46,7 +46,7 @@
     <div
       class="p-0 border-2 rounded-container-token border-surface-500 bg-surface-500 overflow-hidden relative"
     >
-      <img src={url} class="max-h-16" />
+      <img src={url} class="max-h-16" alt={url} />
       <span
         class="block absolute top-1 right-1 rounded-full bg-surface-400 hover:bg-surface-700 cursor-pointer"
         on:click={() => deleteImage(i)}

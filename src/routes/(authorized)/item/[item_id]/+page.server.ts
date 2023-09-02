@@ -45,7 +45,7 @@ export const load: PageServerLoad = (async ({ locals, params }) => {
   }
   else{
     return {
-      item:item, owner:owner, last_requst:last_requst,
+      item:item, owner:owner, last_requst:last_requst, holder:null,
       borrow_requests:result.borrow_requests.filter((value)=>{
         return user.id==value.borrow_request.borrower_id || user.id==value.borrow_request.lender_id;
       })

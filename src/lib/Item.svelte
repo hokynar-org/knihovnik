@@ -1,11 +1,14 @@
 <script lang="ts">
   import Fa from 'svelte-fa';
   import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
-  import type { Item, PublicItemSafe } from './types';
+  import type { Item, PublicItemSafe, PublicUserSafe } from './types';
   import { onMount } from 'svelte';
   import Spinner from './components/Spinner.svelte';
-  export let imageAltText: string = 'cute black cat';
   export let item: PublicItemSafe;
+  export let owner: PublicUserSafe | null;
+  export let holder: PublicUserSafe | null;
+  const imageAltText = 'image';
+
   // async function getImageUrl(image_src: string) {
   //   const response = await fetch('/api/image/' + image_src, {
   //     method: 'GET',
@@ -38,6 +41,19 @@
       </h4>
       <div class="descr">{item.description}</div>
     </div>
+    <div>
+      <div>
+        {#if owner}
+          Vlastní uživatel {owner.user_name}
+        {/if}
+      </div>
+      <div>
+        {#if holder}
+          Drží uživalel {holder.user_name}
+        {/if}
+      </div>
+    </div>
+
     <div class="m-2">
       <slot />
     </div>

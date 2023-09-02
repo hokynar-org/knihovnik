@@ -7,7 +7,7 @@
 <h3>Zde naleznete věci, které by se měli válet u Vás!</h3>
 <div class="container">
   {#each data.offers as offer (offer.item.id)}
-    <Item item={offer.item}></Item>
+    <Item item={offer.item} owner={offer.owner} holder={null}></Item>
   {/each}
 </div>
 

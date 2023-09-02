@@ -1,12 +1,12 @@
 <script lang="ts">
   import { user_items } from '$lib/store';
-  import type { PublicItemSafe } from './types';
-  export let item: PublicItemSafe;
+  import type { PublicItemSafe, PublicUserSafe } from './types';
+  export let offer: { item: PublicItemSafe; holder: PublicUserSafe | null };
 
   let disabled = false;
 
   async function deleteItem() {
-    const response = await fetch('/api/item/' + item.id + '/remove', {
+    const response = await fetch('/api/item/' + offer.item.id + '/remove', {
       method: 'POST',
     });
     if (!response.ok) {
@@ -21,7 +21,7 @@
     disabled = true;
     deleteItem()
       .then((value) => {
-        const index = $user_items.indexOf(item);
+        const index = $user_items.indexOf(offer);
         if (index > -1) {
           $user_items.splice(index, 1);
           $user_items = $user_items; // důležité pro Svelte

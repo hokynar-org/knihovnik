@@ -6,16 +6,15 @@
   import { onMount } from 'svelte';
   import DeleteItem from '$lib/DeleteItem.svelte';
   import FileUploader from '$lib/components/FileUploader.svelte';
-  export let data;
+  import type { PageData } from './$types';
+  export let data: PageData;
 
   const { form, enhance } = superForm(data.item_form);
   let files: string[] = [];
   $: filesSerialized = files.join(',');
   $: $form.files = filesSerialized;
 
-  $user_items = data.user_items.flatMap((value) => {
-    return value.item;
-  });
+  $: $user_items = data.user_items;
 </script>
 
 <div>
@@ -43,8 +42,8 @@
 </div>
 
 <div class="relative w-full">
-  {#each $user_items as item (item.id)}
-    <Item {item}>
+  {#each $user_items as offer (offer.item.id)}
+    <Item item={offer.item} owner={null} holder={offer.holder}>
       <div>
         <p>Location</p>
       </div>
@@ -52,7 +51,7 @@
         <button class="btn variant-filled-primary py-1 my-2">Edit</button>
       </div>
       <div>
-        <DeleteItem {item} />
+        <DeleteItem {offer} />
       </div>
     </Item>
   {/each}
