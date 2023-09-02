@@ -147,7 +147,7 @@ export const getItems = async ()=>{
             image_src: items.image_src
         },
     })
-    .from(items)
+    .from(items).where(eq(items.offered,true))
     .innerJoin(owner,  eq(items.owner_id, owner.id))
     const image_srcs_promise = result.flatMap((value)=>{
         return getFileUrl(value.item.image_src)

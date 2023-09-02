@@ -20,6 +20,9 @@ export const POST = (async ({ locals, url}) => {
         throw error(404);
     }
     const item = found_items[0];
+    if(item.owner_id!=user.id && !item.offered){
+        throw error(401);
+    }
     if(item.holder_id==user.id){
         throw error(400);
     }

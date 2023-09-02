@@ -32,6 +32,7 @@ export const items = pgTable('items', {
   holder_id: integer('holder_id')
     .references(() => users.id)
     .notNull(),
+  offered: boolean('offered').default(true).notNull()
 });
 
 export const borrow_requests = pgTable('borrow_requests', {

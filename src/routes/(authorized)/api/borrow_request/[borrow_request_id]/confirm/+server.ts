@@ -22,6 +22,7 @@ export const POST = (async ({ request, params, locals, url, route }) => {
         description: items.description,
         id: items.id,
         owner_id: items.owner_id,
+        image_src: items.name,
       },
       borrow_request: {
         status: borrow_requests.status,
@@ -90,7 +91,7 @@ export const POST = (async ({ request, params, locals, url, route }) => {
         text: "User " + locals.user.user_name + " confirmed hand over of " + item.name,
         url: '/borrow_request/'+String(old_borrow_request.id),
       }).returning();
-      const new_item = db.update(items).set({holder_id:old_borrow_request.borrower_id}).where(eq(items.id, old_borrow_request.item_id)).returning();
+      const new_item = db.update(items).set({holder_id:old_borrow_request.borrower_id,offered:false}).where(eq(items.id, old_borrow_request.item_id)).returning();
       const results=await Promise.all([new_borrow_requests,new_requests_actions,confirm_notification,new_item]);
       await pusher.sendToUser(String(other_user_id), "notification", results[2][0]);
       await pusher.trigger('private-borrow_request-' + borrow_request_id,'request_action',{borrow_request:results[0][0],action:results[1][0]});
