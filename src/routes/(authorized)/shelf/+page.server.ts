@@ -5,14 +5,14 @@ import type { PageServerLoad } from './$types';
 import type { Offer } from '$lib/types';
 import { redirect } from '@sveltejs/kit';
 import {getFileUrl} from '$lib/server/bucket'
-import { getItems } from '$lib/server/item_load';
+import {getShelfItems } from '$lib/server/item_load';
 
 export const load = (async ({ locals }) => {
   if(!locals.user){
     redirect(301,"/")
   }
   const user=locals.user;
-  const offers = await getItems();
+  const offers = await getShelfItems(user.id);
   return {
     offers: offers,
   };

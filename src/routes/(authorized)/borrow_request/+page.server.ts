@@ -47,6 +47,7 @@ export const load = (async ({ locals }) => {
       description: items.description,
       id: items.id,
       owner_id: items.owner_id,
+      image_src:items.image_src,
     },
     borrow_request: {
       status: borrow_requests.status,

@@ -2,7 +2,7 @@ import { error, fail, json, redirect } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { db } from '$lib/server/db/drizzle';
 import {borrow_requests, items, notifications, request_actions, users} from '$lib/server/db/schema'
-import { and, eq } from 'drizzle-orm';
+import { and, eq, or } from 'drizzle-orm';
 import type { BorrowRequest, Item, PublicItemSafe } from '$lib/types';
 import { pusher } from '$lib/server/pusher';
 
@@ -17,14 +17,14 @@ export const POST = (async ({ locals, url}) => {
     }
     const found_items = await db.select().from(items).where(eq(items.id, Number(item_id)));
     if(found_items.length==0){
-        throw error(400);
+        throw error(404);
     }
     const item = found_items[0];
     if(item.holder_id==user.id){
         throw error(400);
     }
     const found_borrow_requests:Array<BorrowRequest> =
-    await db.select().from(borrow_requests).where(and(eq(borrow_requests.item_id, Number(item.id)),eq(borrow_requests.borrower_id, Number(user.id))));
+    await db.select().from(borrow_requests).where(and(or(eq(borrow_requests.status,'PENDING'),eq(borrow_requests.status,'ACCEPTED')),eq(borrow_requests.item_id, Number(item.id)),eq(borrow_requests.borrower_id, Number(user.id))));
     if(found_borrow_requests.length>0) {
         throw error(400);
     }

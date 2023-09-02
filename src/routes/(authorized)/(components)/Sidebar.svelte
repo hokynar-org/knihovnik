@@ -20,8 +20,7 @@
   <MenuItem href="/borrow_request" icon={faEnvelopeOpen} {current}
     >Requests</MenuItem
   >
-  <MenuItem href="/borrowed" icon={faCube} {current}>Borrowed</MenuItem>
-  <MenuItem href="/lended" icon={faHandHolding} {current}>Lended</MenuItem>
+  <MenuItem href="/shelf" icon={faCube} {current}>Shelf</MenuItem>
 
   <svelte:fragment slot="trail">
     {#if isAdmin}

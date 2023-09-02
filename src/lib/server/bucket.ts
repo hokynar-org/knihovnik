@@ -24,7 +24,10 @@ const S3 = new S3Client({
   },
 });
 
-export async function getFileUrl(filename: string) {
+export async function getFileUrl(filename: string | null) {
+  if(!filename){
+    return null
+  }
   return await getSignedUrl(
     S3,
     new GetObjectCommand({ Bucket: BUCKET_NAME, Key: filename }),

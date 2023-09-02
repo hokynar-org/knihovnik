@@ -6,6 +6,7 @@ import { z } from 'zod';
 import { superValidate } from 'sveltekit-superforms/server';
 import type { PageServerLoad } from './$types';
 import type { Item, PublicItemSafe } from '$lib/types';
+import { getMyItems } from '$lib/server/item_load';
 
 const item_form_schema = z.object({
   name: z.string().min(2),
@@ -14,19 +15,13 @@ const item_form_schema = z.object({
 });
 
 export const load = (async ({ locals }) => {
-  const user_items: Array<PublicItemSafe> = await db
-    .select({
-      name: items.name,
-      description: items.description,
-      id: items.id,
-      owner_id: items.owner_id,
-      image_src: items.image_src
-    })
-    .from(items)
-    .where(eq(items.owner_id, Number(locals.user.id)));
-
+  if(!locals.user){
+    throw redirect(301,"/login")
+  }
+  const user = locals.user
+  const offers = await getMyItems(user.id);
   return {
-    user_items: user_items,
+    user_items: offers,
     item_form: superValidate(item_form_schema),
   };
 }) satisfies PageServerLoad;

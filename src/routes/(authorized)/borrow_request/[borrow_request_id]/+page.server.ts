@@ -5,6 +5,7 @@ import type { PageServerLoad } from './$types';
 import type { BorrowRequest, PublicItemSafe, PublicUserSafe, RequestAction } from '$lib/types';
 import { alias } from 'drizzle-orm/pg-core';
 import { error, redirect } from '@sveltejs/kit';
+import { getFileUrl } from '$lib/server/bucket';
 
 export const load = (async ({ locals,params, url}) => {
   if(!params.borrow_request_id){
@@ -69,8 +70,6 @@ export const load = (async ({ locals,params, url}) => {
   .select()
   .from(request_actions).where(eq(request_actions.borrow_request_id,borrow_request_id));
 
-  // const read_notifications = db.update(notifications).set({read:true}).where(and(eq(notifications.user_id,locals.user.id),eq(notifications.url,url.pathname)))
-  // const results = await Promise.all([borrow_request_reusults,request_actions_results,read_notifications]);
   const results = await Promise.all([borrow_request_reusults,request_actions_results]);
   if(results[0].length==0){
     throw error(404);
@@ -78,11 +77,18 @@ export const load = (async ({ locals,params, url}) => {
   if(locals.user.id!=results[0][0].lender.id && locals.user.id!=results[0][0].borrower.id && locals.user.id!=results[0][0].owner.id){
     throw error(401);
   }
+  const image_src = await getFileUrl(results[0][0].item.image_src);
   return {
     borrower:results[0][0].borrower,
     lender:results[0][0].lender,
     owner:results[0][0].owner,
-    item:results[0][0].item,
+    item: {
+      name: results[0][0].item.name,
+      description: results[0][0].item.description,
+      id: results[0][0].item.id,
+      owner_id: results[0][0].item.owner_id,
+      image_src: image_src,
+    },
     borrow_request:results[0][0].borrow_request,
     request_actions: results[1],
   };

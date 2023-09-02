@@ -13,7 +13,9 @@
   $: filesSerialized = files.join(',');
   $: $form.files = filesSerialized;
 
-  $user_items = data.user_items;
+  $user_items = data.user_items.flatMap((value) => {
+    return value.item;
+  });
 </script>
 
 <div>
