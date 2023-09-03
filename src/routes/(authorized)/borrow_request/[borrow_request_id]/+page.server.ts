@@ -6,7 +6,7 @@ import type { BorrowRequest, PublicItemSafe, PublicUserSafe, RequestAction } fro
 import { alias } from 'drizzle-orm/pg-core';
 import { error, redirect } from '@sveltejs/kit';
 import { getFileUrl } from '$lib/server/bucket';
-
+import { item_select } from '$lib/server/db/selects';
 export const load = (async ({ locals,params, url}) => {
   if(!params.borrow_request_id){
     throw error(404);
@@ -44,13 +44,7 @@ export const load = (async ({ locals,params, url}) => {
       user_name: owner.user_name,
       pronouns: owner.pronouns,
     },
-    item: {
-      name: items.name,
-      description: items.description,
-      id: items.id,
-      owner_id: items.owner_id,
-      image_src: items.image_src
-    },
+    item: item_select,
     borrow_request: {
       status: borrow_requests.status,
       id: borrow_requests.id,
@@ -88,6 +82,7 @@ export const load = (async ({ locals,params, url}) => {
       id: results[0][0].item.id,
       owner_id: results[0][0].item.owner_id,
       image_src: image_src,
+      offered: results[0][0].item.offered,
     },
     borrow_request:results[0][0].borrow_request,
     request_actions: results[1],

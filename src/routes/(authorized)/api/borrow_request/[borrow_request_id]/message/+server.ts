@@ -5,6 +5,7 @@ import {borrow_requests, items, notifications, request_actions} from '$lib/serve
 import { eq } from 'drizzle-orm';
 import type { BorrowRequest, Notification, PublicItemSafe, RequestAction } from '$lib/types';
 import { pusher } from '$lib/server/pusher';
+import {item_select} from '$lib/server/db/selects'
 
 export const POST = (async ({ request, params, locals, url, route }) => {
   if (!locals.user) {
@@ -18,12 +19,7 @@ export const POST = (async ({ request, params, locals, url, route }) => {
   const user_id = locals.user.id;
   const borrow_request_id = params.borrow_request_id as string;
   const found_borrow_requests:{item:PublicItemSafe,borrow_request:BorrowRequest}[] = await db.select({
-    item: {
-      name: items.name,
-      description: items.description,
-      id: items.id,
-      owner_id: items.owner_id,
-    },
+    item: item_select,
     borrow_request: {
       status: borrow_requests.status,
       id: borrow_requests.id,

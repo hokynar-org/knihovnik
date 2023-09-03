@@ -1,67 +1,28 @@
-import { alias } from "drizzle-orm/pg-core";
 import { db } from "./db/drizzle";
 import { borrow_requests, items, users } from "./db/schema";
 import { and, eq, or } from "drizzle-orm";
 import { getFileUrl } from "./bucket";
 import type { BorrowRequest, PublicItemSafe, PublicUserSafe } from "$lib/types";
-import { error } from "@sveltejs/kit";
+import { item_select,borrow_request_select,borrowers,lenders,owners,holders,holder_select,borrower_select,lender_select,owner_select } from "./db/selects";
 
 export const getItem = async (item_id:number)=>{
-    const holder= alias(users,'holder');
-    const owner = alias(users,'owner');
-    const borrower = alias(users,'borrower');
-    const lender = alias(users,'lender');
     const result_item:Promise<{holder:PublicUserSafe,owner:PublicUserSafe,item:PublicItemSafe}[]> =
     db.select({
-        holder: {
-            id: holder.id,
-            full_name: holder.full_name,
-            user_name: holder.user_name,
-            pronouns: holder.pronouns,
-        },
-        owner: {
-            id: owner.id,
-            full_name: owner.full_name,
-            user_name: owner.user_name,
-            pronouns: owner.pronouns,
-        },
-        item: {
-            name: items.name,
-            description: items.description,
-            id: items.id,
-            owner_id: items.owner_id,
-            holder_id: items.holder_id,
-            image_src: items.image_src
-        },
+        holder: holder_select,
+        owner: owner_select,
+        item: item_select,
     })
     .from(items).where(eq(items.id, item_id))
-    .innerJoin(owner,  eq(items.owner_id, owner.id))
-    .innerJoin(holder, eq(items.holder_id, holder.id));
+    .innerJoin(owners,  eq(items.owner_id, owners.id))
+    .innerJoin(holders, eq(items.holder_id, holders.id));
 
     const result_requests:Promise<{borrow_request:BorrowRequest,borrower:PublicUserSafe,lender:PublicUserSafe}[]>= db.select({
-        borrow_request:{
-            status: borrow_requests.status,
-            id: borrow_requests.id,
-            borrower_id: borrow_requests.borrower_id,
-            lender_id: borrow_requests.lender_id,
-            item_id: borrow_requests.item_id,
-            timestamp: borrow_requests.timestamp,
-        },
-        borrower: {
-            id: borrower.id,
-            full_name: borrower.full_name,
-            user_name: borrower.user_name,
-            pronouns: borrower.pronouns,
-        },
-        lender: {
-            id: lender.id,
-            full_name: lender.full_name,
-            user_name: lender.user_name,
-            pronouns: lender.pronouns,
-        },
+        borrow_request: borrow_request_select,
+        borrower: borrower_select,
+        lender: lender_select,
     }).from(borrow_requests).where(eq(borrow_requests.item_id,item_id))
-    .innerJoin(borrower,    eq(borrow_requests.borrower_id  , borrower.id))
-    .innerJoin(lender,      eq(borrow_requests.lender_id    , lender.id));
+    .innerJoin(borrowers,    eq(borrow_requests.borrower_id  , borrowers.id))
+    .innerJoin(lenders,      eq(borrow_requests.lender_id    , lenders.id));
     const result = await Promise.all([result_item,result_requests]);
     if(result[0].length==0){
         return null;
@@ -74,6 +35,7 @@ export const getItem = async (item_id:number)=>{
             id: result[0][0].item.id,
             owner_id: result[0][0].item.owner_id,
             image_src: image_src,
+            offered: result[0][0].item.offered,
         },
         holder: result[0][0].holder,
         owner: result[0][0].owner,
@@ -82,34 +44,15 @@ export const getItem = async (item_id:number)=>{
 }
 
 export const getJustItem = async (item_id:number)=>{
-    const holder= alias(users,'holder');
-    const owner = alias(users,'owner');
     const result:{holder:PublicUserSafe,owner:PublicUserSafe,item:PublicItemSafe}[] =
     await db.select({
-        holder: {
-            id: holder.id,
-            full_name: holder.full_name,
-            user_name: holder.user_name,
-            pronouns: holder.pronouns,
-        },
-        owner: {
-            id: owner.id,
-            full_name: owner.full_name,
-            user_name: owner.user_name,
-            pronouns: owner.pronouns,
-        },
-        item: {
-            name: items.name,
-            description: items.description,
-            id: items.id,
-            owner_id: items.owner_id,
-            holder_id: items.holder_id,
-            image_src: items.image_src
-        },
+        holder: holder_select,
+        owner: owner_select,
+        item: item_select,
     })
     .from(items).where(eq(items.id, item_id))
-    .innerJoin(owner,  eq(items.owner_id, owner.id))
-    .innerJoin(holder, eq(items.holder_id, holder.id));
+    .innerJoin(owners,  eq(items.owner_id, owners.id))
+    .innerJoin(holders, eq(items.holder_id, holders.id));
     if(result.length==0){
         return null;
     }
@@ -121,6 +64,7 @@ export const getJustItem = async (item_id:number)=>{
             id: result[0].item.id,
             owner_id: result[0].item.owner_id,
             image_src: image_src,
+            offered: result[0].item.offered,
         },
         holder: result[0].holder,
         owner: result[0].owner,
@@ -129,26 +73,13 @@ export const getJustItem = async (item_id:number)=>{
 
 
 export const getItems = async ()=>{
-        const owner = alias(users,'owner');
     const result:{owner:PublicUserSafe,item:PublicItemSafe}[] =
     await db.select({
-        owner: {
-            id: owner.id,
-            full_name: owner.full_name,
-            user_name: owner.user_name,
-            pronouns: owner.pronouns,
-        },
-        item: {
-            name: items.name,
-            description: items.description,
-            id: items.id,
-            owner_id: items.owner_id,
-            holder_id: items.holder_id,
-            image_src: items.image_src
-        },
+        owner: owner_select,
+        item: item_select,
     })
     .from(items).where(eq(items.offered,true))
-    .innerJoin(owner,  eq(items.owner_id, owner.id))
+    .innerJoin(owners,  eq(items.owner_id, owners.id))
     const image_srcs_promise = result.flatMap((value)=>{
         return getFileUrl(value.item.image_src)
     })
@@ -161,6 +92,7 @@ export const getItems = async ()=>{
                 id: value.item.id,
                 owner_id: value.item.owner_id,
                 image_src: image_srcs[index],
+                offered: value.item.offered,
             },
             owner: value.owner
         }
@@ -169,26 +101,13 @@ export const getItems = async ()=>{
 }
 
 export const getShelfItems = async (user_id:number)=>{
-    const owner = alias(users,'owner');
     const result:{owner:PublicUserSafe,item:PublicItemSafe}[] =
     await db.select({
-        owner: {
-            id: owner.id,
-            full_name: owner.full_name,
-            user_name: owner.user_name,
-            pronouns: owner.pronouns,
-        },
-        item: {
-            name: items.name,
-            description: items.description,
-            id: items.id,
-            owner_id: items.owner_id,
-            holder_id: items.holder_id,
-            image_src: items.image_src
-        },
+        owner: owner_select,
+        item: item_select,
     })
     .from(items).where(eq(items.holder_id,user_id))
-    .innerJoin(owner,  eq(items.owner_id, owner.id))
+    .innerJoin(owners,  eq(items.owner_id, owners.id))
     const image_srcs_promise = result.flatMap((value)=>{
         return getFileUrl(value.item.image_src)
     })
@@ -201,6 +120,7 @@ export const getShelfItems = async (user_id:number)=>{
                 id: value.item.id,
                 owner_id: value.item.owner_id,
                 image_src: image_srcs[index],
+                offered: value.item.offered,
             },
             owner: value.owner
         }
@@ -209,26 +129,12 @@ export const getShelfItems = async (user_id:number)=>{
 }
 
 export const getMyItems = async (user_id:number)=>{
-    const holder = alias(users,'holder');
     const result:{holder:PublicUserSafe,item:PublicItemSafe}[] =
     await db.select({
-        item: {
-            name: items.name,
-            description: items.description,
-            id: items.id,
-            owner_id: items.owner_id,
-            holder_id: items.holder_id,
-            image_src: items.image_src
-        },
-        holder: {
-            id: holder.id,
-            full_name: holder.full_name,
-            user_name: holder.user_name,
-            pronouns: holder.pronouns,
-        },
+        item: item_select,
+        holder: holder_select,
     }).from(items).where(eq(items.owner_id,user_id))
-    .innerJoin(holder, eq(items.holder_id, holder.id));
-
+    .innerJoin(holders, eq(items.holder_id, holders.id));
 
     const image_srcs_promise = result.flatMap((value)=>{
         return getFileUrl(value.item.image_src)
@@ -242,6 +148,7 @@ export const getMyItems = async (user_id:number)=>{
                 id: value.item.id,
                 owner_id: value.item.owner_id,
                 image_src: image_srcs[index],
+                offered: value.item.offered,
             },
             holder:value.holder
         }

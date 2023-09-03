@@ -5,6 +5,7 @@ import {borrow_requests, items, notifications, request_actions} from '$lib/serve
 import { eq } from 'drizzle-orm';
 import type { BorrowRequest } from '$lib/types';
 import {pusher} from '$lib/server/pusher';
+import { borrow_request_select, item_select } from '$lib/server/db/selects';
 
 export const POST = (async ({ request, params, locals, url, route }) => {
   if (!locals.user) {
@@ -17,20 +18,9 @@ export const POST = (async ({ request, params, locals, url, route }) => {
   const borrow_request_id = params.borrow_request_id as string;
   const found_borrow_requests =
   await db.select({
-    item: {
-      name: items.name,
-      description: items.description,
-      id: items.id,
-      owner_id: items.owner_id,
-    },
-    borrow_request: {
-      status: borrow_requests.status,
-      id: borrow_requests.id,
-      borrower_id: borrow_requests.borrower_id,
-      lender_id: borrow_requests.lender_id,
-      item_id: borrow_requests.item_id,
-      timestamp: borrow_requests.timestamp,
-    },}).from(borrow_requests).where(eq(borrow_requests.id, Number(borrow_request_id))).innerJoin(items,eq(items.id,borrow_requests.item_id));
+    item: item_select,
+    borrow_request: borrow_request_select,
+  }).from(borrow_requests).where(eq(borrow_requests.id, Number(borrow_request_id))).innerJoin(items,eq(items.id,borrow_requests.item_id));
   if(found_borrow_requests.length==0) {
     throw error(400);
   }

@@ -52,6 +52,11 @@
           Drží uživalel {holder.user_name}
         {/if}
       </div>
+      {#if item.offered}
+        Tento předmět si můžete půjčit
+      {:else}
+        Tento předmět si nyní nelze půjčit
+      {/if}
     </div>
 
     <div class="m-2">
