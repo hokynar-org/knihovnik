@@ -64,15 +64,21 @@ export const request_actionsRelations = relations(request_actions, ({ one }) => 
 	}),
 }));
 
-export const community = pgTable('community', {
+export const communities = pgTable('communities', {
   id: serial('id').primaryKey(),
   name: text('name'),
   description: text('description'),
 });
 
+export const user_community_relations = pgTable('user_community_relations', {
+  user_id: integer('user_id').references(() => users.id).notNull(),
+  community_id: integer('community_id').references(() => communities.id).notNull(),
+  role: text('role').default('MEMBER')
+});
+
 export const item_visibility = pgTable('item_visibility', {
   item_id: integer('item_id').references(() => items.id),
-  community_id: integer('community_id').references(() => community.id),
+  community_id: integer('community_id').references(() => communities.id),
 });
 
 export const notifications = pgTable('notifications',{
