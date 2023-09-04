@@ -1,0 +1,40 @@
+<script lang="ts">
+  import { superForm } from 'sveltekit-superforms/client';
+  import Item from '$lib/Item.svelte';
+  import { user_items } from '$lib/store';
+  import { FileDropzone } from '@skeletonlabs/skeleton';
+  import { onMount } from 'svelte';
+  import DeleteItem from '$lib/DeleteItem.svelte';
+  import FileUploader from '$lib/components/FileUploader.svelte';
+  import type { PageData } from './$types';
+  import OfferItem from '$lib/OfferItem.svelte';
+  export let data: PageData;
+
+  const { form, enhance } = superForm(data.community_form);
+</script>
+
+<div>
+  <form
+    method="POST"
+    action="?/new_community"
+    class="max-w-xs min-w-xs"
+    use:enhance
+  >
+    <label for="name" class="text-xl mt-4 mb-2">Name</label>
+    <input type="text" name="name" class="input" bind:value={$form.name} />
+
+    <label for="description" class="text-xl mt-4 mb-2">Description</label>
+    <textarea
+      id="description"
+      name="description"
+      rows="4"
+      class="input"
+      bind:value={$form.description}
+      style="resize: none;"
+    />
+
+    <div class="flex content-center justify-center my-3">
+      <button class="btn variant-filled-primary">Submit</button>
+    </div>
+  </form>
+</div>

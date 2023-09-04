@@ -6,6 +6,13 @@ export const owners = alias(users,'owners');
 export const borrowers = alias(users,'borrowers');
 export const lenders = alias(users,'lenders');
 
+export const user_select = {
+    id: users.id,
+    full_name: users.full_name,
+    user_name: users.user_name,
+    pronouns: users.pronouns,
+};
+
 export const holder_select = {
     id: holders.id,
     full_name: holders.full_name,

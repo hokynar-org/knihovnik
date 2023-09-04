@@ -1,6 +1,6 @@
 import { redirect, type Actions, fail } from '@sveltejs/kit';
 import { db } from '$lib/server/db/drizzle';
-import { borrow_requests, items } from '$lib/server/db/schema';
+import { borrow_requests, communities, items, user_community_relations } from '$lib/server/db/schema';
 import { eq } from 'drizzle-orm';
 import { z } from 'zod';
 import { superValidate } from 'sveltekit-superforms/server';
@@ -18,31 +18,32 @@ export const load = (async ({ locals }) => {
     throw redirect(301,"/login")
   }
   const user = locals.user
-  const offers = await getMyItems(user.id);
   return {
-    user_items: offers,
-    item_form: superValidate(community_form_schema),
+    community_form: superValidate(community_form_schema),
   };
 }) satisfies PageServerLoad;
 
 export const actions: Actions = {
   // Add new item
-  new_item: async ({ request, locals }) => {
+  new_community: async ({ request, locals }) => {
     if (!locals.user) {
       throw redirect(302, '/login');
     }
-
+    const user = locals.user;
     const form = await superValidate(request, community_form_schema);
     if (!form.valid) {
       return fail(400, { form });
     }
 
     try {
-      await db.insert(items).values({
+      const community = (await db.insert(communities).values({
         name: form.data.name as string,
         description: form.data.description as string,
-        owner_id: locals.user.id as number,
-        holder_id: locals.user.id as number,
+      }).returning())[0];
+      await db.insert(user_community_relations).values({
+        community_id:community.id,
+        user_id:user.id,
+        role:'ADMIN',
       });
     } catch (error) {
       console.error(error);
