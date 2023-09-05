@@ -1,7 +1,7 @@
 import { redirect, type Actions, fail } from '@sveltejs/kit';
 import { db } from '$lib/server/db/drizzle';
 import { borrow_requests, communities, items, user_community_relations } from '$lib/server/db/schema';
-import { eq } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 import { z } from 'zod';
 import { superValidate } from 'sveltekit-superforms/server';
 import type { PageServerLoad } from './$types';
@@ -18,8 +18,10 @@ export const load = (async ({ locals }) => {
     throw redirect(301,"/login")
   }
   const user = locals.user
+  const user_communities = await db.select().from(communities).innerJoin(user_community_relations,and(eq(communities.id,user_community_relations.community_id),eq(user_community_relations.user_id,user.id)))
   return {
     community_form: superValidate(community_form_schema),
+    user_communities: user_communities,
   };
 }) satisfies PageServerLoad;
 

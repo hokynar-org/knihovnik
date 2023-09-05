@@ -73,7 +73,8 @@ export const communities = pgTable('communities', {
 export const user_community_relations = pgTable('user_community_relations', {
   user_id: integer('user_id').references(() => users.id).notNull(),
   community_id: integer('community_id').references(() => communities.id).notNull(),
-  role: text('role').default('MEMBER')
+  role: text('role').default('MEMBER'),
+  timestamp: timestamp('timestamp').defaultNow(),
 });
 
 export const item_visibility = pgTable('item_visibility', {

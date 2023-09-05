@@ -8,6 +8,7 @@
     faToolbox,
     faCube,
     faHandHolding,
+    faUserGroup,
   } from '@fortawesome/free-solid-svg-icons';
 
   export let isAdmin: boolean;
@@ -21,6 +22,7 @@
     >Requests</MenuItem
   >
   <MenuItem href="/shelf" icon={faCube} {current}>Shelf</MenuItem>
+  <MenuItem href="/community" icon={faUserGroup} {current}>Community</MenuItem>
 
   <svelte:fragment slot="trail">
     {#if isAdmin}

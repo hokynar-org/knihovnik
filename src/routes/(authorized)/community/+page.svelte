@@ -11,6 +11,7 @@
   export let data: PageData;
 
   const { form, enhance } = superForm(data.community_form);
+  $: user_communities = data.user_communities;
 </script>
 
 <div>
@@ -37,4 +38,12 @@
       <button class="btn variant-filled-primary">Submit</button>
     </div>
   </form>
+</div>
+<div>
+  {#each user_communities as community (community.communities.id)}
+    <a href={'/community/' + community.communities.id}
+      >{community.communities.name} ({community.user_community_relations
+        .role})</a
+    ><br />
+  {/each}
 </div>

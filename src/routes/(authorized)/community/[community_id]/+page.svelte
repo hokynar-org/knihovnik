@@ -39,6 +39,42 @@
     }
     return await res.json();
   };
+  const accept = async (user_id: number) => {
+    const res = await fetch(
+      '/api/community/' + community.id + '/' + user_id + '/accept',
+      {
+        method: 'POST',
+      },
+    );
+    if (!res.ok) {
+      throw new Error(String(res.status));
+    }
+    return await res.json();
+  };
+  const deny = async (user_id: number) => {
+    const res = await fetch(
+      '/api/community/' + community.id + '/' + user_id + '/deny',
+      {
+        method: 'POST',
+      },
+    );
+    if (!res.ok) {
+      throw new Error(String(res.status));
+    }
+    return await res.json();
+  };
+  const promote = async (user_id: number) => {
+    const res = await fetch(
+      '/api/community/' + community.id + '/' + user_id + '/promote',
+      {
+        method: 'POST',
+      },
+    );
+    if (!res.ok) {
+      throw new Error(String(res.status));
+    }
+    return await res.json();
+  };
   const confirm = async () => {
     const res = await fetch('/api/community/' + community.id + '/confirm', {
       method: 'POST',
@@ -57,6 +93,24 @@
     }
     return await res.json();
   };
+  const request = async () => {
+    const res = await fetch('/api/community/' + community.id + '/request', {
+      method: 'POST',
+    });
+    if (!res.ok) {
+      throw new Error(String(res.status));
+    }
+    return await res.json();
+  };
+  const leave = async () => {
+    const res = await fetch('/api/community/' + community.id + '/leave', {
+      method: 'POST',
+    });
+    if (!res.ok) {
+      throw new Error(String(res.status));
+    }
+    return await res.json();
+  };
 </script>
 
 <h4>Community: {community.name}</h4>
@@ -64,22 +118,79 @@
 <div>
   {#if role}
     You are a {role}
-  {/if}
-</div>
-<div>
-  {#each community_users as community_user}
-    {community_user.user.user_name} ({community_user.relation.role})
-    {#if role == 'ADMIN'}
+    {#if role == 'MEMBER' || role == 'ADMIN'}
       <button
         class="btn variant-filled-error py-1 my-2"
         on:click={() => {
-          kick(community_user.user.id)
+          leave()
             .then((value) => {})
             .catch((reason) => {});
         }}
       >
-        Kick
+        Leave
       </button>
+    {/if}
+  {:else}
+    <button
+      class="btn variant-filled-primary py-1 my-2"
+      on:click={() => {
+        request()
+          .then((value) => {})
+          .catch((reason) => {});
+      }}
+    >
+      Request
+    </button>
+  {/if}
+</div>
+
+<div>
+  {#each community_users as community_user}
+    {community_user.user.user_name} ({community_user.relation.role})
+    {#if role == 'ADMIN'}
+      {#if community_user.relation.role == 'MEMBER'}
+        <button
+          class="btn variant-filled-error py-1 my-2"
+          on:click={() => {
+            kick(community_user.user.id)
+              .then((value) => {})
+              .catch((reason) => {});
+          }}
+        >
+          Kick
+        </button>
+        <button
+          class="btn variant-filled-primary py-1 my-2"
+          on:click={() => {
+            promote(community_user.user.id)
+              .then((value) => {})
+              .catch((reason) => {});
+          }}
+        >
+          Promote
+        </button>
+      {:else if community_user.relation.role == 'REQUESTED'}
+        <button
+          class="btn variant-filled-primary py-1 my-2"
+          on:click={() => {
+            accept(community_user.user.id)
+              .then((value) => {})
+              .catch((reason) => {});
+          }}
+        >
+          Accept
+        </button>
+        <button
+          class="btn variant-filled-error py-1 my-2"
+          on:click={() => {
+            deny(community_user.user.id)
+              .then((value) => {})
+              .catch((reason) => {});
+          }}
+        >
+          Deny
+        </button>
+      {/if}
     {/if}
     <br />
   {/each}

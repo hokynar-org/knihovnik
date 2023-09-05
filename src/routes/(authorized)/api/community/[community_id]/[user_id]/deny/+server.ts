@@ -30,15 +30,15 @@ export const POST = (async ({params, locals, url}) => {
         throw error(404);
     }
     const community=results[0][0];
-    //  Invited user does not exist
+    //  Denied user does not exist
     if (results[1].length==0){
         throw error(404);
     }
-    // Invited user is already a member/admin/invited/requested
-    if (results[2].length!=0){
+    // Denied user is not a member/admin/invited/requested
+    if (results[2].length==0){
         throw error(400);
     }
-    // This user is not a member/admin
+    // This user is not a member/admin/invited/requested
     if(results[3].length==0){
         throw error(401);
     }
@@ -46,17 +46,17 @@ export const POST = (async ({params, locals, url}) => {
     if(results[3][0].role!='ADMIN'){
         throw error(401);
     }
-    const new_relations = (await db.insert(user_community_relations).values({
-        community_id: community_id,
-        user_id: user_id,
-        role: 'INVITED',
-    }).returning())[0];
-    const notification = await db.insert(notifications).values({
-            user_id: user_id,
-            text: "User " + user.user_name + " invited you to " + community.name,
-            url: '/community/'+String(community_id),
-        }).returning();
-    await pusher.sendToUser(String(user_id), "notification", notification[0]);
+    // Denied user is not a requested
+    if(results[2][0].role!='REQUESTED'){
+        throw error(400);
+    }
+    const new_relations = (await db.delete(user_community_relations).where(and(eq(user_community_relations.community_id, community_id),eq(user_community_relations.user_id, user_id))).returning())[0];
+    // const notification = await db.insert(notifications).values({
+    //         user_id: user_id,
+    //         text: "User " + user.user_name + " invited you to " + community.name,
+    //         url: '/community/'+String(community_id),
+    //     }).returning();  
+    // await pusher.sendToUser(String(user_id), "notification", notification[0]);
 
     return json(new_relations);
 }) satisfies RequestHandler;

@@ -45,10 +45,15 @@
   $pusher.user.bind('notification', (data: Notification) => {
     $notifications = [data, ...$notifications];
   });
+  $: unread = $notifications.filter((notification) => {
+    return !notification.read;
+  }).length;
+  $: uread_string = unread == 0 ? '' : String(unread);
+  $: uread_string_brace = unread == 0 ? '' : '(' + String(unread) + ')';
 </script>
 
 <svelte:head>
-  <title>Knihovník</title>
+  <title>Knihovník {uread_string_brace}</title>
 </svelte:head>
 
 <AppDrawer user={data.user} />
@@ -79,9 +84,7 @@
         >
           <Fa icon={faBell} size="lg" />
           <div class="text-lg">
-            {$notifications.filter((notification) => {
-              return !notification.read;
-            }).length}
+            {uread_string}
           </div>
         </button>
         <UserButton user={data.user} darkMode={data.darkMode} />
