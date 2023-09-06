@@ -12,7 +12,7 @@ export const load = (async ({ locals }) => {
     redirect(301,"/")
   }
   const user=locals.user;
-  const offers = await getItems();
+  const offers = await getItems(user.id);
   return {
     offers: offers,
   };

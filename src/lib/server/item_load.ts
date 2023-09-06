@@ -1,5 +1,5 @@
 import { db } from "./db/drizzle";
-import { borrow_requests, items, users } from "./db/schema";
+import { borrow_requests, item_visibility, items, user_community_relations, users } from "./db/schema";
 import { and, eq, or } from "drizzle-orm";
 import { getFileUrl } from "./bucket";
 import type { BorrowRequest, PublicItemSafe, PublicUserSafe } from "$lib/types";
@@ -72,7 +72,7 @@ export const getJustItem = async (item_id:number)=>{
 }
 
 
-export const getItems = async ()=>{
+export const getItems = async (user_id:number)=>{
     const result:{owner:PublicUserSafe,item:PublicItemSafe}[] =
     await db.select({
         owner: owner_select,
@@ -80,6 +80,7 @@ export const getItems = async ()=>{
     })
     .from(items).where(eq(items.offered,true))
     .innerJoin(owners,  eq(items.owner_id, owners.id))
+    .innerJoin(item_visibility,eq(item_visibility.item_id,items.id)).innerJoin(user_community_relations,and(eq(item_visibility.community_id,user_community_relations.community_id),and(eq(user_community_relations.user_id, user_id),or(eq(user_community_relations.role, 'ADMIN'),eq(user_community_relations.role, 'MEMBER')))));
     const image_srcs_promise = result.flatMap((value)=>{
         return getFileUrl(value.item.image_src)
     })
