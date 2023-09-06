@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Item from '$lib/Item.svelte';
   import { pusher } from '$lib/store.js';
   import type {
     CommunityMessage,
@@ -11,6 +12,7 @@
   $: community = data.community;
   $: community_users = data.community_users;
   $: community_messages = data.community_messages;
+  $: community_items = data.community_items;
   $: role = data.role;
   let found_users: PublicUserSafe[] = [];
   let search_name = '';
@@ -320,4 +322,9 @@
       {disabled}>Send</button
     >
   </div>
+</div>
+<div>
+  {#each community_items as offer (offer.item.id)}
+    <Item item={offer.item} owner={offer.owner} holder={null}></Item>
+  {/each}
 </div>

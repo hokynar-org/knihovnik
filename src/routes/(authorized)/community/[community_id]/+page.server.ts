@@ -5,7 +5,7 @@ import type { PageServerLoad } from './$types';
 import type { Offer } from '$lib/types';
 import { error, redirect } from '@sveltejs/kit';
 import {getFileUrl} from '$lib/server/bucket'
-import {getShelfItems } from '$lib/server/item_load';
+import {getCommunityItems, getShelfItems } from '$lib/server/item_load';
 import { user_select } from '$lib/server/db/selects';
 
 export const load = (async ({ locals,params }) => {
@@ -34,11 +34,13 @@ export const load = (async ({ locals,params }) => {
     throw error(404);
   }
   const community=found_communities[0];
+  const community_items = getCommunityItems(community.id);
   return {
     community:          community,
     community_users:    community_users,
     community_messages: messages,
     role: user_relation.length==0?null:user_relation[0].role,
-    community_items: null,
+    community_items: community_items,
+    
   };
 }) satisfies PageServerLoad;
