@@ -64,6 +64,20 @@
       "when": 1693921851905,
       "tag": "0008_nappy_hitman",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "5",
+      "when": 1693950430397,
+      "tag": "0009_equal_malice",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "5",
+      "when": 1693955528125,
+      "tag": "0010_last_dagger",
+      "breakpoints": true
     }
   ]
 }

@@ -90,3 +90,11 @@ export const notifications = pgTable('notifications',{
   timestamp: timestamp('timestamp').defaultNow().notNull(),
   read: boolean('read').default(false).notNull(),
 });
+
+export const community_messages = pgTable('community_messages', {
+  id: serial('id').primaryKey(),
+  community_id: integer('community_id').references(() => communities.id).notNull(),
+  user_id: integer('user_id').references(() => users.id).notNull(),
+  message: text('message'),
+  timestamp: timestamp('timestamp').defaultNow(),
+});

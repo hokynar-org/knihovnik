@@ -37,7 +37,7 @@
       transport: 'ajax',
     },
     channelAuthorization: {
-      endpoint: '/api/pusher/borrow_request',
+      endpoint: '/api/pusher/channel',
       transport: 'ajax',
     },
   });

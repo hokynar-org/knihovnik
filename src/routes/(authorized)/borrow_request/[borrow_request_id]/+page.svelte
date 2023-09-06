@@ -274,7 +274,7 @@
 {/if}
 
 <div>
-  <Item {item} />
+  <Item {item} holder={null} owner={null} />
 </div>
 {borrow_request.status}
 <div>
@@ -308,10 +308,12 @@
         if (fallback) {
           res.then((value) => {
             $request_actions = [...$request_actions, value];
+            message = '';
             disabled = false;
           });
         } else {
           res.then((value) => {
+            message = '';
             disabled = false;
           });
         }

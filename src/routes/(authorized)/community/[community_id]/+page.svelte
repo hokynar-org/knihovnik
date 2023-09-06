@@ -1,11 +1,34 @@
 <script lang="ts">
-  import type { Community, PublicUserSafe, User } from '$lib/types';
+  import { pusher } from '$lib/store.js';
+  import type {
+    CommunityMessage,
+    Community,
+    PublicUserSafe,
+    User,
+  } from '$lib/types';
+  import { onDestroy } from 'svelte';
   export let data;
   $: community = data.community;
   $: community_users = data.community_users;
+  $: community_messages = data.community_messages;
   $: role = data.role;
   let found_users: PublicUserSafe[] = [];
   let search_name = '';
+  let disabled = false;
+  let fallback = false;
+  if ($pusher) {
+    const channel = $pusher.subscribe(
+      'private-community-' + String(data.community.id),
+    );
+    channel.bind('message', (data: { message: CommunityMessage }) => {
+      community_messages = [...community_messages, data.message];
+    });
+    onDestroy(() => {
+      channel.unsubscribe();
+    });
+  } else {
+    fallback = true;
+  }
   const search = async (user_name: string) => {
     const res = await fetch('/api/find_user/' + user_name, {
       method: 'POST',
@@ -111,6 +134,19 @@
     }
     return await res.json();
   };
+  const send_message = async () => {
+    const res = await fetch('/api/community/' + community.id + '/message', {
+      method: 'POST',
+      body: JSON.stringify({
+        message: message,
+      }),
+    });
+    if (!res.ok) {
+      throw new Error(String(res.status));
+    }
+    return (await res.json()) as CommunityMessage;
+  };
+  let message = '';
 </script>
 
 <h4>Community: {community.name}</h4>
@@ -251,3 +287,37 @@
     Reject
   </button>
 {/if}
+<div>
+  <table>
+    {#each community_messages as community_message (community_message.id)}
+      <tr>
+        <td>
+          {community_message.message}
+        </td>
+      </tr>
+    {/each}
+  </table>
+  <div class="flex">
+    <input class="input" type="text" bind:value={message} />
+    <button
+      class="btn variant-filled-primary py-1 my-2"
+      on:click={() => {
+        disabled = true;
+        const res = send_message();
+        if (fallback) {
+          res.then((value) => {
+            community_messages = [...community_messages, value];
+            message = '';
+            disabled = false;
+          });
+        } else {
+          res.then((value) => {
+            message = '';
+            disabled = false;
+          });
+        }
+      }}
+      {disabled}>Send</button
+    >
+  </div>
+</div>

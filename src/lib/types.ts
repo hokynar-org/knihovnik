@@ -1,5 +1,5 @@
 import type { InferModel } from 'drizzle-orm';
-import type { borrow_requests, items, notifications, request_actions } from './server/db/schema';
+import type { borrow_requests, community_messages, items, notifications, request_actions } from './server/db/schema';
 
 export interface Community {
   id: number;
@@ -55,6 +55,8 @@ export interface Session {
 export type BorrowRequest = InferModel<typeof borrow_requests>;
 
 export type Item = InferModel<typeof items>;
+
+export type CommunityMessage = InferModel<typeof community_messages>;
 
 export type RequestAction = InferModel <typeof request_actions>;
 
