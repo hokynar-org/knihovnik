@@ -73,7 +73,7 @@ export const getJustItem = async (item_id:number)=>{
 
 
 export const getItems = async (user_id:number)=>{
-    const result:{owner:PublicUserSafe,item:PublicItemSafe}[] =
+    const db_result:{owner:PublicUserSafe,item:PublicItemSafe}[] =
     await db.select({
         owner: owner_select,
         item: item_select,
@@ -81,6 +81,17 @@ export const getItems = async (user_id:number)=>{
     .from(items).where(eq(items.offered,true))
     .innerJoin(owners,  eq(items.owner_id, owners.id))
     .innerJoin(item_visibility,eq(item_visibility.item_id,items.id)).innerJoin(user_community_relations,and(eq(item_visibility.community_id,user_community_relations.community_id),and(eq(user_community_relations.user_id, user_id),or(eq(user_community_relations.role, 'ADMIN'),eq(user_community_relations.role, 'MEMBER')))));
+
+    const result: { owner: PublicUserSafe; item: PublicItemSafe; }[] = [];
+    db_result.forEach((value)=>{
+        if(result.filter((fvaleu)=>{
+            if(fvaleu.item.id==value.item.id){
+                return true
+            }
+        }).length==0){
+            result.push(value);
+        }
+    });
     const image_srcs_promise = result.flatMap((value)=>{
         return getFileUrl(value.item.image_src)
     })
