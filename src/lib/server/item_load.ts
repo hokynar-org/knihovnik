@@ -101,6 +101,36 @@ export const getItems = async (user_id:number)=>{
     return offers
 }
 
+
+export const getCommunityItems = async (community_id:number)=>{
+    const result:{owner:PublicUserSafe,item:PublicItemSafe}[] =
+    await db.select({
+        owner: owner_select,
+        item: item_select,
+    })
+    .from(items).where(and(eq(items.offered,true),eq(items.holder_id,items.owner_id)))
+    .innerJoin(item_visibility,and(eq(items.id,item_visibility.item_id),eq(item_visibility.community_id,community_id)))
+    .innerJoin(owners,  eq(items.owner_id, owners.id))
+    const image_srcs_promise = result.flatMap((value)=>{
+        return getFileUrl(value.item.image_src)
+    })
+    const image_srcs = await Promise.all(image_srcs_promise)
+    const offers = result.flatMap((value,index)=>{
+        return {
+            item: {
+                name:value.item.name,
+                description: value.item.description,
+                id: value.item.id,
+                owner_id: value.item.owner_id,
+                image_src: image_srcs[index],
+                offered: value.item.offered,
+            },
+            owner: value.owner
+        }
+    })
+    return offers
+}
+
 export const getShelfItems = async (user_id:number)=>{
     const result:{owner:PublicUserSafe,item:PublicItemSafe}[] =
     await db.select({

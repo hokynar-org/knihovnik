@@ -1,7 +1,7 @@
 import { error, fail, json, redirect } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { db } from '$lib/server/db/drizzle';
-import {borrow_requests, communities, items, notifications, request_actions, user_community_relations, users} from '$lib/server/db/schema'
+import {borrow_requests, communities, item_visibility, items, notifications, request_actions, user_community_relations, users} from '$lib/server/db/schema'
 import { and, eq, or } from 'drizzle-orm';
 import type { BorrowRequest, Item, PublicItemSafe } from '$lib/types';
 import { pusher } from '$lib/server/pusher';
@@ -51,6 +51,11 @@ export const POST = (async ({params, locals, url}) => {
     if(results[2][0].role!='MEMBER'){
         throw error(400);
     }
+    const user_community_items = await db.select().from(item_visibility).where(eq(item_visibility.community_id,community_id)).innerJoin(items,and(eq(item_visibility.item_id,items.id),eq(items.owner_id,user_id)));
+    const deleted_visibility_query = user_community_items.flatMap((value)=>{
+        return db.delete(item_visibility).where(and(eq(item_visibility.community_id, community_id),eq(item_visibility.item_id,value.items.id))).returning();
+    });
+    const deleted_visibility = await Promise.all(deleted_visibility_query);
 
     const new_relations = (await db.delete(user_community_relations).where(and(eq(user_community_relations.community_id, community_id),eq(user_community_relations.user_id, user_id))).returning())[0];
 

@@ -38,6 +38,7 @@ export const load = (async ({ locals,params }) => {
     community:          community,
     community_users:    community_users,
     community_messages: messages,
-    role: user_relation.length==0?null:user_relation[0].role
+    role: user_relation.length==0?null:user_relation[0].role,
+    community_items: null,
   };
 }) satisfies PageServerLoad;
