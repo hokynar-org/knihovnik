@@ -34,7 +34,10 @@
     />
 
     <input name="files" bind:value={filesSerialized} class="hidden" />
-    <FileUploader bind:filenames={files} />
+
+    <div class="mt-4 mb-4">
+      <FileUploader bind:filenames={files} />
+    </div>
 
     <div class="flex content-center justify-center my-3">
       <button class="btn variant-filled-primary">Submit</button>
@@ -42,7 +45,7 @@
   </form>
 </div>
 
-<div class="relative w-full">
+<div class="relative w-full mt-6">
   {#each $user_items as offer (offer.item.id)}
     <Item item={offer.item} owner={null} holder={offer.holder}>
       <!-- <div>

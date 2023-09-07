@@ -41,7 +41,7 @@
   };
 </script>
 
-<div class="dropzone-previews flex flex-row gap-4 mt-4 mb-4 flex-wrap">
+<div class="dropzone-previews flex flex-row gap-4 flex-wrap">
   {#each uploadedFiles as { previewUrl: url }, i (url)}
     <div
       class="p-0 border-2 rounded-container-token border-surface-500 bg-surface-500 overflow-hidden relative"
