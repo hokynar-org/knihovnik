@@ -7,6 +7,8 @@
   export let item: PublicItemSafe;
   export let owner: PublicUserSafe | null;
   export let holder: PublicUserSafe | null;
+  import { page } from '$app/stores';
+  $: user = $page.data.user as PublicUserSafe;
   const imageAltText = 'image';
 
   // async function getImageUrl(image_src: string) {
@@ -44,18 +46,26 @@
     <div class="pt-4 pb-4">
       <div class="">
         {#if owner}
-          Vlastní uživatel {owner.user_name}
+          {#if owner.id == user.id}
+            You own this item
+          {:else}
+            This item is owned by {owner.user_name}
+          {/if}
         {/if}
       </div>
       <div class="">
         {#if holder}
-          Drží uživalel {holder.user_name}
+          {#if holder.id == user.id}
+            You hold this item
+          {:else}
+            This item is held by {holder.user_name}
+          {/if}
         {/if}
       </div>
-      {#if item.offered}
-        Tento předmět si můžete půjčit
-      {:else}
-        Tento předmět si nyní nelze půjčit
+      {#if item.offered && owner && owner.id != user.id}
+        You can borrow this item
+      {:else if owner && owner.id != user.id}
+        At the moment, you cannot borrow this item
       {/if}
     </div>
 

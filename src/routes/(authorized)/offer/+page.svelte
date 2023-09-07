@@ -9,6 +9,7 @@
   import type { PageData } from './$types';
   import OfferItem from '$lib/OfferItem.svelte';
   export let data: PageData;
+  $: user = data.user;
 
   const { form, enhance } = superForm(data.item_form);
   let files: string[] = [];
@@ -57,7 +58,7 @@
   <h2 class="text-4xl mx-4">Items you offered</h2>
 
   {#each $user_items as offer (offer.item.id)}
-    <Item item={offer.item} owner={null} holder={offer.holder}>
+    <Item item={offer.item} owner={user} holder={offer.holder}>
       <!-- <div>
         <p>Location</p>
       </div>

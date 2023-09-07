@@ -10,6 +10,7 @@
   } from '$lib/types';
   import { onDestroy } from 'svelte';
   export let data;
+  $: user = data.user;
   $: community = data.community;
   $: community_users = data.community_users;
   $: community_messages = data.community_messages;
