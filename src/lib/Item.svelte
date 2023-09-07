@@ -49,7 +49,9 @@
           {#if owner.id == user.id}
             You own this item
           {:else}
-            This item is owned by {owner.user_name}
+            This item is owned by <a href={'/user/' + owner.id}
+              >{owner.user_name}</a
+            >
           {/if}
         {/if}
       </div>
