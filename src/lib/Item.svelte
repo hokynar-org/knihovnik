@@ -60,7 +60,9 @@
           {#if holder.id == user.id}
             You hold this item
           {:else}
-            This item is held by {holder.user_name}
+            This item is held by <a href={'/user/' + holder.id}
+              >{holder.user_name}</a
+            >
           {/if}
         {/if}
       </div>
