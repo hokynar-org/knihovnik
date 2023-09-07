@@ -171,7 +171,7 @@
 </p>
 <div>
   {#if role}
-    You are a {role}
+    Your role is {role}
     {#if role == 'MEMBER' || role == 'ADMIN'}
       <button
         class="btn variant-filled-error py-1 my-2"
@@ -199,9 +199,10 @@
 </div>
 
 <div>
-  <h3 class="mt-4 mb-2 text-lg">Users in this community</h3>
+  <h3 class="mt-4 mb-2 text-xl">Users in this community</h3>
   {#each community_users as community_user}
-    {community_user.user.user_name} ({community_user.relation.role})
+    <a href={'/user/' + user.id}>{community_user.user.user_name}</a>
+    ({community_user.relation.role})
     {#if role == 'ADMIN'}
       {#if community_user.relation.role == 'MEMBER'}
         <button
@@ -251,22 +252,25 @@
   {/each}
 </div>
 {#if role == 'ADMIN'}
+  <h3 class="mt-4 mb-2 text-xl">Find and invite users</h3>
   <div>
-    <input type="text" bind:value={search_name} />
-    <button
-      class="btn variant-filled-primary py-1 my-2"
-      on:click={() => {
-        search(search_name)
-          .then((value) => {
-            found_users = value;
-          })
-          .catch((reason) => {
-            found_users = [];
-          });
-      }}
-    >
-      Hledej
-    </button>
+    <input class="input" type="text" bind:value={search_name} />
+    <div class="flex content-center justify-center my-3">
+      <button
+        class="btn variant-filled-primary py-1"
+        on:click={() => {
+          search(search_name)
+            .then((value) => {
+              found_users = value;
+            })
+            .catch((reason) => {
+              found_users = [];
+            });
+        }}
+      >
+        Hledej
+      </button>
+    </div>
     <div>
       {#each found_users as user (user.id)}
         {user.user_name}
@@ -320,7 +324,7 @@
           >
             {#if community_message.user_id != user.id}
               <div>
-                <a href="./">{community_message.user_name}</a>:
+                <a href={'/user/' + user.id}>{community_message.user_name}</a>:
               </div>
               {#if timevisible == community_message.id}
                 <!--
@@ -338,7 +342,9 @@
           </td>
           <td class="py-2.5 flex">
             {#if community_message.user_id == user.id}
-              <div class="card px-2 variant-soft fit-content ml-auto max-w-xs">
+              <div
+                class="card px-2 variant-soft fit-content ml-auto max-w-xs break-words"
+              >
                 {community_message.message}
               </div>
             {:else}
@@ -354,7 +360,7 @@
           >
             {#if community_message.user_id == user.id}
               <div>
-                :<a href="./">{community_message.user_name}</a>
+                :<a href={'/user/' + user.id}>{community_message.user_name}</a>
               </div>
               {#if timevisible == community_message.id}
                 <!--
