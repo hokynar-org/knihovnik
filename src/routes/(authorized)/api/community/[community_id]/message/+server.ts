@@ -3,7 +3,7 @@ import type { RequestHandler } from './$types';
 import { db } from '$lib/server/db/drizzle';
 import {borrow_requests, communities, community_messages, items, notifications, request_actions, user_community_relations, users} from '$lib/server/db/schema'
 import { and, eq, or } from 'drizzle-orm';
-import type { BorrowRequest, Item, PublicItemSafe } from '$lib/types';
+import type { BorrowRequest, CommunityMessagePlus, Item, PublicItemSafe } from '$lib/types';
 import { pusher } from '$lib/server/pusher';
 
 export const POST = (async ({params, locals, url, request}) => {
@@ -41,7 +41,8 @@ export const POST = (async ({params, locals, url, request}) => {
         user_id: user.id,
         message: body.message,
     }).returning())[0];
-    await pusher.trigger('private-community-' + community.id,'message',{message:new_message});
+    const new_message_plus:CommunityMessagePlus={...new_message,user_name:user.user_name};
+    await pusher.trigger('private-community-' + community.id,'message',{message:new_message_plus});
     // const notification = await db.insert(notifications).values({
     //         user_id: user_id,
     //         text: "User " + user.user_name + " invited you to " + community.name,
@@ -49,5 +50,5 @@ export const POST = (async ({params, locals, url, request}) => {
     //     }).returning();
     // await pusher.sendToUser(String(user_id), "notification", notification[0]);
 
-    return json(new_message);
+    return json(new_message_plus);
 }) satisfies RequestHandler;

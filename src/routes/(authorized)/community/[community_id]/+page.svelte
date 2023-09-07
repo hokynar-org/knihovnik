@@ -6,6 +6,7 @@
     Community,
     PublicUserSafe,
     User,
+    CommunityMessagePlus,
   } from '$lib/types';
   import { onDestroy } from 'svelte';
   export let data;
@@ -22,7 +23,7 @@
     const channel = $pusher.subscribe(
       'private-community-' + String(data.community.id),
     );
-    channel.bind('message', (data: { message: CommunityMessage }) => {
+    channel.bind('message', (data: { message: CommunityMessagePlus }) => {
       community_messages = [...community_messages, data.message];
     });
     onDestroy(() => {
@@ -146,7 +147,7 @@
     if (!res.ok) {
       throw new Error(String(res.status));
     }
-    return (await res.json()) as CommunityMessage;
+    return (await res.json()) as CommunityMessagePlus;
   };
   let message = '';
 </script>
@@ -295,6 +296,9 @@
   <table>
     {#each community_messages as community_message (community_message.id)}
       <tr>
+        <td>
+          {community_message.user_name}:
+        </td>
         <td>
           {community_message.message}
         </td>

@@ -58,6 +58,9 @@ export type Item = InferModel<typeof items>;
 
 export type CommunityMessage = InferModel<typeof community_messages>;
 
+export type CommunityMessagePlus = CommunityMessage & {user_name:string}
+
+
 export type RequestAction = InferModel <typeof request_actions>;
 
 export type Notification = InferModel <typeof notifications>;
