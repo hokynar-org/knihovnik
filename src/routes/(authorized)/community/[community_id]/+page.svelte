@@ -11,6 +11,7 @@
   import { onDestroy } from 'svelte';
   import Fa from 'svelte-fa';
   import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
+  import { onMount } from 'svelte';
 
   export let data;
   $: user = data.user;
@@ -156,6 +157,7 @@
   };
   let message = '';
 
+  //Chat
   let timevisible = 0;
   function mouseOver(no: number) {
     timevisible = no;
@@ -163,6 +165,11 @@
   function mouseLeave() {
     timevisible = 0;
   }
+  let element;
+  onMount(() => scrollToBottom(element));
+  const scrollToBottom = async (node) => {
+    node.scroll({ top: node.scrollHeight, behavior: 'smooth' });
+  };
 </script>
 
 <h4 class="mt-4 mb-2">Community: {community.name}</h4>
@@ -312,7 +319,7 @@
 {/if}
 <div class="mt-6 border-solid border-2 pl-4">
   <h3 class="mt-4 mb-2 text-xl">Community chat</h3>
-  <div class="max-h-[500px] overflow-y-scroll pr-4">
+  <div class="max-h-[500px] overflow-y-scroll pr-4" bind:this={element}>
     <table>
       {#each community_messages as community_message (community_message.id)}
         <tr>
@@ -343,12 +350,14 @@
           <td class="py-2.5 flex">
             {#if community_message.user_id == user.id}
               <div
-                class="card px-2 variant-soft fit-content ml-auto max-w-xs break-words"
+                class="card px-2 variant-soft fit-content ml-auto max-w-xs max-h-[6rem] text-ellipsis overflow-hidden wrap-anywhere"
               >
                 {community_message.message}
               </div>
             {:else}
-              <div class="card px-2 variant-soft fit-content">
+              <div
+                class="card px-2 variant-soft fit-content max-w-xs max-h-[6rem] text-ellipsis overflow-hidden wrap-anywhere"
+              >
                 {community_message.message}
               </div>
             {/if}
@@ -416,5 +425,9 @@
 <style>
   .fit-content {
     width: fit-content;
+  }
+
+  .wrap-anywhere {
+    overflow-wrap: anywhere;
   }
 </style>
