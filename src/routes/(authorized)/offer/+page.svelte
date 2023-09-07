@@ -18,7 +18,14 @@
   $: $user_items = data.user_items;
 </script>
 
-<div>
+<div class="mt-6">
+  <h2 class="text-2xl">Offer an item</h2>
+
+  <p class="text-sm min-w-xs max-w-xs">
+    Add an item others can borrow. You will be able to choose which community
+    can borrow it.
+  </p>
+
   <form method="POST" action="?/new_item" class="max-w-xs min-w-xs" use:enhance>
     <label for="name" class="text-xl mt-4 mb-2">Name</label>
     <input type="text" name="name" class="input" bind:value={$form.name} />
@@ -35,7 +42,8 @@
 
     <input name="files" bind:value={filesSerialized} class="hidden" />
 
-    <div class="mt-4 mb-4">
+    <label for="description" class="text-xl mt-4 mb-2">Picture</label>
+    <div class="mb-4">
       <FileUploader bind:filenames={files} />
     </div>
 
@@ -46,6 +54,8 @@
 </div>
 
 <div class="relative w-full mt-6">
+  <h2 class="text-4xl mx-4">Items you offered</h2>
+
   {#each $user_items as offer (offer.item.id)}
     <Item item={offer.item} owner={null} holder={offer.holder}>
       <!-- <div>

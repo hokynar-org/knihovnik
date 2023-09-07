@@ -4,7 +4,7 @@
   export let data: PageData;
 </script>
 
-<ol>
+<ol class="mt-6">
   {#each data.borrow_requests as borrow_request}
     <li>
       <a
