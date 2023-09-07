@@ -11,6 +11,10 @@
   $: user = $page.data.user as PublicUserSafe;
   const imageAltText = 'image';
 
+  let clamped = true;
+  function toggleClamp() {
+    clamped = !clamped;
+  }
   // async function getImageUrl(image_src: string) {
   //   const response = await fetch('/api/image/' + image_src, {
   //     method: 'GET',
@@ -49,7 +53,16 @@
       <h4 class="mb-2">
         <a href="/item/{item.id}">{item.name}</a>
       </h4>
-      <div class="descr line-clamp overflow-hidden">{item.description}</div>
+      <div
+        class="overflow-hidden"
+        class:line-clamp={clamped}
+        on:click={toggleClamp}
+        on:keypress={toggleClamp}
+        role="button"
+        tabindex="0"
+      >
+        {item.description}
+      </div>
     </div>
     <div class="pt-4 pb-4">
       <div class="">

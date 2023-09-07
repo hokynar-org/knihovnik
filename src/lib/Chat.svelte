@@ -37,6 +37,8 @@
   };
   let message = '';
 
+  //Show time of message on hover, currently hidden
+  //styling needs to be improved
   let timevisible = 0;
   function mouseOver(no: number) {
     timevisible = no;
