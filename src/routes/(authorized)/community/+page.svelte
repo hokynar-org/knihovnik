@@ -14,6 +14,17 @@
   $: user_communities = data.user_communities;
 </script>
 
+<div class="w-xs">
+  <h2 class="text-2xl mt-6 mb-4">Your communities</h2>
+
+  {#each user_communities as community (community.communities.id)}
+    <a href={'/community/' + community.communities.id}
+      >{community.communities.name} ({community.user_community_relations
+        .role})</a
+    ><br />
+  {/each}
+</div>
+
 <div>
   <h2 class="text-2xl mt-6 mb-2">Create a community</h2>
 
@@ -47,13 +58,8 @@
   </form>
 </div>
 
-<div>
-  <h2 class="text-2xl mt-6 mb-4">Your communities</h2>
-
-  {#each user_communities as community (community.communities.id)}
-    <a href={'/community/' + community.communities.id}
-      >{community.communities.name} ({community.user_community_relations
-        .role})</a
-    ><br />
-  {/each}
-</div>
+<style>
+  .w-xs {
+    width: 20rem;
+  }
+</style>

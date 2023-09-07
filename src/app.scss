@@ -10,3 +10,12 @@ body {
   height: 100dvh;
   overflow: hidden;
 }
+
+a {
+  font-weight: bold;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
