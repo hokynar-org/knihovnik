@@ -9,6 +9,9 @@
     CommunityMessagePlus,
   } from '$lib/types';
   import { onDestroy } from 'svelte';
+  import Fa from 'svelte-fa';
+  import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
+
   export let data;
   $: user = data.user;
   $: community = data.community;
@@ -16,6 +19,7 @@
   $: community_messages = data.community_messages;
   $: community_items = data.community_items;
   $: role = data.role;
+
   let found_users: PublicUserSafe[] = [];
   let search_name = '';
   let disabled = false;
@@ -151,10 +155,20 @@
     return (await res.json()) as CommunityMessagePlus;
   };
   let message = '';
+
+  let timevisible = 0;
+  function mouseOver(no: number) {
+    timevisible = no;
+  }
+  function mouseLeave() {
+    timevisible = 0;
+  }
 </script>
 
 <h4 class="mt-4 mb-2">Community: {community.name}</h4>
-<p>{community.description}</p>
+<p>
+  {community.description}
+</p>
 <div>
   {#if role}
     You are a {role}
@@ -292,24 +306,78 @@
     Reject
   </button>
 {/if}
-<div class="mt-6">
+<div class="mt-6 border-solid border-2 pl-4">
   <h3 class="mt-4 mb-2 text-xl">Community chat</h3>
-  <table>
-    {#each community_messages as community_message (community_message.id)}
-      <tr>
-        <td>
-          {community_message.user_name}:
-        </td>
-        <td>
-          {community_message.message}
-        </td>
-      </tr>
-    {/each}
-  </table>
-  <div class="flex">
+  <div class="max-h-[500px] overflow-y-scroll pr-4">
+    <table>
+      {#each community_messages as community_message (community_message.id)}
+        <tr>
+          <td
+            class="text-right"
+            on:mouseleave={mouseLeave}
+            on:mouseover={() => mouseOver(community_message.id)}
+            on:focus={() => mouseOver(community_message.id)}
+          >
+            {#if community_message.user_id != user.id}
+              <div>
+                <a href="./">{community_message.user_name}</a>:
+              </div>
+              {#if timevisible == community_message.id}
+                <!--
+                <div class="text-sm">
+                  {community_message.timestamp
+                    ? new Date(community_message.timestamp).toLocaleTimeString()
+                    : ''}
+                  {community_message.timestamp
+                    ? new Date(community_message.timestamp).toLocaleDateString()
+                    : ''}
+                </div>
+                -->
+              {/if}
+            {/if}
+          </td>
+          <td class="py-2.5 flex">
+            {#if community_message.user_id == user.id}
+              <div class="card px-2 variant-soft fit-content ml-auto max-w-xs">
+                {community_message.message}
+              </div>
+            {:else}
+              <div class="card px-2 variant-soft fit-content">
+                {community_message.message}
+              </div>
+            {/if}
+          </td>
+          <td
+            on:mouseleave={mouseLeave}
+            on:mouseover={() => mouseOver(community_message.id)}
+            on:focus={() => mouseOver(community_message.id)}
+          >
+            {#if community_message.user_id == user.id}
+              <div>
+                :<a href="./">{community_message.user_name}</a>
+              </div>
+              {#if timevisible == community_message.id}
+                <!--
+                  <div class="text-sm">
+                  {community_message.timestamp
+                    ? new Date(community_message.timestamp).toLocaleTimeString()
+                    : ''}
+                  {community_message.timestamp
+                    ? new Date(community_message.timestamp).toLocaleDateString()
+                    : ''}
+                </div>
+                -->
+              {/if}
+            {/if}
+          </td>
+        </tr>
+      {/each}
+    </table>
+  </div>
+  <div class="flex my-2">
     <input class="input" type="text" bind:value={message} />
     <button
-      class="btn variant-filled-primary py-1 my-2"
+      class="btn variant-filled-primary py-1 my-2 mx-2"
       on:click={() => {
         disabled = true;
         const res = send_message();
@@ -326,7 +394,9 @@
           });
         }
       }}
-      {disabled}>Send</button
+      {disabled}
+    >
+      <Fa size="xs" icon={faPaperPlane} />&nbsp;Send</button
     >
   </div>
 </div>
@@ -336,3 +406,9 @@
     <Item item={offer.item} owner={offer.owner} holder={null}></Item>
   {/each}
 </div>
+
+<style>
+  .fit-content {
+    width: fit-content;
+  }
+</style>
