@@ -7,7 +7,7 @@ import { db } from '$lib/server/db/drizzle';
 import { eq } from 'drizzle-orm';
 import { JWT_SECRET } from '$env/static/private';
 import jwt from 'jsonwebtoken';
-import type { PageServerLoad, Actions } from './$types.d.ts';
+import type { PageServerLoad, Actions } from './$types.js';
 import type { Session } from '$lib/types.js';
 import { notifications } from '$lib/store.js';
 

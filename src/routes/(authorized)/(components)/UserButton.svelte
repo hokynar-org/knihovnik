@@ -36,7 +36,7 @@
 <div class="card p-2 w-56 shadow-xl" data-popup="profile">
   <ol class="list-nav">
     <li>
-      <a href="/user">
+      <a href="/profile">
         <span class="badge"><Fa icon={faUser} /></span>
         <span>Profile</span>
       </a>
