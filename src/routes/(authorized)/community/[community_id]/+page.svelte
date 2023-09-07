@@ -1,5 +1,6 @@
 <script lang="ts">
   import Item from '$lib/Item.svelte';
+  import Chat from '$lib/Chat.svelte';
   import { pusher } from '$lib/store.js';
   import type {
     CommunityMessage,
@@ -9,9 +10,6 @@
     CommunityMessagePlus,
   } from '$lib/types';
   import { onDestroy } from 'svelte';
-  import Fa from 'svelte-fa';
-  import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
-  import { onMount } from 'svelte';
 
   export let data;
   $: user = data.user;
@@ -142,33 +140,6 @@
       throw new Error(String(res.status));
     }
     return await res.json();
-  };
-  const send_message = async () => {
-    const res = await fetch('/api/community/' + community.id + '/message', {
-      method: 'POST',
-      body: JSON.stringify({
-        message: message,
-      }),
-    });
-    if (!res.ok) {
-      throw new Error(String(res.status));
-    }
-    return (await res.json()) as CommunityMessagePlus;
-  };
-  let message = '';
-
-  //Chat
-  let timevisible = 0;
-  function mouseOver(no: number) {
-    timevisible = no;
-  }
-  function mouseLeave() {
-    timevisible = 0;
-  }
-  let element;
-  onMount(() => scrollToBottom(element));
-  const scrollToBottom = async (node) => {
-    node.scroll({ top: node.scrollHeight, behavior: 'smooth' });
   };
 </script>
 
@@ -319,101 +290,7 @@
 {/if}
 <div class="mt-6 border-solid border-2 pl-4">
   <h3 class="mt-4 mb-2 text-xl">Community chat</h3>
-  <div class="max-h-[500px] overflow-y-scroll pr-4" bind:this={element}>
-    <table>
-      {#each community_messages as community_message (community_message.id)}
-        <tr>
-          <td
-            class="text-right"
-            on:mouseleave={mouseLeave}
-            on:mouseover={() => mouseOver(community_message.id)}
-            on:focus={() => mouseOver(community_message.id)}
-          >
-            {#if community_message.user_id != user.id}
-              <div>
-                <a href={'/user/' + user.id}>{community_message.user_name}</a>:
-              </div>
-              {#if timevisible == community_message.id}
-                <!--
-                <div class="text-sm">
-                  {community_message.timestamp
-                    ? new Date(community_message.timestamp).toLocaleTimeString()
-                    : ''}
-                  {community_message.timestamp
-                    ? new Date(community_message.timestamp).toLocaleDateString()
-                    : ''}
-                </div>
-                -->
-              {/if}
-            {/if}
-          </td>
-          <td class="py-2.5 flex">
-            {#if community_message.user_id == user.id}
-              <div
-                class="card px-2 variant-soft fit-content ml-auto max-w-xs max-h-[6rem] text-ellipsis overflow-hidden wrap-anywhere"
-              >
-                {community_message.message}
-              </div>
-            {:else}
-              <div
-                class="card px-2 variant-soft fit-content max-w-xs max-h-[6rem] text-ellipsis overflow-hidden wrap-anywhere"
-              >
-                {community_message.message}
-              </div>
-            {/if}
-          </td>
-          <td
-            on:mouseleave={mouseLeave}
-            on:mouseover={() => mouseOver(community_message.id)}
-            on:focus={() => mouseOver(community_message.id)}
-          >
-            {#if community_message.user_id == user.id}
-              <div>
-                :<a href={'/user/' + user.id}>{community_message.user_name}</a>
-              </div>
-              {#if timevisible == community_message.id}
-                <!--
-                  <div class="text-sm">
-                  {community_message.timestamp
-                    ? new Date(community_message.timestamp).toLocaleTimeString()
-                    : ''}
-                  {community_message.timestamp
-                    ? new Date(community_message.timestamp).toLocaleDateString()
-                    : ''}
-                </div>
-                -->
-              {/if}
-            {/if}
-          </td>
-        </tr>
-      {/each}
-    </table>
-  </div>
-  <div class="flex my-2">
-    <input class="input" type="text" bind:value={message} />
-    <button
-      class="btn variant-filled-primary py-1 my-2 mx-2"
-      on:click={() => {
-        disabled = true;
-        const res = send_message();
-        if (fallback) {
-          res.then((value) => {
-            community_messages = [...community_messages, value];
-            message = '';
-            disabled = false;
-          });
-        } else {
-          res.then((value) => {
-            message = '';
-            disabled = false;
-          });
-        }
-      }}
-      {disabled}
-    >
-      <Fa size="xs" icon={faPaperPlane} />&nbsp;Send</button
-    >
-  </div>
+  <Chat messages={community_messages} {user} isadmin={false} />
 </div>
 
 <div class="mt-6">
@@ -423,11 +300,4 @@
 </div>
 
 <style>
-  .fit-content {
-    width: fit-content;
-  }
-
-  .wrap-anywhere {
-    overflow-wrap: anywhere;
-  }
 </style>
