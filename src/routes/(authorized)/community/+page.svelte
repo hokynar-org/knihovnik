@@ -15,6 +15,13 @@
 </script>
 
 <div>
+  <h2 class="text-2xl mt-6 mb-2">Create a community</h2>
+
+  <p class="text-sm min-w-xs max-w-xs">
+    Anyone can create a community and invite other users to it. Admins have a
+    responsibility to moderate their community. TODO agree on this description
+  </p>
+
   <form
     method="POST"
     action="?/new_community"
@@ -39,7 +46,10 @@
     </div>
   </form>
 </div>
+
 <div>
+  <h2 class="text-2xl mt-6 mb-4">Your communities</h2>
+
   {#each user_communities as community (community.communities.id)}
     <a href={'/community/' + community.communities.id}
       >{community.communities.name} ({community.user_community_relations

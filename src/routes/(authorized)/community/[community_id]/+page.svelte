@@ -183,6 +183,7 @@
 </div>
 
 <div>
+  <h3 class="mt-4 mb-2 text-lg">Users in this community</h3>
   {#each community_users as community_user}
     {community_user.user.user_name} ({community_user.relation.role})
     {#if role == 'ADMIN'}
@@ -289,7 +290,8 @@
     Reject
   </button>
 {/if}
-<div>
+<div class="mt-6">
+  <h3 class="mt-4 mb-2 text-xl">Community chat</h3>
   <table>
     {#each community_messages as community_message (community_message.id)}
       <tr>
@@ -323,7 +325,8 @@
     >
   </div>
 </div>
-<div>
+
+<div class="mt-6">
   {#each community_items as offer (offer.item.id)}
     <Item item={offer.item} owner={offer.owner} holder={null}></Item>
   {/each}
