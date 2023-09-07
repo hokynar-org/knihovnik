@@ -4,6 +4,7 @@ import { db } from '$lib/server/db/drizzle';
 import {borrow_requests, item_visibility, items} from '$lib/server/db/schema'
 import { eq } from 'drizzle-orm';
 import type { Item } from '$lib/types';
+import { item_select } from '$lib/server/db/selects';
 
 export const POST = (async ({locals, params, request}) => {
     if (!locals.user) {
@@ -25,8 +26,10 @@ export const POST = (async ({locals, params, request}) => {
         throw error(401);
     }
     const new_item:{name:string, description:string} = await request.json();
-    await db.delete(borrow_requests).where(eq(borrow_requests.item_id, Number(item_id)));
-    const deleted_item:Item[] = await db.delete(items).where(eq(items.id, Number(item_id))).returning();
+    if(!new_item.name || !new_item.description){
 
-    return json(deleted_item[0]);
+    }
+    const updated_item = (await db.update(items).set({name:new_item.name,description:new_item.description}).where(eq(borrow_requests.item_id, Number(item_id))).returning(item_select))[0];
+
+    return json(updated_item);
 }) satisfies RequestHandler;
