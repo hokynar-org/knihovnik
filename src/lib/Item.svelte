@@ -33,15 +33,23 @@
 <article
   class="relative flex rounded-xl overflow-hidden bg-surface-100-800-token m-4"
 >
-  <div data-tooltip={imageAltText} data-placement="top" class="max-h-60 mr-2">
-    <img class="max-h-60" src={item.image_src} alt={imageAltText} />
+  <div
+    data-tooltip={imageAltText}
+    data-placement="top"
+    class="max-h-60 mr-2 w-[25%] overflow-hidden"
+  >
+    <img
+      class="object-cover w-[100%] h-[100%]"
+      src={item.image_src}
+      alt={imageAltText}
+    />
   </div>
-  <div class="flex w-full flex-nowrap justify-between">
-    <div class="m-4">
+  <div class="flex w-full flex-nowrap justify-between py-2">
+    <div class="m-4 w-[50%]">
       <h4 class="mb-2">
         <a href="/item/{item.id}">{item.name}</a>
       </h4>
-      <div class="descr">{item.description}</div>
+      <div class="descr line-clamp overflow-hidden">{item.description}</div>
     </div>
     <div class="pt-4 pb-4">
       <div class="">

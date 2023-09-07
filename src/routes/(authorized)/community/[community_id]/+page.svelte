@@ -293,7 +293,7 @@
   <Chat messages={community_messages} {user} isadmin={false} />
 </div>
 
-<div class="mt-6">
+<div class="mt-6 w-full">
   {#each community_items as offer (offer.item.id)}
     <Item item={offer.item} owner={offer.owner} holder={null}></Item>
   {/each}

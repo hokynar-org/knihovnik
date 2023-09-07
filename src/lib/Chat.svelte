@@ -82,13 +82,13 @@
         <td class="py-2.5 flex">
           {#if community_message.user_id == user.id}
             <div
-              class="card px-3 py-1 variant-soft fit-content max-w-xs max-h-[6.6rem] text-ellipsis overflow-hidden wrap-anywhere ml-auto"
+              class="card px-3 py-1 variant-soft fit-content max-w-xs max-h-[6.6rem] line-clamp overflow-hidden wrap-anywhere ml-auto"
             >
               {community_message.message}
             </div>
           {:else}
             <div
-              class="card px-3 py-1 variant-soft fit-content max-w-xs max-h-[6.6rem] text-ellipsis overflow-hidden wrap-anywhere"
+              class="card px-3 py-1 variant-soft fit-content max-w-xs max-h-[6.6rem] line-clamp overflow-hidden wrap-anywhere"
             >
               {community_message.message}
             </div>

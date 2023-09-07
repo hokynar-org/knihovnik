@@ -19,3 +19,12 @@ a {
 a:hover {
   text-decoration: underline;
 }
+
+/* https://css-tricks.com/line-clampin/ */
+/* would be nice to define a class like line-clamp-{n}
+and n is the number of clamped lines*/
+.line-clamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+}
