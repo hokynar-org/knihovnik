@@ -17,7 +17,8 @@ export const load: PageServerLoad = (async ({ locals, params }) => {
   }
   const item_id = Number(params.item_id);
   const user=locals.user;
-  const results = await Promise.all([getItem(item_id),db.select().from(user_community_relations).where(and(eq(user_community_relations.user_id, user.id),or(eq(user_community_relations.role, 'ADMIN'),eq(user_community_relations.role, 'MEMBER')))).innerJoin(communities,eq(user_community_relations.community_id,communities.id)).leftJoin(item_visibility,eq(item_visibility.community_id,user_community_relations.community_id))]); 
+  const results = await Promise.all([getItem(item_id),db.select().from(user_community_relations).where(and(eq(user_community_relations.user_id, user.id),or(eq(user_community_relations.role, 'ADMIN'),eq(user_community_relations.role, 'MEMBER')))).innerJoin(communities,eq(user_community_relations.community_id,communities.id)).leftJoin(item_visibility,and(eq(item_visibility.item_id, item_id),eq(item_visibility.community_id,user_community_relations.community_id)))]);
+  console.table(results[1])
   const item_result=results[0];
   const community_visibility=results[1];
   if(!item_result){
