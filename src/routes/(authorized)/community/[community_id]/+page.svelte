@@ -1,6 +1,8 @@
 <script lang="ts">
   import Item from '$lib/Item.svelte';
   import Chat from '$lib/Chat.svelte';
+  import Fa from 'svelte-fa';
+  import { faLockOpen } from '@fortawesome/free-solid-svg-icons';
   import { pusher } from '$lib/store.js';
   import type {
     CommunityMessage,
@@ -289,7 +291,16 @@
   </button>
 {/if}
 <div class="mt-6 border-solid border-2 pl-4">
-  <h3 class="mt-4 mb-2 text-xl">Community chat</h3>
+  <div
+    class="inline-grid items-baseline grid-cols-2"
+    title="This chat is not encrypted. Do not share any sensitive information: use
+    end-to-end encrypted services like Signal for that."
+  >
+    <h3 class="mt-4 mb-2 text-xl">Community chat</h3>
+    <p class="ml-2">
+      <Fa class="inline text-xl" icon={faLockOpen} />
+    </p>
+  </div>
   <Chat messages={community_messages} {user} isadmin={false} />
 </div>
 
