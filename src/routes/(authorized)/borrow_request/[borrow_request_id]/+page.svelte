@@ -121,67 +121,82 @@
   };
 </script>
 
+<h1 class="mt-6 mb-4 text-3xl min-w-xs">
+  Borrow request for <a href={'/item/' + item.id}>{item.name}</a>
+</h1>
+
+<p>Status: {borrow_request.status}</p>
+<p>
+  This is a request between you and <a href={'/user/' + lender.id}
+    >{lender.user_name}</a
+  >.
+</p>
+
 {#if borrow_request.status == 'PENDING'}
   {#if borrow_request.lender_id == user.id}
-    <button
-      class="btn variant-filled-primary py-1 my-2"
-      on:click={() => {
-        disabled = true;
-        const res = deny();
-        if (fallback) {
-          res
-            .then((value) => {
-              borrow_request = value;
-              disabled = false;
-              return value;
-            })
-            .catch((reason) => {
-              disabled = false;
-            });
-        } else {
-          res
-            .then((value) => {
-              disabled = false;
-              return value;
-            })
-            .catch((reason) => {
-              disabled = false;
-            });
-        }
-      }}
-      {disabled}>Deny</button
-    >
-    <button
-      class="btn variant-filled-primary py-1 my-2"
-      on:click={() => {
-        disabled = true;
-        const res = accept();
-        if (fallback) {
-          res
-            .then((value) => {
-              borrow_request = value;
-              disabled = false;
-              return value;
-            })
-            .catch((reason) => {
-              disabled = false;
-            });
-        } else {
-          res
-            .then((value) => {
-              disabled = false;
-              return value;
-            })
-            .catch((reason) => {
-              disabled = false;
-            });
-        }
-      }}
-      {disabled}>Accept</button
-    >
+    <h3 class="text-xl mt-4 mb-2">Accept the request?</h3>
+    <div>
+      <button
+        class="btn variant-filled-primary py-1 my-2"
+        on:click={() => {
+          disabled = true;
+          const res = accept();
+          if (fallback) {
+            res
+              .then((value) => {
+                borrow_request = value;
+                disabled = false;
+                return value;
+              })
+              .catch((reason) => {
+                disabled = false;
+              });
+          } else {
+            res
+              .then((value) => {
+                disabled = false;
+                return value;
+              })
+              .catch((reason) => {
+                disabled = false;
+              });
+          }
+        }}
+        {disabled}>Accept</button
+      >
+      <button
+        class="btn variant-filled-error py-1 my-2"
+        on:click={() => {
+          disabled = true;
+          const res = deny();
+          if (fallback) {
+            res
+              .then((value) => {
+                borrow_request = value;
+                disabled = false;
+                return value;
+              })
+              .catch((reason) => {
+                disabled = false;
+              });
+          } else {
+            res
+              .then((value) => {
+                disabled = false;
+                return value;
+              })
+              .catch((reason) => {
+                disabled = false;
+              });
+          }
+        }}
+        {disabled}>Deny</button
+      >
+    </div>
   {:else if borrow_request.borrower_id == user.id}
+    <h3 class="text-xl mt-4 mb-2">Cancel the request?</h3>
     <button
-      class="btn variant-filled-primary py-1 my-2"
+      class="btn variant-filled-error py-1 my-2"
       on:click={() => {
         disabled = true;
         const res = cancel();
@@ -273,11 +288,8 @@
   >
 {/if}
 
-<div>
-  <Item {item} holder={null} owner={null} />
-</div>
-{borrow_request.status}
-<div>
+<!--Chat-->
+<div class="mt-6">
   <table>
     {#each $request_actions as request_action (request_action.id)}
       <tr>
@@ -321,4 +333,8 @@
       {disabled}>Send</button
     >
   </div>
+</div>
+
+<div class="mt-6">
+  <Item {item} holder={null} owner={null} />
 </div>
