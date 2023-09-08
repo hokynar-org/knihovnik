@@ -134,7 +134,13 @@
 
 {#if borrow_request.status == 'PENDING'}
   {#if borrow_request.lender_id == user.id}
-    <h3 class="text-xl mt-4 mb-2">Accept the request?</h3>
+    <h3 class="text-xl mt-4 mb-1">Accept the request?</h3>
+    <p class="text-sm mb-2 max-w-xs">
+      By accepting, you promise to borrow the item to the user
+      <a href={'/user/' + lender.id}>{lender.user_name}</a>. Make sure to speak
+      to them to clarify the terms of this borrowing. You can always cancel
+      this.
+    </p>
     <div>
       <button
         class="btn variant-filled-primary py-1 my-2"
@@ -230,62 +236,78 @@
       return true;
     }
   }).length == 0}
-  <button
-    class="btn variant-filled-primary py-1 my-2"
-    on:click={() => {
-      disabled = true;
-      const res = confirm();
-      if (fallback) {
-        res
-          .then((value) => {
-            borrow_request = value;
-            disabled = false;
-            return value;
-          })
-          .catch((reason) => {
-            disabled = false;
-          });
-      } else {
-        res
-          .then((value) => {
-            disabled = false;
-            return value;
-          })
-          .catch((reason) => {
-            disabled = false;
-          });
-      }
-    }}
-    {disabled}>Confirm</button
-  >
-  <button
-    class="btn variant-filled-error py-1 my-2"
-    on:click={() => {
-      disabled = true;
-      const res = abort();
-      if (fallback) {
-        res
-          .then((value) => {
-            borrow_request = value;
-            disabled = false;
-            return value;
-          })
-          .catch((reason) => {
-            disabled = false;
-          });
-      } else {
-        res
-          .then((value) => {
-            disabled = false;
-            return value;
-          })
-          .catch((reason) => {
-            disabled = false;
-          });
-      }
-    }}
-    {disabled}>Abort</button
-  >
+  <h3 class="text-xl mt-4 mb-1">Confirm handover</h3>
+  {#if borrow_request.lender_id == user.id}
+    <p class="text-sm mb-2 max-w-xs">
+      Confirm if you have given the item to
+      <a href={'/user/' + lender.id}>{lender.user_name}</a>. Abort if you
+      haven't and want to cancel this borrowing.
+    </p>
+  {:else}
+    <p class="text-sm mb-2 max-w-xs">
+      Confirm if you have received the item from
+      <a href={'/user/' + owner.id}>{owner.user_name}</a>. Abort if you haven't
+      and want to cancel this borrowing.
+    </p>
+  {/if}
+  <div>
+    <button
+      class="btn variant-filled-primary py-1 my-2"
+      on:click={() => {
+        disabled = true;
+        const res = confirm();
+        if (fallback) {
+          res
+            .then((value) => {
+              borrow_request = value;
+              disabled = false;
+              return value;
+            })
+            .catch((reason) => {
+              disabled = false;
+            });
+        } else {
+          res
+            .then((value) => {
+              disabled = false;
+              return value;
+            })
+            .catch((reason) => {
+              disabled = false;
+            });
+        }
+      }}
+      {disabled}>Confirm</button
+    >
+    <button
+      class="btn variant-filled-error py-1 my-2"
+      on:click={() => {
+        disabled = true;
+        const res = abort();
+        if (fallback) {
+          res
+            .then((value) => {
+              borrow_request = value;
+              disabled = false;
+              return value;
+            })
+            .catch((reason) => {
+              disabled = false;
+            });
+        } else {
+          res
+            .then((value) => {
+              disabled = false;
+              return value;
+            })
+            .catch((reason) => {
+              disabled = false;
+            });
+        }
+      }}
+      {disabled}>Abort</button
+    >
+  </div>
 {/if}
 
 <!--Chat-->
