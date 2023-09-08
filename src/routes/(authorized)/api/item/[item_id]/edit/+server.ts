@@ -25,11 +25,14 @@ export const POST = (async ({locals, params, request}) => {
     if (item.owner_id != locals.user.id) {
         throw error(401);
     }
+    if (item.owner_id != item.holder_id) {
+        throw error(400);
+    }
     const new_item:{name:string, description:string} = await request.json();
     if(!new_item.name || !new_item.description){
 
     }
-    const updated_item = (await db.update(items).set({name:new_item.name,description:new_item.description}).where(eq(borrow_requests.item_id, Number(item_id))).returning(item_select))[0];
+    const updated_item = (await db.update(items).set({name:new_item.name,description:new_item.description}).where(eq(items.id, Number(item_id))).returning(item_select))[0];
 
     return json(updated_item);
 }) satisfies RequestHandler;

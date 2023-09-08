@@ -2,13 +2,13 @@ import { error, redirect } from '@sveltejs/kit';
 import { borrow_requests, communities, item_visibility, items, user_community_relations, users } from '$lib/server/db/schema';
 import { db } from '$lib/server/db/drizzle';
 import { and, eq, or } from 'drizzle-orm';
-import type { PageServerLoad } from './$types';
+import type { LayoutServerLoad } from './$types';
 import type { BorrowRequest, Offer, PublicItemSafe,PublicUserSafe } from '$lib/types';
 import { alias } from 'drizzle-orm/pg-core';
 import { getFileUrl } from '$lib/server/bucket';
 import { getItem } from '$lib/server/item_load';
 
-export const load: PageServerLoad = (async ({ locals, params }) => {
+export const load: LayoutServerLoad = (async ({ locals, params }) => {
   if(!params.item_id){
     throw error(400)
   }
@@ -18,7 +18,6 @@ export const load: PageServerLoad = (async ({ locals, params }) => {
   const item_id = Number(params.item_id);
   const user=locals.user;
   const results = await Promise.all([getItem(item_id),db.select().from(user_community_relations).where(and(eq(user_community_relations.user_id, user.id),or(eq(user_community_relations.role, 'ADMIN'),eq(user_community_relations.role, 'MEMBER')))).innerJoin(communities,eq(user_community_relations.community_id,communities.id)).leftJoin(item_visibility,and(eq(item_visibility.item_id, item_id),eq(item_visibility.community_id,user_community_relations.community_id)))]);
-  console.table(results[1])
   const item_result=results[0];
   const community_visibility=results[1];
   if(!item_result){
@@ -60,4 +59,4 @@ export const load: PageServerLoad = (async ({ locals, params }) => {
       community_visibility:community_visibility,
     }
   }
-}) satisfies PageServerLoad;
+}) satisfies LayoutServerLoad;
