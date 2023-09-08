@@ -29,7 +29,7 @@
   };
 </script>
 
-<div class="container">
+<div class="container mt-6 mb-6">
   <Item {item} {holder} {owner}>
     {#if holder}
       {#if user.id != holder.id}
@@ -42,38 +42,49 @@
 </div>
 {#if user.id == owner.id}
   <div>
-    <h4>Nastavení</h4>
-    <div>
-      <ol>
+    <h4 class="text-2xl">Visibility settings</h4>
+    <p class="text-sm">Which communities can see and borrow this item?</p>
+    <div class="mt-4">
+      <ol class="grid justify-items-center">
         {#each community_visibility as visibility (visibility.communities.id)}
-          <li>
-            {visibility.communities.name}
-            {#if visibility.item_visibility}
-              True
-            {:else}
-              False
-            {/if}
-            <button
-              class="btn variant-filled-primary py-1 my-2"
-              on:click={() => {
-                disabled = true;
-                const res = change_visibility(visibility.communities.id);
-                res.then((value) => {
-                  const index = community_visibility.indexOf(visibility);
-                  community_visibility[index].item_visibility = value;
-                  disabled = false;
-                });
-              }}
-              {disabled}>change</button
-            >
+          <li
+            class="inline-grid grid-cols-3 justify-items-center items-baseline"
+          >
+            <span>
+              <a href={'/community/' + visibility.communities.id}
+                >{visibility.communities.name}</a
+              >
+            </span>
+            <span>
+              {#if visibility.item_visibility}
+                <p>Visible</p>
+              {:else}
+                <p>Hidden</p>
+              {/if}
+            </span>
+            <span>
+              <button
+                class="btn variant-filled-primary py-1 my-2"
+                on:click={() => {
+                  disabled = true;
+                  const res = change_visibility(visibility.communities.id);
+                  res.then((value) => {
+                    const index = community_visibility.indexOf(visibility);
+                    community_visibility[index].item_visibility = value;
+                    disabled = false;
+                  });
+                }}
+                {disabled}>change</button
+              >
+            </span>
           </li>
         {/each}
       </ol>
     </div>
   </div>
 {/if}
-<div>
-  <h4>History</h4>
+<div class="mt-6">
+  <h4 class="mb-2">History</h4>
   <ol>
     {#each borrow_requests as borrow_request}
       <li>
