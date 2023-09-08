@@ -29,6 +29,7 @@
   };
 </script>
 
+<a href={'/item/' + item.id + '/edit'}><h4>Edit </h4></a>
 <div class="container mt-6 mb-6">
   <Item {item} {holder} {owner}>
     {#if holder}
