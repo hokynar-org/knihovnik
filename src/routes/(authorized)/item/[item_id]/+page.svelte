@@ -29,7 +29,9 @@
   };
 </script>
 
-<a href={'/item/' + item.id + '/edit'}><h4>Edit </h4></a>
+{#if user.id == owner.id && holder && user.id == holder.id}
+  <a href={'/item/' + item.id + '/edit'}><h4>Edit</h4></a>
+{/if}
 <div class="container mt-6 mb-6">
   <Item {item} {holder} {owner}>
     {#if holder}
