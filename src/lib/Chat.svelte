@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import ChatMessage from '$lib/ChatMessage.svelte';
   import Fa from 'svelte-fa';
   import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
   import type {
@@ -37,15 +38,6 @@
   };
   let message = '';
 
-  //Show time of message on hover, currently hidden
-  //styling needs to be improved
-  let timevisible = 0;
-  function mouseOver(no: number) {
-    timevisible = no;
-  }
-  function mouseLeave() {
-    timevisible = 0;
-  }
   let element: any;
   onMount(() => scrollToBottom(element));
   const scrollToBottom = async (node: any) => {
@@ -56,70 +48,7 @@
 <div class="max-h-[500px] overflow-y-scroll pr-4" bind:this={element}>
   <table>
     {#each messages as community_message (community_message.id)}
-      <tr>
-        <td
-          class="text-right"
-          on:mouseleave={mouseLeave}
-          on:mouseover={() => mouseOver(community_message.id)}
-          on:focus={() => mouseOver(community_message.id)}
-        >
-          {#if community_message.user_id != user.id}
-            <div>
-              <a href={'/user/' + user.id}>{community_message.user_name}</a>:
-            </div>
-            {#if timevisible == community_message.id}
-              <!--
-              <div class="text-sm">
-                {community_message.timestamp
-                  ? new Date(community_message.timestamp).toLocaleTimeString()
-                  : ''}
-                {community_message.timestamp
-                  ? new Date(community_message.timestamp).toLocaleDateString()
-                  : ''}
-              </div>
-              -->
-            {/if}
-          {/if}
-        </td>
-        <td class="py-2.5 flex">
-          {#if community_message.user_id == user.id}
-            <div
-              class="card px-3 py-1 variant-soft fit-content max-w-xs max-h-[6.6rem] line-clamp overflow-hidden wrap-anywhere ml-auto"
-            >
-              {community_message.message}
-            </div>
-          {:else}
-            <div
-              class="card px-3 py-1 variant-soft fit-content max-w-xs max-h-[6.6rem] line-clamp overflow-hidden wrap-anywhere"
-            >
-              {community_message.message}
-            </div>
-          {/if}
-        </td>
-        <td
-          on:mouseleave={mouseLeave}
-          on:mouseover={() => mouseOver(community_message.id)}
-          on:focus={() => mouseOver(community_message.id)}
-        >
-          {#if community_message.user_id == user.id}
-            <div>
-              :<a href={'/user/' + user.id}>{community_message.user_name}</a>
-            </div>
-            {#if timevisible == community_message.id}
-              <!--
-                <div class="text-sm">
-                {community_message.timestamp
-                  ? new Date(community_message.timestamp).toLocaleTimeString()
-                  : ''}
-                {community_message.timestamp
-                  ? new Date(community_message.timestamp).toLocaleDateString()
-                  : ''}
-              </div>
-              -->
-            {/if}
-          {/if}
-        </td>
-      </tr>
+      <ChatMessage {user} {community_message} />
     {/each}
   </table>
 </div>
@@ -148,13 +77,3 @@
     <Fa size="xs" icon={faPaperPlane} />&nbsp;Send</button
   >
 </div>
-
-<style>
-  .fit-content {
-    width: fit-content;
-  }
-
-  .wrap-anywhere {
-    overflow-wrap: anywhere;
-  }
-</style>
