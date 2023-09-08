@@ -35,7 +35,7 @@
 </script>
 
 <article
-  class="relative flex rounded-xl overflow-hidden bg-surface-100-800-token m-4"
+  class="relative flex rounded-xl overflow-hidden bg-surface-100-800-token m-4 pr-4"
 >
   <div
     data-tooltip={imageAltText}
@@ -64,7 +64,7 @@
         {item.description}
       </div>
     </div>
-    <div class="pt-4 pb-4">
+    <div class="pt-4 pb-4 w-[25%]">
       <div class="">
         {#if owner}
           {#if owner.id == user.id}

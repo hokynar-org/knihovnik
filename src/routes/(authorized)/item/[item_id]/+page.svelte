@@ -41,7 +41,7 @@
   </Item>
 </div>
 {#if user.id == owner.id}
-  <div>
+  <div class="mb-6">
     <h4 class="text-2xl">Visibility settings</h4>
     <p class="text-sm">Which communities can see and borrow this item?</p>
     <div class="mt-4">
@@ -83,7 +83,7 @@
     </div>
   </div>
 {/if}
-<div class="mt-6">
+<div class="">
   <h4 class="mb-2">History</h4>
   <ol>
     {#each borrow_requests as borrow_request}
