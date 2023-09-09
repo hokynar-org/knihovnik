@@ -140,9 +140,12 @@
 
 <p>Status: {borrow_request.status}</p>
 <p>
-  This is a request between you and <a href={'/user/' + lender.id}
-    >{lender.user_name}</a
-  >.
+  This is a request between you and
+  {#if user.id == lender.id}
+    <a href={'/user/' + borrower.id}>{borrower.user_name}</a>.
+  {:else if user.id == borrower.id}
+    <a href={'/user/' + lender.id}>{lender.user_name}</a>.
+  {/if}
 </p>
 
 {#if borrow_request.status == 'PENDING'}

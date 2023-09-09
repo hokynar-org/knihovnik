@@ -44,7 +44,6 @@ export const actions: Actions = {
     if (!form.valid) {
       return fail(400, { form });
     }
-    console.log(form.data)
     await db
       .update(users)
       .set({
