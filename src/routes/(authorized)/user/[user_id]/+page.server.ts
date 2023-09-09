@@ -55,10 +55,11 @@ export const load = (async ({ locals, params }) => {
   if(shared_communities.length==0){
     return {
     profiled_user:{
-      user_id:user.id,
+      id:user.id,
       user_name:user.user_name,
       full_name:null,
       pronouns: null,
+      bio: null,
     }
     }
   }

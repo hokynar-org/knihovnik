@@ -27,39 +27,46 @@
 <div class="container">
   <Item {item} {holder} {owner} />
 </div>
-<div>
-  <label for="name" class="text-xl mt-4 mb-2">Name</label>
-  <input type="text" name="name" class="input" bind:value={new_name} />
+{#if user.id != owner.id}
+  Tady nemáte co dělat!
+{:else if !holder || holder.id != owner.id}
+  Editovat popis předmětu můžete jen když je u vás!
+{/if}
+{#if holder && user.id == owner.id && user.id == holder.id}
+  <div>
+    <label for="name" class="text-xl mt-4 mb-2">Name</label>
+    <input type="text" name="name" class="input" bind:value={new_name} />
 
-  <label for="description" class="text-xl mt-4 mb-2">Description</label>
-  <textarea
-    id="description"
-    name="description"
-    rows="4"
-    class="input"
-    bind:value={new_description}
-    style="resize: none;"
-  />
+    <label for="description" class="text-xl mt-4 mb-2">Description</label>
+    <textarea
+      id="description"
+      name="description"
+      rows="4"
+      class="input"
+      bind:value={new_description}
+      style="resize: none;"
+    />
 
-  <div class="flex content-center justify-center my-3">
-    <button
-      class="btn variant-filled-primary"
-      disabled={(new_name == item.name &&
-        new_description == item.description) ||
-        disabled}
-      on:click={() => {
-        disabled = true;
-        const res = edit();
-        res
-          .then((value) => {
-            item.name = value.name;
-            item.description = value.description;
-            disabled = false;
-          })
-          .catch(() => {
-            disabled = false;
-          });
-      }}>Submit</button
-    >
+    <div class="flex content-center justify-center my-3">
+      <button
+        class="btn variant-filled-primary"
+        disabled={(new_name == item.name &&
+          new_description == item.description) ||
+          disabled}
+        on:click={() => {
+          disabled = true;
+          const res = edit();
+          res
+            .then((value) => {
+              item.name = value.name;
+              item.description = value.description;
+              disabled = false;
+            })
+            .catch(() => {
+              disabled = false;
+            });
+        }}>Submit</button
+      >
+    </div>
   </div>
-</div>
+{/if}

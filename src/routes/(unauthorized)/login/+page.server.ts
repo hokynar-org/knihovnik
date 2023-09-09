@@ -9,6 +9,7 @@ import { db } from '$lib/server/db/drizzle';
 import { JWT_SECRET } from '$env/static/private';
 import type { PageServerLoad } from './$types';
 import type { Session } from '$lib/types';
+import { user_select } from '$lib/server/db/selects';
 
 const schema = z.object({
   email: z.string().email(),

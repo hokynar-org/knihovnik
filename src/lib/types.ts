@@ -1,22 +1,5 @@
 import type { InferModel } from 'drizzle-orm';
-import type { borrow_requests, community_messages, items, notifications, request_actions } from './server/db/schema';
-
-export interface Community {
-  id: number;
-  dateCreated: Date;
-  communityName: string;
-  communityDescription: string;
-  users: User[];
-}
-
-export interface User {
-  id: number;
-  full_name: string;
-  user_name: string;
-  email: string;
-  pronouns: string;
-  role: string;
-}
+import type { borrow_requests, community_messages, items, notifications, request_actions, users } from './server/db/schema';
 
 export interface UserRegister {
   full_name: string;
@@ -24,22 +7,6 @@ export interface UserRegister {
   password: string;
   email: string;
   pronouns: string;
-}
-
-export interface PrivateUserSafe {
-  id: number;
-  full_name: string;
-  user_name: string;
-  email: string;
-  pronouns: string;
-  role: string;
-}
-
-export interface PublicUserSafe {
-  user_name: string;
-  full_name: string;
-  pronouns: string;
-  id: number;
 }
 
 export type PublicItemSafe = Pick<
@@ -56,10 +23,20 @@ export type BorrowRequest = InferModel<typeof borrow_requests>;
 
 export type Item = InferModel<typeof items>;
 
+export type User = InferModel<typeof users>;
+
+
+export type PrivateUserSafe = Pick<
+User,
+  'user_name' | 'email' | 'id' | 'full_name' | 'pronouns' | 'bio' | 'role'
+>;
+
+export type PublicUserSafe = Pick<
+User,
+  'user_name' | 'id' | 'pronouns' | 'bio' | 'full_name'
+>;
+
 export type CommunityMessage = InferModel<typeof community_messages>;
-
-export type CommunityMessagePlus = CommunityMessage & {user_name:string}
-
 
 export type RequestAction = InferModel <typeof request_actions>;
 

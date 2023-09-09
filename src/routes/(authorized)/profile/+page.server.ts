@@ -15,6 +15,7 @@ const schema = z.object({
   user_name: z.string().min(2),
   full_name: z.string().min(1),
   pronouns: z.string(),
+  bio: z.string(),
 });
 
 const schemaPassword = z.object({
@@ -23,28 +24,6 @@ const schemaPassword = z.object({
 });
 
 export const load = (async ({ locals }) => {
-  const select_type = {
-    user: {
-      id: users.id,
-      full_name: users.full_name,
-      user_name: users.user_name,
-      pronouns: users.pronouns,
-    },
-    item: {
-      name: items.name,
-      description: items.description,
-      id: items.id,
-      owner_id: items.owner_id,
-    },
-    borrow_request: {
-      status: borrow_requests.status,
-      id: borrow_requests.id,
-      borrower_id: borrow_requests.borrower_id,
-      lender_id: borrow_requests.lender_id,
-      item_id: borrow_requests.item_id,
-      timestamp: borrow_requests.timestamp,
-    },
-  };
 
   const form = await superValidate(schema);
   const formPassword = await superValidate(schemaPassword);
@@ -62,17 +41,17 @@ export const actions: Actions = {
     }
 
     const form = await superValidate(request, schema);
-
     if (!form.valid) {
       return fail(400, { form });
     }
-
+    console.log(form.data)
     await db
       .update(users)
       .set({
         user_name: form.data.user_name,
         full_name: form.data.full_name,
         pronouns: form.data.pronouns,
+        bio: form.data.bio,
       })
       .where(eq(users.id, Number(locals.user.id)));
 
@@ -90,6 +69,7 @@ export const actions: Actions = {
         user_name: form.data.user_name,
         full_name: form.data.full_name,
         pronouns: form.data.pronouns,
+        bio: form.data.bio,
       },
     };
 
@@ -106,7 +86,7 @@ export const actions: Actions = {
       },
     );
 
-    throw redirect(303, '/user');
+    throw redirect(301, '/profile');
   },
 
   update_password: async ({ request, locals }) => {

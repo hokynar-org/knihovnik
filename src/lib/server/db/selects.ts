@@ -11,6 +11,7 @@ export const user_select = {
     full_name: users.full_name,
     user_name: users.user_name,
     pronouns: users.pronouns,
+    bio: users.bio,
 };
 
 export const holder_select = {

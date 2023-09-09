@@ -19,6 +19,7 @@ export const users = pgTable('users', {
   password_hash: text('password_hash').notNull(),
   role: text('role').default('USER').notNull(),
   confirm_hash: text('confirm_hash'),
+  bio: text('bio')
 });
 
 export const items = pgTable('items', {
