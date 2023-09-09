@@ -175,7 +175,9 @@
 <div>
   <h3 class="mt-4 mb-2 text-xl">Users in this community</h3>
   {#each community_users as community_user}
-    <a href={'/user/' + user.id}>{community_user.user.user_name}</a>
+    <a href={'/user/' + community_user.user.id}
+      >{community_user.user.user_name}</a
+    >
     ({community_user.relation.role})
     {#if role == 'ADMIN'}
       {#if community_user.relation.role == 'MEMBER'}
@@ -247,7 +249,7 @@
     </div>
     <div>
       {#each found_users as user (user.id)}
-        {user.user_name}
+        <a href={'/user/' + user.id}>{user.user_name}</a>
         <button
           class="btn variant-filled-primary py-1 my-2"
           on:click={() => {
