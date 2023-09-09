@@ -83,6 +83,7 @@ export const communities = pgTable('communities', {
   id: serial('id').primaryKey(),
   name: text('name'),
   description: text('description'),
+  visibility: boolean('visibility').default(false),
 });
 
 export const user_community_relations = pgTable('user_community_relations', {
@@ -110,6 +111,7 @@ export const notifications = pgTable('notifications', {
   url: text('url'),
   timestamp: timestamp('timestamp').defaultNow().notNull(),
   read: boolean('read').default(false).notNull(),
+  
 });
 
 export const community_messages = pgTable('community_messages', {

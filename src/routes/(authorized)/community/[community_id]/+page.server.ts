@@ -2,7 +2,7 @@ import { db } from '$lib/server/db/drizzle';
 import { borrow_requests, communities, community_messages, items, user_community_relations, users } from '$lib/server/db/schema';
 import { and, eq,not, or } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
-import type { CommunityMessagePlus, Offer } from '$lib/types';
+import type { CommunityMessage, Offer } from '$lib/types';
 import { error, redirect } from '@sveltejs/kit';
 import {getFileUrl} from '$lib/server/bucket'
 import {getCommunityItems, getShelfItems } from '$lib/server/item_load';
@@ -29,7 +29,7 @@ export const load = (async ({ locals,params }) => {
   .where(eq(user_community_relations.community_id,community_id))
   .innerJoin(users,eq(users.id,user_community_relations.user_id))
   const user_relation = await db.select().from(user_community_relations).where(and(eq(user_community_relations.community_id,community_id),eq(user_community_relations.user_id,user.id)));
-  const messages:CommunityMessagePlus[] = await db.select({
+  const messages:CommunityMessage[] = await db.select({
     id:community_messages.id,
     user_id:community_messages.user_id,
     community_id:community_messages.user_id,

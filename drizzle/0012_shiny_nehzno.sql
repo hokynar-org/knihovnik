@@ -1,0 +1,1 @@
+ALTER TABLE "community_messages" ADD COLUMN "visibility" boolean DEFAULT false;
