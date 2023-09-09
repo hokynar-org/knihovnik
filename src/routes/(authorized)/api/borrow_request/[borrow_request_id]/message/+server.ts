@@ -16,6 +16,7 @@ export const POST = (async ({ request, params, locals, url, route }) => {
   }
   const body = await (await request).json()
   const message = body.message;
+  const user = locals.user;
   const user_id = locals.user.id;
   const borrow_request_id = params.borrow_request_id as string;
   const found_borrow_requests:{item:PublicItemSafe,borrow_request:BorrowRequest}[] = await db.select({
@@ -54,8 +55,12 @@ export const POST = (async ({ request, params, locals, url, route }) => {
       }).returning();
     const results:[RequestAction[],Notification[]] = await Promise.all([new_requests_actions,message_notification]);
     await pusher.sendToUser(String(user_id==borrow_request.lender_id?borrow_request.borrower_id:borrow_request.lender_id), "notification", results[1][0]);
-    await pusher.trigger('private-borrow_request-' + borrow_request_id,'request_action',{borrow_request:undefined,action:results[0][0]})
-    return json(results[0][0]);
+    const request_action_message = {
+      ...results[0][0],
+      user_name:user.user_name,
+    }
+    await pusher.trigger('private-borrow_request-' + borrow_request_id,'request_action',{borrow_request:undefined,action:request_action_message})
+    return json({borrow_request:undefined,action:request_action_message});
   } catch (err) {
     throw error(500);
   }

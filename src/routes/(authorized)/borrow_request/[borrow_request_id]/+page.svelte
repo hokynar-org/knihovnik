@@ -4,7 +4,11 @@
   export let data: PageData;
   import Item from '$lib/Item.svelte';
   import { goto } from '$app/navigation';
-  import type { BorrowRequest, RequestAction } from '$lib/types';
+  import type {
+    BorrowRequest,
+    RequestAction,
+    RequestActionMessage,
+  } from '$lib/types';
   import { onDestroy, onMount } from 'svelte';
   $: borrow_request = data.borrow_request;
   $: $request_actions = data.request_actions;
@@ -16,13 +20,17 @@
   let disabled = false;
   let message: string = '';
   let fallback = false;
+
   if ($pusher) {
     const channel = $pusher.subscribe(
       'private-borrow_request-' + String(data.borrow_request.id),
     );
     channel.bind(
       'request_action',
-      (data: { borrow_request: BorrowRequest; action: RequestAction }) => {
+      (data: {
+        borrow_request: BorrowRequest | undefined;
+        action: RequestActionMessage;
+      }) => {
         $request_actions = [...$request_actions, data.action];
         if (data.borrow_request) {
           borrow_request = data.borrow_request;
@@ -47,7 +55,10 @@
     if (!response.ok) {
       throw new Error(String(response.status));
     }
-    return await response.json();
+    return (await response.json()) as {
+      borrow_request: BorrowRequest | undefined;
+      action: RequestActionMessage;
+    };
   }
   async function cancel() {
     const response = await fetch(
@@ -71,7 +82,10 @@
     if (!response.ok) {
       throw new Error(String(response.status));
     }
-    return await response.json();
+    return (await response.json()) as {
+      borrow_request: BorrowRequest | undefined;
+      action: RequestActionMessage;
+    };
   }
   async function deny() {
     const response = await fetch(
@@ -83,7 +97,10 @@
     if (!response.ok) {
       throw new Error(String(response.status));
     }
-    return await response.json();
+    return (await response.json()) as {
+      borrow_request: BorrowRequest | undefined;
+      action: RequestActionMessage;
+    };
   }
   async function confirm() {
     const response = await fetch(
@@ -95,7 +112,10 @@
     if (!response.ok) {
       throw new Error(String(response.status));
     }
-    return await response.json();
+    return (await response.json()) as {
+      borrow_request: BorrowRequest | undefined;
+      action: RequestActionMessage;
+    };
   }
   async function abort() {
     const response = await fetch(
@@ -107,18 +127,11 @@
     if (!response.ok) {
       throw new Error(String(response.status));
     }
-    return await response.json();
+    return (await response.json()) as {
+      borrow_request: BorrowRequest | undefined;
+      action: RequestActionMessage;
+    };
   }
-  const id_to_user = (id: number) => {
-    switch (id) {
-      case lender.id:
-        return lender.user_name;
-      case borrower.id:
-        return borrower.user_name;
-      case owner.id:
-        return owner.user_name;
-    }
-  };
 </script>
 
 <h1 class="mt-6 mb-4 text-3xl min-w-xs">
@@ -150,7 +163,8 @@
           if (fallback) {
             res
               .then((value) => {
-                borrow_request = value;
+                if (value.borrow_request) borrow_request = value.borrow_request;
+                $request_actions = [...$request_actions, value.action];
                 disabled = false;
                 return value;
               })
@@ -178,7 +192,8 @@
           if (fallback) {
             res
               .then((value) => {
-                borrow_request = value;
+                if (value.borrow_request) borrow_request = value.borrow_request;
+                $request_actions = [...$request_actions, value.action];
                 disabled = false;
                 return value;
               })
@@ -259,7 +274,8 @@
         if (fallback) {
           res
             .then((value) => {
-              borrow_request = value;
+              if (value.borrow_request) borrow_request = value.borrow_request;
+              $request_actions = [...$request_actions, value.action];
               disabled = false;
               return value;
             })
@@ -287,7 +303,8 @@
         if (fallback) {
           res
             .then((value) => {
-              borrow_request = value;
+              if (value.borrow_request) borrow_request = value.borrow_request;
+              $request_actions = [...$request_actions, value.action];
               disabled = false;
               return value;
             })
@@ -319,7 +336,7 @@
           {request_action.type}
         </td>
         <td>
-          {id_to_user(request_action.user_id)}
+          {request_action.user_name}
         </td>
         <td>
           {request_action.timestamp
@@ -341,7 +358,8 @@
         const res = send_message();
         if (fallback) {
           res.then((value) => {
-            $request_actions = [...$request_actions, value];
+            if (value.borrow_request) borrow_request = value.borrow_request;
+            $request_actions = [...$request_actions, value.action];
             message = '';
             disabled = false;
           });

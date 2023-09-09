@@ -48,6 +48,17 @@ export type CommunityMessage = {
 
 export type RequestAction = InferModel <typeof request_actions>;
 
+export type RequestActionMessage = {
+  id: number;
+  message: string | null;
+  type: string;
+  user_id: number;
+  timestamp: Date | null;
+  borrow_request_id: number;
+  user_name:string;
+}
+
+
 export type Notification = InferModel <typeof notifications>;
 
 export interface Offer {

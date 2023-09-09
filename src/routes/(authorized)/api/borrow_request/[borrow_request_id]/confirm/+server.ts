@@ -15,6 +15,7 @@ export const POST = (async ({ request, params, locals, url, route }) => {
     throw error(400);
   }
   const user_id = locals.user.id;
+  const user=locals.user;
   const borrow_request_id = params.borrow_request_id as string;
   const found_borrow_requests_promise =
     db.select({
@@ -70,8 +71,12 @@ export const POST = (async ({ request, params, locals, url, route }) => {
         }).returning();
       const results=await Promise.all([new_requests_actions,confirm_notification]);
       await pusher.sendToUser(String(other_user_id), "notification", results[1][0]);
-      await pusher.trigger('private-borrow_request-' + borrow_request_id,'request_action',{borrow_request:undefined,action:results[0][0]});
-      return json(old_borrow_request);
+      const request_action_message = {
+        ...results[0][0],
+        user_name:user.user_name,
+      }
+      await pusher.trigger('private-borrow_request-' + borrow_request_id,'request_action',{borrow_request:undefined,action:request_action_message});
+      return json({borrow_request:old_borrow_request,action:request_action_message});
     }
     else if(found_confirm_actions.length==1){
       const new_borrow_requests = db.update(borrow_requests).set({status:'CONFIRMED'}).where(eq(borrow_requests.id, Number(borrow_request_id))).returning();
@@ -83,8 +88,12 @@ export const POST = (async ({ request, params, locals, url, route }) => {
       const new_item = db.update(items).set({holder_id:old_borrow_request.borrower_id,offered:false}).where(eq(items.id, old_borrow_request.item_id)).returning();
       const results=await Promise.all([new_borrow_requests,new_requests_actions,confirm_notification,new_item]);
       await pusher.sendToUser(String(other_user_id), "notification", results[2][0]);
-      await pusher.trigger('private-borrow_request-' + borrow_request_id,'request_action',{borrow_request:results[0][0],action:results[1][0]});
-      return json(results[0][0]);
+      const request_action_message = {
+        ...results[1][0],
+        user_name:user.user_name,
+      }
+      await pusher.trigger('private-borrow_request-' + borrow_request_id,'request_action',{borrow_request:results[0][0],action:request_action_message});
+      return json({borrow_request:results[0][0],action:request_action_message});
     }
     else{
       throw error(400);

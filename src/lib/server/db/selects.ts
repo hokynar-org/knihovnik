@@ -1,4 +1,4 @@
-import { borrow_requests, items, users } from "./schema"
+import { borrow_requests, items, users, request_actions } from "./schema"
 import { alias } from "drizzle-orm/pg-core";
 
 export const holders= alias(users,'holders');
@@ -19,6 +19,8 @@ export const holder_select = {
     full_name: holders.full_name,
     user_name: holders.user_name,
     pronouns: holders.pronouns,
+    bio: holders.bio,
+
 };
 
 export const owner_select = {
@@ -26,6 +28,8 @@ export const owner_select = {
     full_name: owners.full_name,
     user_name: owners.user_name,
     pronouns: owners.pronouns,
+    bio: owners.bio,
+
 };
 
 export const borrower_select = {
@@ -33,6 +37,8 @@ export const borrower_select = {
     full_name: borrowers.full_name,
     user_name: borrowers.user_name,
     pronouns: borrowers.pronouns,
+    bio: borrowers.bio,
+
 };
 
 export const lender_select = {
@@ -40,6 +46,7 @@ export const lender_select = {
     full_name: lenders.full_name,
     user_name: lenders.user_name,
     pronouns: lenders.pronouns,
+    bio: lenders.bio,
 };
 
 export const item_select={
@@ -60,3 +67,23 @@ export const borrow_request_select={
     item_id: borrow_requests.item_id,
     timestamp: borrow_requests.timestamp,
 };
+
+export const request_action_select={
+    id:request_actions.id,
+    borrow_request_id:request_actions.borrow_request_id,
+    timestamp:request_actions.timestamp,
+    message:request_actions.message,
+    type:request_actions.type,
+    user_id: request_actions.user_id,
+};
+
+export const request_action_message_select={
+    id:request_actions.id,
+    borrow_request_id:request_actions.borrow_request_id,
+    timestamp:request_actions.timestamp,
+    message:request_actions.message,
+    type:request_actions.type,
+    user_id: request_actions.user_id,
+    user_name: users.user_name,
+};
+
