@@ -4,13 +4,7 @@
   import Fa from 'svelte-fa';
   import { faLockOpen } from '@fortawesome/free-solid-svg-icons';
   import { pusher } from '$lib/store.js';
-  import type {
-    CommunityMessage,
-    Community,
-    PublicUserSafe,
-    User,
-    CommunityMessagePlus,
-  } from '$lib/types';
+  import type { CommunityMessage, PublicUserSafe, User } from '$lib/types';
   import { onDestroy } from 'svelte';
 
   export let data;
@@ -29,7 +23,7 @@
     const channel = $pusher.subscribe(
       'private-community-' + String(data.community.id),
     );
-    channel.bind('message', (data: { message: CommunityMessagePlus }) => {
+    channel.bind('message', (data: { message: CommunityMessage }) => {
       community_messages = [...community_messages, data.message];
     });
     onDestroy(() => {
@@ -301,7 +295,7 @@
       <Fa class="inline text-xl" icon={faLockOpen} />
     </p>
   </div>
-  <Chat messages={community_messages} {user} isadmin={false} />
+  <Chat messages={community_messages} {user} {community} isadmin={false} />
 </div>
 
 <div class="mt-6 w-full">

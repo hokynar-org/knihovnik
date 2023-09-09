@@ -1,13 +1,7 @@
 <script lang="ts">
-  import type {
-    CommunityMessage,
-    Community,
-    PublicUserSafe,
-    User,
-    CommunityMessagePlus,
-  } from '$lib/types';
+  import type { CommunityMessage, PublicUserSafe, User } from '$lib/types';
 
-  export let community_message: CommunityMessagePlus;
+  export let community_message: CommunityMessage;
   export let user: PublicUserSafe; //To determine who writes "your" messages
 
   //Show time of message on hover, currently hidden

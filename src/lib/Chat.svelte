@@ -3,18 +3,12 @@
   import ChatMessage from '$lib/ChatMessage.svelte';
   import Fa from 'svelte-fa';
   import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
-  import type {
-    CommunityMessage,
-    Community,
-    PublicUserSafe,
-    User,
-    CommunityMessagePlus,
-  } from '$lib/types';
+  import type { CommunityMessage, PublicUserSafe, User } from '$lib/types';
 
-  export let messages: CommunityMessagePlus[];
+  export let messages: CommunityMessage[];
   export let user: PublicUserSafe; //To determine who writes "your" messages
   export let isadmin: Boolean; //To be used to determine if you can delete messages
-  let community: {
+  export let community: {
     //Which community does this chat belong to?
     id: number;
     name: string | null;
@@ -34,7 +28,7 @@
     if (!res.ok) {
       throw new Error(String(res.status));
     }
-    return (await res.json()) as CommunityMessagePlus;
+    return (await res.json()) as CommunityMessage;
   };
   let message = '';
 
