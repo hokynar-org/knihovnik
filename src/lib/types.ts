@@ -36,7 +36,15 @@ User,
   'user_name' | 'id' | 'pronouns' | 'bio' | 'full_name'
 >;
 
-export type CommunityMessage = InferModel<typeof community_messages>;
+
+export type CommunityMessage = {
+  id: number;
+  timestamp: Date | null;
+  community_id: number;
+  user_id: number;
+  message: string | null;
+  user_name:string;
+}
 
 export type RequestAction = InferModel <typeof request_actions>;
 

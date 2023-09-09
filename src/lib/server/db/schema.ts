@@ -120,9 +120,6 @@ export const community_messages = pgTable('community_messages', {
   user_id: integer('user_id')
     .references(() => users.id)
     .notNull(),
-  user_name: integer('user_name')
-    .references(() => users.user_name)
-    .notNull(),
   message: text('message'),
   timestamp: timestamp('timestamp').defaultNow(),
 });
