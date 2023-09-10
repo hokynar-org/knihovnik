@@ -1,16 +1,11 @@
 <script lang="ts">
-  import type { CommunityMessage, PublicUserSafe } from '$lib/types';
+  import type { CommunityMessage, Community } from '$lib/types';
   import { composedMessage } from '$lib/components/Chat/stores';
   import Fa from 'svelte-fa';
   import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 
   export let messages: CommunityMessage[];
-  export let community: {
-    //Which community does this chat belong to?
-    id: number;
-    name: string | null;
-    description: string | null;
-  };
+  export let community: Community; //Which community does this chat belong to?
 
   let disabled = false;
   let fallback = false;

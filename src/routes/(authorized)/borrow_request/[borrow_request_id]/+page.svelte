@@ -44,22 +44,6 @@
     fallback = true;
   }
 
-  async function send_message() {
-    const response = await fetch(
-      '/api/borrow_request/' + borrow_request.id + '/message',
-      {
-        method: 'POST',
-        body: JSON.stringify({ message: message }),
-      },
-    );
-    if (!response.ok) {
-      throw new Error(String(response.status));
-    }
-    return (await response.json()) as {
-      borrow_request: BorrowRequest | undefined;
-      action: RequestActionMessage;
-    };
-  }
   async function cancel() {
     const response = await fetch(
       '/api/borrow_request/' + borrow_request.id + '/cancel',
@@ -258,14 +242,14 @@
   {#if borrow_request.lender_id == user.id}
     <p class="text-sm mb-2 max-w-xs">
       Confirm if you have given the item to
-      <a href={'/user/' + lender.id}>{lender.user_name}</a>. Abort if you
+      <a href={'/user/' + borrower.id}>{borrower.user_name}</a>. Abort if you
       haven't and want to cancel this borrowing.
     </p>
   {:else}
     <p class="text-sm mb-2 max-w-xs">
       Confirm if you have received the item from
-      <a href={'/user/' + owner.id}>{owner.user_name}</a>. Abort if you haven't
-      and want to cancel this borrowing.
+      <a href={'/user/' + lender.id}>{lender.user_name}</a>. Abort if you
+      haven't and want to cancel this borrowing.
     </p>
   {/if}
   <div>
@@ -330,59 +314,9 @@
   </div>
 {/if}
 
-<!--Chat-->
-<div class="mt-6">
-  <table>
-    {#each $request_actions as request_action (request_action.id)}
-      <tr>
-        <td>
-          {request_action.type}
-        </td>
-        <td>
-          {request_action.user_name}
-        </td>
-        <td>
-          {request_action.timestamp
-            ? new Date(request_action.timestamp).toLocaleString()
-            : ''}
-        </td>
-        <td>
-          {request_action.message}
-        </td>
-      </tr>
-    {/each}
-  </table>
-  <div class="flex">
-    <input class="input" type="text" bind:value={message} />
-    <button
-      class="btn variant-filled-primary py-1 my-2"
-      on:click={() => {
-        disabled = true;
-        const res = send_message();
-        if (fallback) {
-          res.then((value) => {
-            if (value.borrow_request) borrow_request = value.borrow_request;
-            $request_actions = [...$request_actions, value.action];
-            message = '';
-            disabled = false;
-          });
-        } else {
-          res.then((value) => {
-            message = '';
-            disabled = false;
-          });
-        }
-      }}
-      {disabled}>Send</button
-    >
-  </div>
+<div class="mt-6 border-solid border-2 pl-4 w-modal">
+  <Chat messages={$request_actions} {user} {borrow_request} />
 </div>
-
-<!--
-<div class="mt-6">
-  <Chat messages={$request_actions} {user} />
-</div>
--->
 
 <div class="mt-6">
   <Item {item} holder={null} owner={null} />
