@@ -1,13 +1,13 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import ChatMessage from '$lib/ChatMessage.svelte';
+  import ChatMessage from '$lib/components/Chat/ChatMessage.svelte';
   import ChatSendCommunity from './ChatSendCommunity.svelte';
   import type {
     CommunityMessage,
     PublicUserSafe,
     RequestActionMessage,
   } from '$lib/types';
-  import { msg } from '$lib/components/Chat/stores';
+  import { composedMessage } from '$lib/components/Chat/stores';
 
   export let messages: CommunityMessage[] | RequestActionMessage[];
   export let user: PublicUserSafe; //To determine who writes "your" messages
@@ -26,9 +26,6 @@
     return messages.every((item) => 'community_id' in item);
   }
 
-  let composedMessage = '';
-  $: console.log($msg);
-
   let element: HTMLDivElement;
   onMount(() => scrollToBottom(element));
   const scrollToBottom = async (node: any) => {
@@ -44,7 +41,7 @@
   </table>
 </div>
 <div class="flex my-2 w-full">
-  <input class="input" type="text" bind:value={$msg} />
+  <input class="input" type="text" bind:value={$composedMessage} />
   {#if isCommunityMessages(messages)}
     <ChatSendCommunity {community} {messages} />
   {/if}

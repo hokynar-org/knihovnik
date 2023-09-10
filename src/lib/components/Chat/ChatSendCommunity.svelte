@@ -1,11 +1,10 @@
 <script lang="ts">
   import type { CommunityMessage, PublicUserSafe } from '$lib/types';
-  import { msg } from '$lib/components/Chat/stores';
+  import { composedMessage } from '$lib/components/Chat/stores';
   import Fa from 'svelte-fa';
   import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 
   export let messages: CommunityMessage[];
-  //let composedMessage = $msg;
   export let community: {
     //Which community does this chat belong to?
     id: number;
@@ -20,7 +19,7 @@
     const res = await fetch('/api/community/' + community.id + '/message', {
       method: 'POST',
       body: JSON.stringify({
-        message: $msg,
+        message: $composedMessage,
       }),
     });
     if (!res.ok) {
@@ -38,12 +37,12 @@
     if (fallback) {
       res.then((value) => {
         messages = [...messages, value];
-        $msg = '';
+        $composedMessage = '';
         disabled = false;
       });
     } else {
       res.then((value) => {
-        $msg = '';
+        $composedMessage = '';
         disabled = false;
       });
     }
