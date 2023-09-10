@@ -9,7 +9,7 @@ import { getFileUrl } from '$lib/server/bucket';
 import { getItem } from '$lib/server/item_load';
 
 export const load: LayoutServerLoad = (async ({ locals, params }) => {
-  if(!params.item_id){
+  if(!Number(params.item_id)){
     throw error(400)
   }
   if(!locals.user){
