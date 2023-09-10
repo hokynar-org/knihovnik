@@ -11,6 +11,7 @@
   } from '$lib/types';
   import { composedMessage } from '$lib/components/Chat/stores';
   import ChatSendRequest from './ChatSendRequest.svelte';
+  import { borrow_request_select } from '$lib/server/db/selects';
 
   export let messages: CommunityMessage[] | RequestActionMessage[];
   export let user: PublicUserSafe; //To determine who writes "your" messages
@@ -62,7 +63,7 @@
     <ChatSendCommunity {community} {messages} />
   </div>
 {:else if isRequestMessages(messages) && isBorrowRequestNotNull(borrow_request)}
-  {#if borrow_request.status != ('CONFIRMED' || 'PENDING' || 'ABORTED')}
+  {#if borrow_request.status !== 'CONFIRMED' && borrow_request.status !== 'PENDING' && borrow_request.status !== 'ABORTED'}
     <div class="flex my-2 w-full">
       <input class="input" type="text" bind:value={$composedMessage} />
       <ChatSendRequest {borrow_request} />
