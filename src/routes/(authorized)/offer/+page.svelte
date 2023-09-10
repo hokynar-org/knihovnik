@@ -59,14 +59,9 @@
 
   {#each $user_items as offer (offer.item.id)}
     <Item item={offer.item} owner={user} holder={offer.holder}>
-      <!-- <div>
-        <p>Location</p>
-      </div>
       <div>
-        <button class="btn variant-filled-primary py-1 my-2">Edit</button>
+        <a href={'/item/' + offer.item.id + '/edit'}>Edit</a>
       </div>
-      <div> -->
-      <DeleteItem {offer} />
       <OfferItem item={offer.item} />
     </Item>
   {/each}

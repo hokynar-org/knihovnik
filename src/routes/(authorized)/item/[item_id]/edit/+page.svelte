@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { goto } from '$app/navigation';
   import PromiseButton from '$lib/components/PromiseButton.svelte';
   import ReadOnlyTextFieldInput from '$lib/components/ReadOnlyTextFieldInput.svelte';
   import ReadOnlyTextInput from '$lib/components/ReadOnlyTextInput.svelte';
@@ -26,6 +27,14 @@
       item_id: number | null;
       community_id: number | null;
     } | null;
+  };
+  const deleteItem = async () => {
+    const response = await fetch('/api/item/' + item.id + '/remove', {
+      method: 'POST',
+    });
+    if (!response.ok) {
+      throw new Error(String(response.status));
+    }
   };
 </script>
 
@@ -96,3 +105,13 @@
     </div>
   </div>
 </div>
+<PromiseButton
+  btn_class={'btn variant-filled-error py-1 my-2'}
+  callback={deleteItem}
+  succes={() => {
+    goto('/offer');
+  }}
+  disabled={false}
+>
+  Delete
+</PromiseButton>
