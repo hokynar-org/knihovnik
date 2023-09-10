@@ -1,18 +1,11 @@
 <script lang="ts">
-  import Item from '$lib/Item.svelte';
   import PromiseButton from '$lib/components/PromiseButton.svelte';
   import ReadOnlyTextFieldInput from '$lib/components/ReadOnlyTextFieldInput.svelte';
   import ReadOnlyTextInput from '$lib/components/ReadOnlyTextInput.svelte';
-  import type { PublicItemSafe } from '$lib/types.js';
   import { superForm } from 'sveltekit-superforms/client';
   export let data;
   const { form, errors } = superForm(data.form);
-  $: user = data.user;
   $: item = data.item;
-  $: owner = data.owner;
-  $: holder = data.holder;
-  $: last_requst = data.last_requst ? data.last_requst.borrow_request : null;
-  $: borrow_requests = data.borrow_requests;
   $: community_visibility = data.community_visibility;
   $: $form.name = data.item.name;
   $: $form.description = data.item.description;
