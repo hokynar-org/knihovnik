@@ -43,7 +43,7 @@
 </div>
 <div class="flex my-2 w-full">
   <input class="input" type="text" bind:value={$composedMessage} />
-  {#if isCommunityMessages(messages) && isCommunityNull(community)}
+  {#if isCommunityMessages(messages) && community}
     <ChatSendCommunity {community} {messages} />
   {/if}
 </div>
