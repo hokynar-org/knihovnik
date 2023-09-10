@@ -1,11 +1,15 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import ChatMessage from '$lib/ChatMessage.svelte';
-  import Fa from 'svelte-fa';
-  import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
-  import type { CommunityMessage, PublicUserSafe, User } from '$lib/types';
+  import ChatSendCommunity from './ChatSendCommunity.svelte';
+  import type {
+    CommunityMessage,
+    PublicUserSafe,
+    RequestActionMessage,
+  } from '$lib/types';
+  import { msg } from '$lib/components/Chat/stores';
 
-  export let messages: CommunityMessage[];
+  export let messages: CommunityMessage[] | RequestActionMessage[];
   export let user: PublicUserSafe; //To determine who writes "your" messages
   export let isadmin: Boolean; //To be used to determine if you can delete messages
   export let community: {
@@ -15,21 +19,15 @@
     description: string | null;
   };
 
-  let disabled = false;
-  let fallback = false;
-  const send_message = async () => {
-    const res = await fetch('/api/community/' + community.id + '/message', {
-      method: 'POST',
-      body: JSON.stringify({
-        message: message,
-      }),
-    });
-    if (!res.ok) {
-      throw new Error(String(res.status));
-    }
-    return (await res.json()) as CommunityMessage;
-  };
-  let message = '';
+  function isCommunityMessages(
+    messages: CommunityMessage[] | RequestActionMessage[],
+  ): messages is CommunityMessage[] {
+    //Only CommunityMessage contains the property community_id
+    return messages.every((item) => 'community_id' in item);
+  }
+
+  let composedMessage = '';
+  $: console.log($msg);
 
   let element: HTMLDivElement;
   onMount(() => scrollToBottom(element));
@@ -46,29 +44,8 @@
   </table>
 </div>
 <div class="flex my-2 w-full">
-  <input class="input" type="text" bind:value={message} />
-  <button
-    class="btn variant-filled-primary py-1 my-2 mx-2"
-    on:click={() => {
-      disabled = true;
-      const res = send_message();
-      if (fallback) {
-        res.then((value) => {
-          messages = [...messages, value];
-          message = '';
-          disabled = false;
-          scrollToBottom(element);
-        });
-      } else {
-        res.then((value) => {
-          message = '';
-          disabled = false;
-          scrollToBottom(element);
-        });
-      }
-    }}
-    {disabled}
-  >
-    <Fa size="xs" icon={faPaperPlane} />&nbsp;Send</button
-  >
+  <input class="input" type="text" bind:value={$msg} />
+  {#if isCommunityMessages(messages)}
+    <ChatSendCommunity {community} {messages} />
+  {/if}
 </div>
