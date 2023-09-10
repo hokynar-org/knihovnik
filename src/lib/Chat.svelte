@@ -39,7 +39,7 @@
 </script>
 
 <div class="max-h-[500px] overflow-y-scroll pr-4 w-full" bind:this={element}>
-  <table>
+  <table class="w-full">
     {#each messages as community_message (community_message.id)}
       <ChatMessage {user} {community_message} />
     {/each}

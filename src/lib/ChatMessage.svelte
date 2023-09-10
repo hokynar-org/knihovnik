@@ -20,17 +20,22 @@
   }
 </script>
 
-<tr on:mouseleave={mouseLeave} on:mouseover={mouseOver} on:focus={mouseOver}>
-  <td class="text-right align-top py-3.5">
+<tr
+  on:mouseleave={mouseLeave}
+  on:mouseover={mouseOver}
+  on:focus={mouseOver}
+  class="w-full relative"
+>
+  <td class="text-right align-top w-1/12 py-1.5">
     {#if community_message.user_id != user.id}
       <div class="">
         <a href={'/user/' + user.id}>{community_message.user_name}</a>:
       </div>
     {/if}
   </td>
-  <td class="py-2.5 grid">
+  <td class="py-0.5 grid">
     <div
-      class="card px-3 py-1 variant-soft fit-content max-w-xs overflow-hidden wrap-anywhere"
+      class="card px-3 py-1 variant-soft fit-content overflow-hidden wrap-anywhere"
       class:ml-auto={community_message.user_id == user.id}
       class:line-clamp={clamped}
       class:max-h-[6.6rem]={clamped}
@@ -54,9 +59,17 @@
           ? new Date(community_message.timestamp).toLocaleDateString()
           : ''}
       </div>
+    {:else}
+      <br />
+      <div
+        class="text-sm px-3"
+        class:ml-auto={community_message.user_id == user.id}
+      >
+        <br />
+      </div>
     {/if}
   </td>
-  <td class="align-top py-3.5">
+  <td class="text-right align-top w-1/12 py-1.5">
     {#if community_message.user_id == user.id}
       <div class="">
         :<a href={'/user/' + user.id}>{community_message.user_name}</a>
