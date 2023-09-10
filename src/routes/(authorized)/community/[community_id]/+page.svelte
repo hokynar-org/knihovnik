@@ -385,7 +385,7 @@
     Reject
   </button>
 {/if}
-<div class="mt-6 border-solid border-2 pl-4">
+<div class="mt-6 border-solid border-2 pl-4 w-modal">
   <div
     class="inline-grid items-baseline grid-cols-2"
     title="This chat is not encrypted. Do not share any sensitive information: use

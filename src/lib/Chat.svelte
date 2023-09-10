@@ -17,7 +17,6 @@
 
   let disabled = false;
   let fallback = false;
-
   const send_message = async () => {
     const res = await fetch('/api/community/' + community.id + '/message', {
       method: 'POST',
@@ -32,21 +31,21 @@
   };
   let message = '';
 
-  let element: any;
+  let element: HTMLDivElement;
   onMount(() => scrollToBottom(element));
   const scrollToBottom = async (node: any) => {
     node.scroll({ top: node.scrollHeight, behavior: 'smooth' });
   };
 </script>
 
-<div class="max-h-[500px] overflow-y-scroll pr-4" bind:this={element}>
+<div class="max-h-[500px] overflow-y-scroll pr-4 w-full" bind:this={element}>
   <table>
     {#each messages as community_message (community_message.id)}
       <ChatMessage {user} {community_message} />
     {/each}
   </table>
 </div>
-<div class="flex my-2">
+<div class="flex my-2 w-full">
   <input class="input" type="text" bind:value={message} />
   <button
     class="btn variant-filled-primary py-1 my-2 mx-2"
@@ -58,11 +57,13 @@
           messages = [...messages, value];
           message = '';
           disabled = false;
+          scrollToBottom(element);
         });
       } else {
         res.then((value) => {
           message = '';
           disabled = false;
+          scrollToBottom(element);
         });
       }
     }}

@@ -21,9 +21,9 @@
 </script>
 
 <tr on:mouseleave={mouseLeave} on:mouseover={mouseOver} on:focus={mouseOver}>
-  <td class="text-right">
+  <td class="text-right align-top py-3.5">
     {#if community_message.user_id != user.id}
-      <div>
+      <div class="">
         <a href={'/user/' + user.id}>{community_message.user_name}</a>:
       </div>
     {/if}
@@ -56,9 +56,9 @@
       </div>
     {/if}
   </td>
-  <td>
+  <td class="align-top py-3.5">
     {#if community_message.user_id == user.id}
-      <div>
+      <div class="">
         :<a href={'/user/' + user.id}>{community_message.user_name}</a>
       </div>
     {/if}
