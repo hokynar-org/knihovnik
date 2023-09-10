@@ -39,15 +39,18 @@
       bind:value={$form.description}
       style="resize: none;"
     />
-    <label for="visibility" class="text-xl mt-4 mb-2">Public visibility</label>
-    <input
-      type="checkbox"
-      id="visibility"
-      name="visibility"
-      class="checkbox"
-      bind:checked={$form.visibility}
-    />
-
+    <label
+      for="visibility"
+      class="text-xl mt-4 mb-2 flex items-center space-x-2"
+      ><span>Public visibility</span>
+      <input
+        type="checkbox"
+        id="visibility"
+        name="visibility"
+        class="checkbox"
+        bind:checked={$form.visibility}
+      />
+    </label>
     <div class="flex content-center justify-center my-3">
       <button class="btn variant-filled-primary">Submit</button>
     </div>

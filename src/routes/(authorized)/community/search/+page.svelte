@@ -1,10 +1,11 @@
 <script lang="ts">
   import type { PageData } from './$types';
-  import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+  import {
+    faMagnifyingGlass,
+    faSpinner,
+  } from '@fortawesome/free-solid-svg-icons';
   import Fa from 'svelte-fa';
-  export let data: PageData;
   import type { Community } from '$lib/types';
-  // $: public_communities = data.public_communities;
   let found_communities: Community[] = [];
   let search_name: string = '';
   const search = async () => {
@@ -16,6 +17,7 @@
     }
     return (await res.json()) as Community[];
   };
+  let disabled = false;
 </script>
 
 <div>
@@ -29,16 +31,24 @@
     />
     <button
       on:click={() => {
+        disabled = true;
         search()
           .then((value) => {
+            disabled = false;
             found_communities = value;
           })
-          .catch((reason) => {});
+          .catch((reason) => {
+            disabled = false;
+          });
       }}
-      disabled={search_name.length < 2}
+      disabled={search_name.length < 2 || disabled}
       class="variant-filled-primary w-fit"
     >
-      <Fa icon={faMagnifyingGlass} />
+      {#if !disabled}
+        <Fa icon={faMagnifyingGlass} />
+      {:else}
+        <Fa icon={faSpinner} />
+      {/if}
     </button>
   </div>
 </div>

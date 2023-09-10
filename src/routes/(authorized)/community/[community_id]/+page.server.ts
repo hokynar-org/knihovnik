@@ -23,6 +23,7 @@ export const load = (async ({ locals,params }) => {
       user_id:      user_community_relations.user_id,
       community_id: user_community_relations.community_id,
       role:         user_community_relations.role,
+      timestamp:    user_community_relations.timestamp,
     },
     user:user_select,
   }).from(user_community_relations)
@@ -48,6 +49,5 @@ export const load = (async ({ locals,params }) => {
     community_messages: messages,
     role: user_relation.length==0?null:user_relation[0].role,
     community_items: community_items,
-    
   };
 }) satisfies PageServerLoad;

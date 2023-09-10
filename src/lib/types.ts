@@ -1,5 +1,5 @@
 import type { InferModel } from 'drizzle-orm';
-import type { borrow_requests, communities, community_messages, items, notifications, request_actions, users } from './server/db/schema';
+import type { borrow_requests, communities, community_messages, items, notifications, request_actions, user_community_relations, users } from './server/db/schema';
 
 export interface UserRegister {
   full_name: string;
@@ -27,6 +27,7 @@ export type User = InferModel<typeof users>;
 
 export type Community = InferModel<typeof communities>;
 
+export type CommunityRelation = InferModel<typeof user_community_relations>;
 
 export type PrivateUserSafe = Pick<
 User,
