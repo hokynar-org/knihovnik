@@ -3,7 +3,7 @@
   import { request_actions, pusher } from '$lib/store';
   export let data: PageData;
   import Item from '$lib/Item.svelte';
-  import { goto } from '$app/navigation';
+  import Chat from '$lib/components/Chat/Chat.svelte';
   import type {
     BorrowRequest,
     RequestAction,
@@ -377,6 +377,12 @@
     >
   </div>
 </div>
+
+<!--
+<div class="mt-6">
+  <Chat messages={$request_actions} {user} />
+</div>
+-->
 
 <div class="mt-6">
   <Item {item} holder={null} owner={null} />

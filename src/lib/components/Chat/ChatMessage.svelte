@@ -38,18 +38,33 @@
     {/if}
   </td>
   <td class="py-0.5 grid">
-    <div
-      class="card px-3 py-1 variant-soft fit-content overflow-hidden wrap-anywhere"
-      class:ml-auto={community_message.user_id == user.id}
-      class:line-clamp={clamped}
-      class:max-h-[6.6rem]={clamped}
-      on:click={toggleClamp}
-      on:keypress={toggleClamp}
-      role="button"
-      tabindex="0"
-    >
-      {community_message.message}
-    </div>
+    {#if !('type' in community_message) || community_message.type == 'MESSAGE'}
+      <div
+        class="card px-3 py-1 variant-soft fit-content overflow-hidden wrap-anywhere"
+        class:ml-auto={community_message.user_id == user.id}
+        class:line-clamp={clamped}
+        class:max-h-[6.6rem]={clamped}
+        on:click={toggleClamp}
+        on:keypress={toggleClamp}
+        role="button"
+        tabindex="0"
+      >
+        {community_message.message}
+      </div>
+    {:else}
+      <div
+        class="px-3 py-1 fit-content overflow-hidden wrap-anywhere"
+        class:ml-auto={community_message.user_id == user.id}
+        class:line-clamp={clamped}
+        class:max-h-[6.6rem]={clamped}
+        on:click={toggleClamp}
+        on:keypress={toggleClamp}
+        role="button"
+        tabindex="0"
+      >
+        {community_message.type}
+      </div>
+    {/if}
     {#if timevisible}
       <br />
       <div

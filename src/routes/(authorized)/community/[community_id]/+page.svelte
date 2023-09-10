@@ -396,7 +396,7 @@
       <Fa class="inline text-xl" icon={faLockOpen} />
     </p>
   </div>
-  <Chat messages={community_messages} {user} {community} isadmin={false} />
+  <Chat messages={community_messages} {user} {community} />
 </div>
 
 <div class="mt-6 w-full">
