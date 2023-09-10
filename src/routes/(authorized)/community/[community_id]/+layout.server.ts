@@ -1,10 +1,9 @@
 import { db } from '$lib/server/db/drizzle';
-import { borrow_requests, communities, community_messages, items, user_community_relations, users } from '$lib/server/db/schema';
+import { communities, community_messages, items, user_community_relations, users } from '$lib/server/db/schema';
 import { and, eq,not, or } from 'drizzle-orm';
-import type { LayoutServerLoad, PageServerLoad } from './$types';
+import type { LayoutServerLoad } from './$types';
 import type { CommunityMessage, Offer } from '$lib/types';
 import { error, redirect } from '@sveltejs/kit';
-import {getFileUrl} from '$lib/server/bucket'
 import {getCommunityItems, getShelfItems } from '$lib/server/item_load';
 import { user_select } from '$lib/server/db/selects';
 
