@@ -11,7 +11,6 @@
   } from '$lib/types';
   import { composedMessage } from '$lib/components/Chat/stores';
   import ChatSendRequest from './ChatSendRequest.svelte';
-  import { borrow_request_select } from '$lib/server/db/selects';
 
   export let messages: CommunityMessage[] | RequestActionMessage[];
   export let user: PublicUserSafe; //To determine who writes "your" messages
