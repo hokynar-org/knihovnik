@@ -55,11 +55,17 @@
     {/each}
   </table>
 </div>
-<div class="flex my-2 w-full">
-  <input class="input" type="text" bind:value={$composedMessage} />
-  {#if isCommunityMessages(messages) && isCommunityNotNull(community)}
+
+{#if isCommunityMessages(messages) && isCommunityNotNull(community)}
+  <div class="flex my-2 w-full">
+    <input class="input" type="text" bind:value={$composedMessage} />
     <ChatSendCommunity {community} {messages} />
-  {:else if isRequestMessages(messages) && isBorrowRequestNotNull(borrow_request)}
-    <ChatSendRequest {borrow_request} />
+  </div>
+{:else if isRequestMessages(messages) && isBorrowRequestNotNull(borrow_request)}
+  {#if borrow_request.status != ('CONFIRMED' || 'PENDING')}
+    <div class="flex my-2 w-full">
+      <input class="input" type="text" bind:value={$composedMessage} />
+      <ChatSendRequest {borrow_request} />
+    </div>
   {/if}
-</div>
+{/if}
