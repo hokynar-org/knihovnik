@@ -25,7 +25,7 @@ export const users = pgTable('users', {
 export const items = pgTable('items', {
   id: serial('id').primaryKey(),
   name: text('name').notNull(),
-  description: text('description'),
+  description: text('description').notNull(),
   image_src: text('image_src'),
   owner_id: integer('owner_id')
     .references(() => users.id)

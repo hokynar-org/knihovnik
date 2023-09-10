@@ -1,7 +1,12 @@
 <script lang="ts">
   import Item from '$lib/Item.svelte';
+  import PromiseButton from '$lib/components/PromiseButton.svelte';
+  import ReadOnlyTextFieldInput from '$lib/components/ReadOnlyTextFieldInput.svelte';
+  import ReadOnlyTextInput from '$lib/components/ReadOnlyTextInput.svelte';
   import type { PublicItemSafe } from '$lib/types.js';
+  import { superForm } from 'sveltekit-superforms/client';
   export let data;
+  const { form, errors } = superForm(data.form);
   $: user = data.user;
   $: item = data.item;
   $: owner = data.owner;
@@ -9,64 +14,92 @@
   $: last_requst = data.last_requst ? data.last_requst.borrow_request : null;
   $: borrow_requests = data.borrow_requests;
   $: community_visibility = data.community_visibility;
-  let new_name = data.item.name;
-  let new_description = data.item.description;
-  let disabled = false;
-  async function edit() {
-    const response = await fetch('/api/item/' + item.id + '/edit', {
-      method: 'POST',
-      body: JSON.stringify({ name: new_name, description: new_description }),
-    });
-    if (!response.ok) {
-      throw new Error(String(response.status));
+  $: $form.name = data.item.name;
+  $: $form.description = data.item.description;
+  const old_name = data.item.name;
+  const old_description = data.item.description;
+  $: disabled = old_name == $form.name && old_description == $form.description;
+  const change_visibility = async (community_id: number) => {
+    const res = await fetch(
+      '/api/item/' + item.id + '/' + community_id + '/visibility',
+      {
+        method: 'POST',
+      },
+    );
+    if (!res.ok) {
+      throw new Error(String(res.status));
     }
-    return (await response.json()) as PublicItemSafe;
-  }
+    return (await res.json()) as {
+      item_id: number | null;
+      community_id: number | null;
+    } | null;
+  };
 </script>
 
-<div class="container">
-  <Item {item} {holder} {owner} />
-</div>
-{#if user.id != owner.id}
-  Tady nemáte co dělat!
-{:else if !holder || holder.id != owner.id}
-  Editovat popis předmětu můžete jen když je u vás!
-{/if}
-{#if holder && user.id == owner.id && user.id == holder.id}
+<div class="space-y-8">
   <div>
-    <label for="name" class="text-xl mt-4 mb-2">Name</label>
-    <input type="text" name="name" class="input" bind:value={new_name} />
+    <h4 class="text-2xl">Edit item</h4>
 
-    <label for="description" class="text-xl mt-4 mb-2">Description</label>
-    <textarea
-      id="description"
-      name="description"
-      rows="4"
-      class="input"
-      bind:value={new_description}
-      style="resize: none;"
-    />
+    <form method="POST" action="?/edit" class="grid grid-cols-1 gap-4">
+      <ReadOnlyTextInput
+        label="Name"
+        name="name"
+        bind:value={$form.name}
+        error={$errors.name}
+      />
 
-    <div class="flex content-center justify-center my-3">
-      <button
-        class="btn variant-filled-primary"
-        disabled={(new_name == item.name &&
-          new_description == item.description) ||
-          disabled}
-        on:click={() => {
-          disabled = true;
-          const res = edit();
-          res
-            .then((value) => {
-              item.name = value.name;
-              item.description = value.description;
-              disabled = false;
-            })
-            .catch(() => {
-              disabled = false;
-            });
-        }}>Submit</button
-      >
+      <ReadOnlyTextFieldInput
+        label="Description"
+        name="description"
+        bind:value={$form.description}
+        error={$errors.description}
+      />
+
+      <div class="self-end justify-self-center col-span-full">
+        <button {disabled} class="btn variant-filled-primary"
+          >Save changes</button
+        >
+      </div>
+    </form>
+  </div>
+  <div class="mb-6">
+    <h4 class="text-2xl">Visibility settings</h4>
+    <p class="text-sm">Which communities can see and borrow this item?</p>
+    <div class="mt-4">
+      <ol class="grid justify-items-center">
+        {#each community_visibility as visibility (visibility.communities.id)}
+          <li
+            class="inline-grid grid-cols-3 justify-items-center items-baseline"
+          >
+            <span>
+              <a href={'/community/' + visibility.communities.id}
+                >{visibility.communities.name}</a
+              >
+            </span>
+            <span>
+              {#if visibility.item_visibility}
+                <p>Visible</p>
+              {:else}
+                <p>Hidden</p>
+              {/if}
+            </span>
+            <span>
+              <PromiseButton
+                disabled={false}
+                callback={async () => {
+                  return await change_visibility(visibility.communities.id);
+                }}
+                succes={(value) => {
+                  const index = community_visibility.indexOf(visibility);
+                  community_visibility[index].item_visibility = value;
+                }}
+                btn_class={'btn variant-filled-primary py-1 my-2'}
+                >Change</PromiseButton
+              >
+            </span>
+          </li>
+        {/each}
+      </ol>
     </div>
   </div>
-{/if}
+</div>
