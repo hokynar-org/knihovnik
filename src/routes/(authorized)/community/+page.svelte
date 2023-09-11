@@ -6,7 +6,7 @@
 </script>
 
 <div class="w-xs">
-  <h2 class="text-2xl mt-6 mb-4">Your communities</h2>
+  <h2 class="text-2xl mb-4">Your communities</h2>
 
   {#each user_communities as community (community.communities.id)}
     <a href={'/community/' + community.communities.id}

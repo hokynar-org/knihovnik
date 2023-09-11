@@ -97,7 +97,7 @@
     <Sidebar current={$page.url.pathname} isAdmin={user.role == 'ADMIN'} />
   </div>
 
-  <main class="flex flex-col items-center relative p-2 h-full">
+  <main class="flex flex-col items-center relative px-2 py-8 h-full">
     <slot />
     {#if $navigating}
       <div

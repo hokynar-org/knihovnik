@@ -118,7 +118,7 @@
   }
 </script>
 
-<h1 class="mt-6 mb-4 text-3xl min-w-xs">
+<h1 class="mb-4 text-3xl min-w-xs">
   Borrow request for <a href={'/item/' + item.id}>{item.name}</a>
 </h1>
 

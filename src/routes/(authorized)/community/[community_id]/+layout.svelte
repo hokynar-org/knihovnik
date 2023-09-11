@@ -44,7 +44,7 @@
   };
 </script>
 
-<h4 class="mt-4 mb-2">Community: {community.name}</h4>
+<h4 class="mb-2">Community: {community.name}</h4>
 <p>
   {community.description}
 </p>
