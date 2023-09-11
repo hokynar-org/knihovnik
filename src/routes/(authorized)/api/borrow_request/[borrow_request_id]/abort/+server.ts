@@ -60,6 +60,10 @@ export const POST = (async ({ request, params, locals, url, route }) => {
   if(found_confirm_actions.length==1 && found_confirm_actions[0].user_id==user_id){
     throw error(400);
   }
+
+  if((old_borrow_request.borrower_id==item.owner_id && user.id!=item.owner_id)){
+    throw error(401);
+  }
   
   try {
     const new_requests_actions:Promise<RequestAction[]> = db.insert(request_actions).values({

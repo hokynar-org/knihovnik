@@ -63,22 +63,7 @@ export const POST = (async ({ request, params, locals, url, route }) => {
       type: 'CONFIRM',
       message: '',
       }).returning();
-    if(found_confirm_actions.length==0){
-      const confirm_notification:Promise<any> = db.insert(notifications).values({
-          user_id: other_user_id,
-          text: "User " + locals.user.user_name + " confirmed hand over of " + item.name,
-          url: '/borrow_request/'+String(old_borrow_request.id),
-        }).returning();
-      const results=await Promise.all([new_requests_actions,confirm_notification]);
-      await pusher.sendToUser(String(other_user_id), "notification", results[1][0]);
-      const request_action_message = {
-        ...results[0][0],
-        user_name:user.user_name,
-      }
-      await pusher.trigger('private-borrow_request-' + borrow_request_id,'request_action',{borrow_request:undefined,action:request_action_message});
-      return json({borrow_request:old_borrow_request,action:request_action_message});
-    }
-    else if(found_confirm_actions.length==1){
+    if(found_confirm_actions.length==1 || (old_borrow_request.borrower_id==item.owner_id && user.id==item.owner_id) ){
       const new_borrow_requests = db.update(borrow_requests).set({status:'CONFIRMED'}).where(eq(borrow_requests.id, Number(borrow_request_id))).returning();
       const confirm_notification:Promise<any> = db.insert(notifications).values({
         user_id: other_user_id,
@@ -94,6 +79,21 @@ export const POST = (async ({ request, params, locals, url, route }) => {
       }
       await pusher.trigger('private-borrow_request-' + borrow_request_id,'request_action',{borrow_request:results[0][0],action:request_action_message});
       return json({borrow_request:results[0][0],action:request_action_message});
+    }
+    else if(found_confirm_actions.length==0){
+      const confirm_notification:Promise<any> = db.insert(notifications).values({
+          user_id: other_user_id,
+          text: "User " + locals.user.user_name + " confirmed hand over of " + item.name,
+          url: '/borrow_request/'+String(old_borrow_request.id),
+        }).returning();
+      const results=await Promise.all([new_requests_actions,confirm_notification]);
+      await pusher.sendToUser(String(other_user_id), "notification", results[1][0]);
+      const request_action_message = {
+        ...results[0][0],
+        user_name:user.user_name,
+      }
+      await pusher.trigger('private-borrow_request-' + borrow_request_id,'request_action',{borrow_request:undefined,action:request_action_message});
+      return json({borrow_request:old_borrow_request,action:request_action_message});
     }
     else{
       throw error(400);

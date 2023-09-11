@@ -34,24 +34,47 @@ export const POST = (async ({ locals, url}) => {
     if(found_borrow_requests.length>0) {
         throw error(400);
     }
-    const new_borrow_requests:BorrowRequest[] = await db.insert(borrow_requests).values({
-        lender_id: item.holder_id as number,
-        borrower_id: user.id as number,
-        item_id: item.id as number,
-        }).returning();
-    const borrow_request:BorrowRequest=new_borrow_requests[0];
-    await db.insert(request_actions).values({
-        borrow_request_id:borrow_request.id,
-        user_id:user.id,
-        type: 'CREATE',
-        message: '',
-        }).returning();
-    const notification = await db.insert(notifications).values({
-            user_id: borrow_request.lender_id,
-            text: "User " + locals.user.user_name + " wants " + item.name,
-            url: '/borrow_request/'+String(borrow_request.id),
-          }).returning();
-    await pusher.sendToUser(String(borrow_request.lender_id), "notification", notification[0]);
-
-    return json(borrow_request);
+    if(user.id==item.owner_id){
+        const new_borrow_requests:BorrowRequest[] = await db.insert(borrow_requests).values({
+            lender_id: item.holder_id as number,
+            borrower_id: user.id as number,
+            item_id: item.id as number,
+            status: 'ACCEPTED'
+            }).returning();
+        const borrow_request:BorrowRequest=new_borrow_requests[0];
+        await db.insert(request_actions).values({
+            borrow_request_id:borrow_request.id,
+            user_id:user.id,
+            type: 'CREATE',
+            message: '',
+            }).returning();
+        const notification = await db.insert(notifications).values({
+                user_id: borrow_request.lender_id,
+                text: "User " + locals.user.user_name + " wants " + item.name + ' back',
+                url: '/borrow_request/'+String(borrow_request.id),
+            }).returning();
+        await pusher.sendToUser(String(borrow_request.lender_id), "notification", notification[0]);
+        return json(borrow_request);
+    }
+    else{
+        const new_borrow_requests:BorrowRequest[] = await db.insert(borrow_requests).values({
+            lender_id: item.holder_id as number,
+            borrower_id: user.id as number,
+            item_id: item.id as number,
+            }).returning();
+        const borrow_request:BorrowRequest=new_borrow_requests[0];
+        await db.insert(request_actions).values({
+            borrow_request_id:borrow_request.id,
+            user_id:user.id,
+            type: 'CREATE',
+            message: '',
+            }).returning();
+        const notification = await db.insert(notifications).values({
+                user_id: borrow_request.lender_id,
+                text: "User " + locals.user.user_name + " wants " + item.name,
+                url: '/borrow_request/'+String(borrow_request.id),
+            }).returning();
+        await pusher.sendToUser(String(borrow_request.lender_id), "notification", notification[0]);
+        return json(borrow_request);
+    }
 }) satisfies RequestHandler;
