@@ -28,6 +28,30 @@
       community_id: number | null;
     } | null;
   };
+  const hide_all = async () => {
+    const res = await fetch('/api/item/' + item.id + '/hide_all', {
+      method: 'POST',
+    });
+    if (!res.ok) {
+      throw new Error(String(res.status));
+    }
+    return (await res.json()) as {
+      item_id: number | null;
+      community_id: number | null;
+    } | null;
+  };
+  const show_all = async () => {
+    const res = await fetch('/api/item/' + item.id + '/show_all', {
+      method: 'POST',
+    });
+    if (!res.ok) {
+      throw new Error(String(res.status));
+    }
+    return (await res.json()) as {
+      item_id: number | null;
+      community_id: number | null;
+    } | null;
+  };
   const deleteItem = async () => {
     const response = await fetch('/api/item/' + item.id + '/remove', {
       method: 'POST',
@@ -67,6 +91,50 @@
   <div class="mb-6">
     <h4 class="text-2xl">Visibility settings</h4>
     <p class="text-sm">Which communities can see and borrow this item?</p>
+    <span>
+      <PromiseButton
+        disabled={community_visibility.filter((value) => {
+          return value.item_visibility;
+        }).length == 0}
+        callback={async () => {
+          return await hide_all();
+        }}
+        succes={(value) => {
+          community_visibility = community_visibility.flatMap((fvalue) => {
+            return {
+              user_community_relations: fvalue.user_community_relations,
+              communities: fvalue.communities,
+              item_visibility: null,
+            };
+          });
+        }}
+        btn_class={'btn variant-filled-error py-1 my-2'}>Hide All</PromiseButton
+      >
+    </span>
+    <span>
+      <PromiseButton
+        disabled={community_visibility.filter((value) => {
+          return !value.item_visibility;
+        }).length == 0}
+        callback={async () => {
+          return await show_all();
+        }}
+        succes={(value) => {
+          community_visibility = community_visibility.flatMap((fvalue) => {
+            return {
+              user_community_relations: fvalue.user_community_relations,
+              communities: fvalue.communities,
+              item_visibility: {
+                community_id: fvalue.communities.id,
+                item_id: item.id,
+              },
+            };
+          });
+        }}
+        btn_class={'btn variant-filled-primary py-1 my-2'}
+        >Show All</PromiseButton
+      >
+    </span>
     <div class="mt-4">
       <ol class="grid justify-items-center">
         {#each community_visibility as visibility (visibility.communities.id)}

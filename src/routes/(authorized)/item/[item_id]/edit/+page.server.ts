@@ -26,7 +26,13 @@ export const load = (async ({ locals,params}) => {
   const item_id = Number(params.item_id)
 
   const user = locals.user;
-  const item = (await db.select(item_select).from(items).where(eq(items.id,item_id)))[0]
+  const results = await Promise.all([
+    db.select(item_select).from(items).where(eq(items.id,item_id)),
+  ])
+  if(results[0].length==0){
+    throw error(404);
+  }
+  const item = results[0][0];
   if(user.id != item.owner_id){
     throw error(401);
   }

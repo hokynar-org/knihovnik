@@ -8,6 +8,7 @@
   let files: string[] = [];
   $: filesSerialized = files.join(',');
   $: $form.files = filesSerialized;
+  $form.visibility = false;
 </script>
 
 <div class="mt-6">
@@ -37,6 +38,17 @@
     <label for="description" class="text-xl mt-4 mb-2">Picture</label>
     <div class="mb-4">
       <FileUploader bind:filenames={files} />
+    </div>
+    <div class="flex mt-4 mb-2">
+      <label for="visibility" class="text-xl mr-4"
+        >Visible to my communities</label
+      >
+      <input
+        class="checkbox self-center"
+        type="checkbox"
+        name="visibility"
+        bind:checked={$form.visibility}
+      />
     </div>
 
     <div class="flex content-center justify-center my-3">

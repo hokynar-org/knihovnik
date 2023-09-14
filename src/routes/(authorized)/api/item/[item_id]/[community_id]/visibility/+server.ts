@@ -10,10 +10,10 @@ export const POST = (async ({locals, params,url}) => {
     if (!locals.user) {
         throw error(401);
     }
-    if (!params.item_id) {
+    if (!Number(params.item_id)) {
         throw error(400);
     }
-    if (!params.community_id) {
+    if (!Number(params.community_id)) {
         throw error(400);
     }
     const item_id=Number(params.item_id);
@@ -30,6 +30,9 @@ export const POST = (async ({locals, params,url}) => {
     const visibility = results[0].item_visibility;
     if (item.owner_id != locals.user.id) {
         throw error(401);
+    }
+    if (item.owner_id != item.holder_id) {
+        throw error(400);
     }
     try{
         if(!visibility){
