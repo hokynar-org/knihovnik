@@ -49,6 +49,7 @@ export const actions: Actions = {
       console.error(error);
       return fail(500, { message: 'Internal Error' });
     }
+    throw redirect(303, '/offer');
   },
   // Remove user owned item
   remove_item: async ({ url, locals }) => {
