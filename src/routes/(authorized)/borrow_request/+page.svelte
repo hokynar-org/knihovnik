@@ -5,13 +5,16 @@
 </script>
 
 <ol class="">
-  {#each data.borrow_requests as borrow_request}
+  {#each [...data.borrow_requests].reverse() as borrow_request}
     <li>
       <a
         class="block p-4 hover:!bg-surface-300-600-token"
         href="/borrow_request/{borrow_request.borrow_request.id}"
       >
         <h4>
+          {#if borrow_request.borrow_request.timestamp != null}
+            {borrow_request.borrow_request.timestamp.toDateString()}
+          {/if}
           {#if data.user.id == borrow_request.borrower.id}
             You requested {borrow_request.item.name} from user {borrow_request
               .lender.user_name}

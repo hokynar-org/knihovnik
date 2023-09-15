@@ -7,12 +7,15 @@
 
 <div class="">
   <ol>
-    {#each borrow_requests as borrow_request}
+    {#each [...borrow_requests].reverse() as borrow_request}
       <li>
         <a
           class="block p-4 hover:!bg-surface-300-600-token"
           href="/borrow_request/{borrow_request.borrow_request.id}"
         >
+          {#if borrow_request.borrow_request.timestamp != null}
+            {borrow_request.borrow_request.timestamp.toDateString()}
+          {/if}
           {#if user.id == borrow_request.borrower.id}
             {borrow_request.lender.user_name} --> you
           {:else if user.id == borrow_request.lender.id}
