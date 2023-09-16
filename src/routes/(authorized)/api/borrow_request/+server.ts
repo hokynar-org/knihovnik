@@ -2,11 +2,11 @@ import { error, fail, json, redirect } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { db } from '$lib/server/db/drizzle';
 import {borrow_requests, item_visibility, items, notifications, request_actions, user_community_relations, users} from '$lib/server/db/schema'
-import { and, eq, or } from 'drizzle-orm';
+import { and, eq, or,ne } from 'drizzle-orm';
 import type { BorrowRequest, Item, PublicItemSafe } from '$lib/types';
 import { pusher } from '$lib/server/pusher';
 import { borrow_request_select, item_select } from '$lib/server/db/selects';
-import { notifyUser } from '$lib/server/notification';
+import { notifyUser, notifyUsers } from '$lib/server/notification';
 
 export const POST = (async ({ locals, url}) => {
     if (!locals.user) {
@@ -36,7 +36,7 @@ export const POST = (async ({ locals, url}) => {
         throw error(400);
     }
     if(user.id==item.owner_id){
-        const borrow_request = await db.transaction(async (tx)=>{
+        const [borrow_request,action,other_borrow_requests] = await db.transaction(async (tx)=>{
             const [borrow_request] = await tx.insert(borrow_requests).values({
                 lender_id: item.holder_id as number,
                 borrower_id: user.id as number,
@@ -49,13 +49,36 @@ export const POST = (async ({ locals, url}) => {
                 type: 'CREATE',
                 message: '',
                 }).returning();
-            return borrow_request
+            const other_borrow_requests = await tx.update(borrow_requests).set({
+                status:'DENIED'
+                }).where(and(ne(borrow_requests.id,borrow_request.id),eq(borrow_requests.status,'PENDING'),eq(borrow_requests.item_id,borrow_request.item_id))).returning(borrow_request_select)
+            if (other_borrow_requests.length>0){
+                const actions_query = other_borrow_requests.flatMap((value)=>{
+                    return {
+                    borrow_request_id:value.id,
+                    user_id:user.id,
+                    type: 'DENY',
+                    message: '',
+                    }
+                })
+                const [actions] = await tx.insert(request_actions).values(actions_query).returning();
+            }
+            return [borrow_request,action,other_borrow_requests]
         })
         await notifyUser({
             user_id: borrow_request.lender_id,
             text: "User " + locals.user.user_name + " wants " + item.name + ' back',
             url: '/borrow_request/'+String(borrow_request.id),
         })
+        if(other_borrow_requests.length>0){
+            await notifyUsers({
+              user_ids: other_borrow_requests.flatMap((value)=>{
+                return value.borrower_id
+              }),
+              text: "User " + locals.user.user_name + " denied your request for " + item.name,
+              url: '/borrow_request/'+String(borrow_request.id),
+            })
+          }
         return json(borrow_request);
     }
     else{

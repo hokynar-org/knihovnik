@@ -5,7 +5,7 @@
 </script>
 
 <ol class="">
-  {#each [...data.borrow_requests].reverse() as borrow_request}
+  {#each [...data.borrow_requests].reverse() as borrow_request (borrow_request.borrow_request.id)}
     <li>
       <a
         class="block p-4 hover:!bg-surface-300-600-token"
