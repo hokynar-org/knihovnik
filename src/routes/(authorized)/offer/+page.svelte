@@ -19,10 +19,12 @@
 
   {#each $user_items as offer (offer.item.id)}
     <Item item={offer.item} owner={user} holder={offer.holder}>
-      <div>
-        <a href={'/item/' + offer.item.id + '/edit'}>Edit</a>
-      </div>
-      <OfferItem item={offer.item} />
+      {#if offer.holder && user.id == offer.holder.id}
+        <div>
+          <a href={'/item/' + offer.item.id + '/edit'}>Edit</a>
+        </div>
+        <OfferItem item={offer.item} />
+      {/if}
     </Item>
   {/each}
 </div>

@@ -25,6 +25,9 @@ export const POST = (async ({locals, params}) => {
     if (item.owner_id != locals.user.id) {
         throw error(401);
     }
+    if (item.holder_id != item.owner_id) {
+        throw error(400);
+    }
     const new_offered= !item.offered;
     try{
         await db.update(items).set({offered:new_offered}).where(eq(items.id, Number(item_id))).returning(
