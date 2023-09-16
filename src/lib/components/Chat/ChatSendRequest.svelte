@@ -8,8 +8,6 @@
   //export let messages: RequestActionMessage[];
   export let borrow_request: BorrowRequest;
 
-  $: console.log(borrow_request);
-
   let disabled = false;
   let fallback = false;
 

@@ -6,6 +6,7 @@ import { eq,and } from 'drizzle-orm';
 import type { BorrowRequest, PublicItemSafe, RequestAction } from '$lib/types';
 import { pusher } from '$lib/server/pusher';
 import { borrow_request_select, item_select } from '$lib/server/db/selects';
+import { notifyUser } from '$lib/server/notification';
 export const POST = (async ({ request, params, locals, url, route }) => {
   // This user is not logged in
   if (!locals.user) {
@@ -66,26 +67,29 @@ export const POST = (async ({ request, params, locals, url, route }) => {
   }
   
   try {
-    const new_requests_actions:Promise<RequestAction[]> = db.insert(request_actions).values({
-      borrow_request_id:Number(borrow_request_id),
-      user_id:user_id,
-      type: 'ABORT',
-      message: '',
-      }).returning();
-    const new_borrow_requests = db.update(borrow_requests).set({status:'ABORTED'}).where(eq(borrow_requests.id, Number(borrow_request_id))).returning();
-    const abort_notification:Promise<any> = db.insert(notifications).values({
+    const [borrow_request,action] = await db.transaction(async (tx)=>{
+      const [borrow_request] = await tx.update(borrow_requests).set({
+          status: 'ABORTED',
+          }).where(eq(borrow_requests.id, Number(borrow_request_id))).returning();
+      const [action] = await tx.insert(request_actions).values({
+          borrow_request_id:borrow_request.id,
+          user_id:user.id,
+          type: 'ABORT',
+          message: '',
+          }).returning();
+      return [borrow_request,action]
+    });
+    await notifyUser({
         user_id: other_user_id,
         text: "User " + locals.user.user_name + " aborted hand over of " + item.name,
         url: '/borrow_request/'+String(old_borrow_request.id),
-      }).returning();
-    const results=await Promise.all([new_requests_actions,abort_notification,new_borrow_requests]);
-    await pusher.sendToUser(String(other_user_id), "notification", results[1][0]);
+      })
     const request_action_message = {
-      ...results[0][0],
+      ...action,
       user_name:user.user_name,
     }
-    await pusher.trigger('private-borrow_request-' + borrow_request_id,'request_action',{borrow_request:results[2][0],action:request_action_message});
-    return json({borrow_request:results[2][0],action:request_action_message});
+    await pusher.trigger('private-borrow_request-' + borrow_request_id,'request_action',{borrow_request:borrow_request,action:request_action_message});
+    return json({borrow_request:borrow_request,action:request_action_message});
   }
   catch (err) {
     throw error(500);

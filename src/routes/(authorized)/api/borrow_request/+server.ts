@@ -5,14 +5,15 @@ import {borrow_requests, item_visibility, items, notifications, request_actions,
 import { and, eq, or } from 'drizzle-orm';
 import type { BorrowRequest, Item, PublicItemSafe } from '$lib/types';
 import { pusher } from '$lib/server/pusher';
-import { item_select } from '$lib/server/db/selects';
+import { borrow_request_select, item_select } from '$lib/server/db/selects';
+import { notifyUser } from '$lib/server/notification';
 
 export const POST = (async ({ locals, url}) => {
     if (!locals.user) {
         throw error(401);
     }
     const user = locals.user;
-    if(!url.searchParams.get('item_id')){
+    if(!Number(url.searchParams.get('item_id'))){
         throw error(400);
     }
     const item_id = Number(url.searchParams.get('item_id'));
@@ -35,46 +36,48 @@ export const POST = (async ({ locals, url}) => {
         throw error(400);
     }
     if(user.id==item.owner_id){
-        const new_borrow_requests:BorrowRequest[] = await db.insert(borrow_requests).values({
-            lender_id: item.holder_id as number,
-            borrower_id: user.id as number,
-            item_id: item.id as number,
-            status: 'ACCEPTED'
-            }).returning();
-        const borrow_request:BorrowRequest=new_borrow_requests[0];
-        await db.insert(request_actions).values({
-            borrow_request_id:borrow_request.id,
-            user_id:user.id,
-            type: 'CREATE',
-            message: '',
-            }).returning();
-        const notification = await db.insert(notifications).values({
-                user_id: borrow_request.lender_id,
-                text: "User " + locals.user.user_name + " wants " + item.name + ' back',
-                url: '/borrow_request/'+String(borrow_request.id),
-            }).returning();
-        await pusher.sendToUser(String(borrow_request.lender_id), "notification", notification[0]);
+        const borrow_request = await db.transaction(async (tx)=>{
+            const [borrow_request] = await tx.insert(borrow_requests).values({
+                lender_id: item.holder_id as number,
+                borrower_id: user.id as number,
+                item_id: item.id as number,
+                status: 'ACCEPTED',
+                }).returning(borrow_request_select);
+            const [action] = await tx.insert(request_actions).values({
+                borrow_request_id:borrow_request.id,
+                user_id:user.id,
+                type: 'CREATE',
+                message: '',
+                }).returning();
+            return borrow_request
+        })
+        await notifyUser({
+            user_id: borrow_request.lender_id,
+            text: "User " + locals.user.user_name + " wants " + item.name + ' back',
+            url: '/borrow_request/'+String(borrow_request.id),
+        })
         return json(borrow_request);
     }
     else{
-        const new_borrow_requests:BorrowRequest[] = await db.insert(borrow_requests).values({
-            lender_id: item.holder_id as number,
-            borrower_id: user.id as number,
-            item_id: item.id as number,
-            }).returning();
-        const borrow_request:BorrowRequest=new_borrow_requests[0];
-        await db.insert(request_actions).values({
-            borrow_request_id:borrow_request.id,
-            user_id:user.id,
-            type: 'CREATE',
-            message: '',
-            }).returning();
-        const notification = await db.insert(notifications).values({
-                user_id: borrow_request.lender_id,
+        const borrow_request = await db.transaction(async (tx)=>{
+            const [borrow_request] = await tx.insert(borrow_requests).values({
+                lender_id: item.holder_id as number,
+                borrower_id: user.id as number,
+                item_id: item.id as number,
+                }).returning(borrow_request_select);
+            const [action] = await tx.insert(request_actions).values({
+                borrow_request_id:borrow_request.id,
+                user_id:user.id,
+                type: 'CREATE',
+                message: '',
+                }).returning();
+            return borrow_request
+        })
+        await notifyUser({
+                url:'/borrow_request/'+String(borrow_request.id),
                 text: "User " + locals.user.user_name + " wants " + item.name,
-                url: '/borrow_request/'+String(borrow_request.id),
-            }).returning();
-        await pusher.sendToUser(String(borrow_request.lender_id), "notification", notification[0]);
+                user_id:borrow_request.lender_id,
+            })
         return json(borrow_request);
     }
 }) satisfies RequestHandler;

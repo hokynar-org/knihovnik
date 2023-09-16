@@ -6,6 +6,7 @@ import { eq } from 'drizzle-orm';
 import type { BorrowRequest } from '$lib/types';
 import { pusher } from '$lib/server/pusher';
 import { borrow_request_select, item_select } from '$lib/server/db/selects';
+import { notifyUser } from '$lib/server/notification';
 export const POST = (async ({ request, params, locals, url, route }) => {
   if (!locals.user) {
     throw error(401);
@@ -32,15 +33,17 @@ export const POST = (async ({ request, params, locals, url, route }) => {
     throw error(400);
   }
   try {
-    const delete_borrow_requests:Promise<any> = db.delete(borrow_requests).where(eq(borrow_requests.id, Number(borrow_request_id))).returning();
-    const delete_request_actions:Promise<any> = db.delete(request_actions).where(eq(request_actions.borrow_request_id, Number(borrow_request_id))).returning();
-    const cancel_notification:Promise<any> = db.insert(notifications).values({
+    const [borrow_request,actions] = await db.transaction(async (tx)=>{
+      const actions = await tx.delete(request_actions).where(eq(request_actions.borrow_request_id, Number(borrow_request_id))).returning()
+      const [borrow_request] = await tx.delete(borrow_requests).where(eq(borrow_requests.id, Number(borrow_request_id))).returning();
+      return [borrow_request,actions]
+    });
+    await notifyUser({
       user_id: old_borrow_request.lender_id,
       text: "User " + locals.user.user_name + " no longer wants " + item.name,
-    }).returning();
-    const results:any = await Promise.all([delete_borrow_requests,delete_request_actions,cancel_notification]);
-    await pusher.sendToUser(String(old_borrow_request.lender_id), "notification", results[2][0]);
-    return json(results[0][0]);
+      url:null,
+    })
+    return json(borrow_request);
   } catch (err) {
     throw error(500);
   }
