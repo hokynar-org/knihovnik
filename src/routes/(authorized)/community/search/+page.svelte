@@ -42,7 +42,8 @@
           });
       }}
       disabled={search_name.length < 2 || disabled}
-      class="variant-filled-primary w-fit"
+      type="button"
+      class="btn btn-sm variant-filled"
     >
       {#if !disabled}
         <Fa icon={faMagnifyingGlass} />
