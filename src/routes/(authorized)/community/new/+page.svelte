@@ -14,9 +14,9 @@
 </script>
 
 <div>
-  <h2 class="text-2xl mt-6 mb-2">Create a community</h2>
+  <h2 class="text-4xl mt-6 mb-2">Create a community</h2>
 
-  <p class="text-sm min-w-xs max-w-xs">
+  <p class="text-base min-w-xs max-w-xs">
     Anyone can create a community and invite other users to it. Admins have a
     responsibility to moderate their community. TODO agree on this description
   </p>
@@ -42,7 +42,14 @@
     <label
       for="visibility"
       class="text-xl mt-4 mb-2 flex items-center space-x-2"
-      ><span>Public visibility</span>
+    >
+      <div>
+        <span class="text-xl">Public visibility</span>
+        <p class="text-base max-w-[80%]">
+          People will be able to search for this community and request to join
+          it. You can change this later.
+        </p>
+      </div>
       <input
         type="checkbox"
         id="visibility"
@@ -51,7 +58,7 @@
         bind:checked={$form.visibility}
       />
     </label>
-    <div class="flex content-center justify-center my-3">
+    <div class="flex content-center justify-center my-6">
       <button class="btn variant-filled-primary">Submit</button>
     </div>
   </form>
