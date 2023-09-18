@@ -3,7 +3,7 @@
   export let data;
 </script>
 
-<h4 class="mb-2 text-2xl">Vaše Polička</h4>
+<h4 class="mb-2 text-4xl">Vaše Polička</h4>
 <h3 class="mb-6">Zde naleznete věci, které by se měly válet u Vás!</h3>
 <div class="container">
   {#each data.offers as offer (offer.item.id)}
