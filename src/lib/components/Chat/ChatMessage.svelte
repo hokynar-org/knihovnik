@@ -33,7 +33,9 @@
   <td class="text-right align-top w-1/12 py-1.5">
     {#if community_message.user_id != user.id}
       <div class="">
-        <a href={'/user/' + user.id}>{community_message.user_name}</a>:
+        <a href={'/user/' + community_message.user_id}
+          >{community_message.user_name}</a
+        >:
       </div>
     {/if}
   </td>
