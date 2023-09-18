@@ -64,8 +64,6 @@
 
 <div class="space-y-8">
   <div>
-    <h4 class="text-2xl">Edit item</h4>
-
     <form method="POST" action="?/edit" class="grid grid-cols-1 gap-4">
       <ReadOnlyTextInput
         label="Name"
@@ -91,51 +89,54 @@
   <div class="mb-6">
     <h4 class="text-2xl">Visibility settings</h4>
     <p class="text-sm">Which communities can see and borrow this item?</p>
-    <span>
-      <PromiseButton
-        disabled={community_visibility.filter((value) => {
-          return value.item_visibility;
-        }).length == 0}
-        callback={async () => {
-          return await hide_all();
-        }}
-        succes={(value) => {
-          community_visibility = community_visibility.flatMap((fvalue) => {
-            return {
-              user_community_relations: fvalue.user_community_relations,
-              communities: fvalue.communities,
-              item_visibility: null,
-            };
-          });
-        }}
-        btn_class={'btn variant-filled-error py-1 my-2'}>Hide All</PromiseButton
-      >
-    </span>
-    <span>
-      <PromiseButton
-        disabled={community_visibility.filter((value) => {
-          return !value.item_visibility;
-        }).length == 0}
-        callback={async () => {
-          return await show_all();
-        }}
-        succes={(value) => {
-          community_visibility = community_visibility.flatMap((fvalue) => {
-            return {
-              user_community_relations: fvalue.user_community_relations,
-              communities: fvalue.communities,
-              item_visibility: {
-                community_id: fvalue.communities.id,
-                item_id: item.id,
-              },
-            };
-          });
-        }}
-        btn_class={'btn variant-filled-primary py-1 my-2'}
-        >Show All</PromiseButton
-      >
-    </span>
-    <div class="mt-4">
+    <div class="grid grid-cols-2 justify-items-center mt-4">
+      <span>
+        <PromiseButton
+          disabled={community_visibility.filter((value) => {
+            return value.item_visibility;
+          }).length == 0}
+          callback={async () => {
+            return await hide_all();
+          }}
+          succes={(value) => {
+            community_visibility = community_visibility.flatMap((fvalue) => {
+              return {
+                user_community_relations: fvalue.user_community_relations,
+                communities: fvalue.communities,
+                item_visibility: null,
+              };
+            });
+          }}
+          btn_class={'btn variant-filled-error py-1 my-2'}
+          >Hide All</PromiseButton
+        >
+      </span>
+      <span>
+        <PromiseButton
+          disabled={community_visibility.filter((value) => {
+            return !value.item_visibility;
+          }).length == 0}
+          callback={async () => {
+            return await show_all();
+          }}
+          succes={(value) => {
+            community_visibility = community_visibility.flatMap((fvalue) => {
+              return {
+                user_community_relations: fvalue.user_community_relations,
+                communities: fvalue.communities,
+                item_visibility: {
+                  community_id: fvalue.communities.id,
+                  item_id: item.id,
+                },
+              };
+            });
+          }}
+          btn_class={'btn variant-filled-primary py-1 my-2'}
+          >Show All</PromiseButton
+        >
+      </span>
+    </div>
+    <div class="mt-2">
       <ol class="grid justify-items-center">
         {#each community_visibility as visibility (visibility.communities.id)}
           <li
@@ -172,14 +173,22 @@
       </ol>
     </div>
   </div>
+
+  <div>
+    <h4 class="text-2xl">Visibility settings</h4>
+    <p class="mb-2">Warning: this cannot be undone.</p>
+
+    <div class="grid justify-items-center">
+      <PromiseButton
+        btn_class={'btn variant-filled-error py-1 my-2'}
+        callback={deleteItem}
+        succes={() => {
+          goto('/offer');
+        }}
+        disabled={false}
+      >
+        Delete Item
+      </PromiseButton>
+    </div>
+  </div>
 </div>
-<PromiseButton
-  btn_class={'btn variant-filled-error py-1 my-2'}
-  callback={deleteItem}
-  succes={() => {
-    goto('/offer');
-  }}
-  disabled={false}
->
-  Delete
-</PromiseButton>

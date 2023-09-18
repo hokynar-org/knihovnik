@@ -12,8 +12,6 @@
 </script>
 
 <div class="mt-6">
-  <h2 class="text-2xl">Offer an item</h2>
-
   <p class="text-sm min-w-xs max-w-xs">
     Add an item others can borrow. You will be able to choose which community
     can borrow it.

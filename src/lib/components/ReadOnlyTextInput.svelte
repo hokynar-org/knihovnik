@@ -15,10 +15,10 @@
 </script>
 
 <label>
-  <span>{label}</span>
-  <div class="w-full flex justify-between rounded-token">
+  <span class="text-xl">{label}</span>
+  <div class="w-full flex justify-between rounded-token mt-1">
     <input
-      class="input border-none w-full rounded-tl-token rounded-bl-token rounded-none"
+      class="input text-base border-none w-full rounded-tl-token rounded-bl-token rounded-none"
       type="text"
       readonly={!editing}
       {name}
