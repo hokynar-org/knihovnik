@@ -175,7 +175,7 @@
   </div>
 
   <div>
-    <h4 class="text-2xl">Visibility settings</h4>
+    <h4 class="text-2xl">Deletion</h4>
     <p class="mb-2">Warning: this cannot be undone.</p>
 
     <div class="grid justify-items-center">

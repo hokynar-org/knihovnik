@@ -31,4 +31,7 @@
       </li>
     {/each}
   </ol>
+  {#if borrow_requests.length == 0}
+    <p class="text-lg mt-2">This item has no history.</p>
+  {/if}
 </div>
