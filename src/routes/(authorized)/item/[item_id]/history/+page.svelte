@@ -5,7 +5,7 @@
   $: borrow_requests = data.borrow_requests;
 </script>
 
-<div class="">
+<div class="mt-1">
   <ol>
     {#each [...borrow_requests].reverse() as borrow_request (borrow_request.borrow_request.id)}
       <li>
@@ -31,4 +31,7 @@
       </li>
     {/each}
   </ol>
+  {#if borrow_requests.length == 0}
+    <p class="text-lg mt-2">This item has no history.</p>
+  {/if}
 </div>

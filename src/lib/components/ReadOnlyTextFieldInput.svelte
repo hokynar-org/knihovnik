@@ -12,13 +12,16 @@
   function init(el: HTMLTextAreaElement) {
     self = el;
   }
+
+  export let rows = 8;
 </script>
 
 <label>
-  <span>{label}</span>
-  <div class="w-full flex justify-between rounded-token">
+  <span class="text-xl">{label}</span>
+  <div class="w-full flex justify-between rounded-token mt-1">
     <textarea
-      class="input resize-none border-none w-full rounded-tl-token rounded-bl-token rounded-none"
+      class="input text-base resize-none border-none w-full rounded-tl-token rounded-bl-token rounded-none"
+      {rows}
       {name}
       readonly={!editing}
       bind:value

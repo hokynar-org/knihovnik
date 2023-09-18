@@ -12,9 +12,7 @@
 </script>
 
 <div class="mt-6">
-  <h2 class="text-2xl">Offer an item</h2>
-
-  <p class="text-sm min-w-xs max-w-xs">
+  <p class="text-base min-w-xs max-w-xs">
     Add an item others can borrow. You will be able to choose which community
     can borrow it.
   </p>
@@ -40,9 +38,17 @@
       <FileUploader bind:filenames={files} />
     </div>
     <div class="flex mt-4 mb-2">
-      <label for="visibility" class="text-xl mr-4"
-        >Visible to my communities</label
-      >
+      <div>
+        <label for="visibility" class="text-xl mr-4"
+          >Visible to my communities</label
+        >
+        <p class="text-base max-w-[80%]">
+          People in <strong>all</strong> my communities will see this item and will
+          be able to request to borrow it. You can change this later (and for individual
+          communities).
+        </p>
+      </div>
+
       <input
         class="checkbox self-center"
         type="checkbox"
@@ -51,7 +57,7 @@
       />
     </div>
 
-    <div class="flex content-center justify-center my-3">
+    <div class="flex content-center justify-center my-6">
       <button class="btn variant-filled-primary">Submit</button>
     </div>
   </form>

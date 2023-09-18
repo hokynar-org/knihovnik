@@ -15,8 +15,6 @@
 </script>
 
 <div class="relative w-full mt-6">
-  <h2 class="text-4xl mx-4">Items you offered</h2>
-
   {#each $user_items as offer (offer.item.id)}
     <Item item={offer.item} owner={user} holder={offer.holder}>
       {#if offer.holder && user.id == offer.holder.id}
