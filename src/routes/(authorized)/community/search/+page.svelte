@@ -24,10 +24,7 @@
 <div>
   <div>
     <h2 class="text-2xl mt-6">Search for a public community</h2>
-    <p class="text-base mt-1 min-w-xs max-w-xs">
-      Only public communities can be found via this search. Enter at least 3
-      characters.
-    </p>
+    <p class="text-base mt-1 min-w-xs max-w-xs">Enter at least 3 characters.</p>
     <div class="input-group input-group-divider flex mt-4 min-w-xs max-w-xs">
       <input
         type="search"
