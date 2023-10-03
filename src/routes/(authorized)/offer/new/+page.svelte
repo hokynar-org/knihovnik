@@ -9,6 +9,11 @@
   $: filesSerialized = files.join(',');
   $: $form.files = filesSerialized;
   $form.visibility = false;
+
+  let hasMainPic = true;
+  function changeMain(): void {
+    hasMainPic = !hasMainPic;
+  }
 </script>
 
 <div class="mt-6">
@@ -37,8 +42,34 @@
 
     <label for="description" class="text-xl mt-4">Main picture*</label>
     <p class="mt-1">This will be used for thumbnails.</p>
+
+    <div class="">
+      <ol class="breadcrumb">
+        <li class:text-lg={hasMainPic} class:text-base={!hasMainPic}>
+          {#if hasMainPic}
+            Upload
+          {:else}
+            <button on:click={changeMain}>Upload</button>
+          {/if}
+        </li>
+        <li class="crumb-separator text-lg" aria-hidden>/</li>
+
+        <li class:text-lg={!hasMainPic} class:text-base={hasMainPic}>
+          {#if !hasMainPic}
+            Presets
+          {:else}
+            <button on:click={changeMain}>Presets</button>
+          {/if}
+        </li>
+      </ol>
+    </div>
+
     <div class="mb-4 mt-2">
-      <FileUploader bind:filenames={files} />
+      {#if hasMainPic}
+        <FileUploader bind:filenames={files} />
+      {:else}
+        <p>TODO: Choose a picture</p>
+      {/if}
     </div>
 
     <label for="description" class="text-xl mt-4">Other pictures</label>
