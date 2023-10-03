@@ -9,6 +9,7 @@
     faCube,
     faHandHolding,
     faUserGroup,
+    faHouse,
   } from '@fortawesome/free-solid-svg-icons';
 
   export let isAdmin: boolean;
@@ -16,6 +17,7 @@
 </script>
 
 <AppRail>
+  <MenuItem href="/" icon={faHouse} {current}>Home</MenuItem>
   <MenuItem href="/borrow" icon={faHandshake} {current}>Borrow</MenuItem>
   <MenuItem href="/offer" icon={faRightLeft} {current}>Offer</MenuItem>
   <MenuItem href="/borrow_request" icon={faEnvelopeOpen} {current}
