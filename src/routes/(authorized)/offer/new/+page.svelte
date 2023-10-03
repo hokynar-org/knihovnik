@@ -2,6 +2,7 @@
   import { superForm } from 'sveltekit-superforms/client';
   import FileUploader from '$lib/components/FileUploader.svelte';
   import type { PageData } from './$types';
+  import IconSelector from '$lib/components/IconSelector/IconSelector.svelte';
   export let data: PageData;
 
   const { form, enhance } = superForm(data.item_form);
@@ -43,13 +44,13 @@
     <label for="description" class="text-xl mt-4">Main picture*</label>
     <p class="mt-1">This will be used for thumbnails.</p>
 
-    <div class="">
-      <ol class="breadcrumb">
+    <div class="flex content-center justify-center mt-2">
+      <ol class="breadcrumb w-auto">
         <li class:text-lg={hasMainPic} class:text-base={!hasMainPic}>
           {#if hasMainPic}
             Upload
           {:else}
-            <button on:click={changeMain}>Upload</button>
+            <button class="font-bold" on:click={changeMain}>Upload</button>
           {/if}
         </li>
         <li class="crumb-separator text-lg" aria-hidden>/</li>
@@ -58,17 +59,17 @@
           {#if !hasMainPic}
             Presets
           {:else}
-            <button on:click={changeMain}>Presets</button>
+            <button class="font-bold" on:click={changeMain}>Presets</button>
           {/if}
         </li>
       </ol>
     </div>
 
-    <div class="mb-4 mt-2">
+    <div class="mb-4 mt-3">
       {#if hasMainPic}
         <FileUploader bind:filenames={files} />
       {:else}
-        <p>TODO: Choose a picture</p>
+        <IconSelector />
       {/if}
     </div>
 
