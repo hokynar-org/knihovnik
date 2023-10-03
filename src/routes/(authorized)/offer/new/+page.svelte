@@ -17,8 +17,10 @@
     can borrow it.
   </p>
 
+  <p>* = mandatory</p>
+
   <form method="POST" action="?/new_item" class="max-w-xs min-w-xs" use:enhance>
-    <label for="name" class="text-xl mt-4 mb-2">Name</label>
+    <label for="name" class="text-xl mt-4 mb-2">Name*</label>
     <input type="text" name="name" class="input" bind:value={$form.name} />
 
     <label for="description" class="text-xl mt-4 mb-2">Description</label>
@@ -33,10 +35,18 @@
 
     <input name="files" bind:value={filesSerialized} class="hidden" />
 
-    <label for="description" class="text-xl mt-4 mb-2">Picture</label>
-    <div class="mb-4">
+    <label for="description" class="text-xl mt-4">Main picture*</label>
+    <p class="mt-1">This will be used for thumbnails.</p>
+    <div class="mb-4 mt-2">
       <FileUploader bind:filenames={files} />
     </div>
+
+    <label for="description" class="text-xl mt-4">Other pictures</label>
+    <p class="mt-1">Show important details of the item.</p>
+    <div class="mb-4 mt-2">
+      <FileUploader bind:filenames={files} />
+    </div>
+
     <div class="flex mt-4 mb-2">
       <div>
         <label for="visibility" class="text-xl mr-4"
