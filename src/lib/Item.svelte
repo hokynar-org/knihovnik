@@ -8,6 +8,7 @@
   export let owner: PublicUserSafe | null;
   export let holder: PublicUserSafe | null;
   import { page } from '$app/stores';
+  import { iconList } from './components/IconSelector/iconList';
   $: user = $page.data.user as PublicUserSafe;
   const imageAltText = 'image';
 
@@ -40,13 +41,19 @@
   <div
     data-tooltip={imageAltText}
     data-placement="top"
-    class="max-h-60 mr-2 w-[25%] overflow-hidden"
+    class="mr-2 w-[25%] overflow-hidden flex justify-center items-center"
   >
-    <img
-      class="object-cover w-[100%] h-[100%]"
-      src={item.image_src}
-      alt={imageAltText}
-    />
+    {#if item.image_src !== null}
+      <img
+        class="object-cover w-[100%] h-[100%] max-h-60"
+        src={item.image_src}
+        alt={imageAltText}
+      />
+    {:else}
+      <div>
+        <Fa size="4x" icon={iconList[10]} />
+      </div>
+    {/if}
   </div>
   <div class="flex w-full flex-nowrap justify-between py-2">
     <div class="m-4 w-[50%]">
