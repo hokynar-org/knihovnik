@@ -1,6 +1,6 @@
 <script lang="ts">
   import { user_items } from '$lib/store';
-  import type { PublicItemSafe, PublicUserSafe } from './types';
+  import type { PublicItemSafe, PublicUserSafe } from '../../types';
   export let offer: { item: PublicItemSafe; holder: PublicUserSafe | null };
 
   let disabled = false;

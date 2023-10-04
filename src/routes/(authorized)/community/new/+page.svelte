@@ -1,10 +1,10 @@
 <script lang="ts">
   import { superForm } from 'sveltekit-superforms/client';
-  import Item from '$lib/Item.svelte';
+  import Item from '$lib/components/ItemDisplay/Item.svelte';
   import { user_items } from '$lib/store';
   import { FileDropzone } from '@skeletonlabs/skeleton';
   import { onMount } from 'svelte';
-  import DeleteItem from '$lib/DeleteItem.svelte';
+  import DeleteItem from '$lib/components/ItemDisplay/DeleteItem.svelte';
   import FileUploader from '$lib/components/FileUploader.svelte';
   import type { PageData } from './$types';
   import OfferItem from '$lib/OfferItem.svelte';

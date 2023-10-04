@@ -1,16 +1,16 @@
 <script lang="ts">
   import Fa from 'svelte-fa';
   import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
-  import type { Item, PublicItemSafe, PublicUserSafe } from './types';
+  import type { Item, PublicItemSafe, PublicUserSafe } from '../../types';
   import { onMount } from 'svelte';
-  import Spinner from './components/Spinner.svelte';
+  import Spinner from '../Spinner.svelte';
   export let item: PublicItemSafe;
   export let owner: PublicUserSafe | null;
   export let holder: PublicUserSafe | null;
   import { page } from '$app/stores';
-  import { iconList } from './components/IconSelector/iconList';
+  import { iconList } from '../IconSelector/iconList';
   $: user = $page.data.user as PublicUserSafe;
-  const imageAltText = 'image';
+  const imageAltText = 'todo: change this';
 
   let clamped = true;
   function toggleClamp() {

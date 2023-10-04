@@ -1,5 +1,9 @@
 <script lang="ts">
-  import type { BorrowRequest, PublicItemSafe, PublicUserSafe } from './types';
+  import type {
+    BorrowRequest,
+    PublicItemSafe,
+    PublicUserSafe,
+  } from '../../types';
   export let borrow_request: BorrowRequest | null;
   export let item: PublicItemSafe;
 

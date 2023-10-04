@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Item from '$lib/Item.svelte';
+  import Item from '$lib/components/ItemDisplay/Item.svelte';
   import Chat from '$lib/components/Chat/Chat.svelte';
   import Fa from 'svelte-fa';
   import { faLockOpen } from '@fortawesome/free-solid-svg-icons';

@@ -1,6 +1,6 @@
 <script lang="ts">
-  import BorrowItem from '$lib/BorrowItem.svelte';
-  import Item from '$lib/Item.svelte';
+  import BorrowItem from '$lib/components/ItemDisplay/BorrowItem.svelte';
+  import Item from '$lib/components/ItemDisplay/Item.svelte';
   export let data;
 </script>
 

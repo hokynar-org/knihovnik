@@ -1,6 +1,6 @@
 <script lang="ts">
-  import Item from '$lib/Item.svelte';
-  import BorrowItem from '$lib/BorrowItem.svelte';
+  import Item from '$lib/components/ItemDisplay/Item.svelte';
+  import BorrowItem from '$lib/components/ItemDisplay/BorrowItem.svelte';
   import type { PageData } from './$types';
   export let data: PageData;
   import { page } from '$app/stores';

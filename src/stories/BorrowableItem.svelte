@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Item from '$lib/Item.svelte';
+  import Item from '$lib/components/ItemDisplay/Item.svelte';
 </script>
 
 <Item

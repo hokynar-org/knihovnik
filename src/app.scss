@@ -28,3 +28,9 @@ and n is the number of clamped lines*/
   -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
 }
+
+.line-clamp-title {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}

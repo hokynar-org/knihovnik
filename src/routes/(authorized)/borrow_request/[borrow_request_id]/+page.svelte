@@ -2,7 +2,7 @@
   import type { PageData } from './$types';
   import { request_actions, pusher } from '$lib/store';
   export let data: PageData;
-  import Item from '$lib/Item.svelte';
+  import Item from '$lib/components/ItemDisplay/Item.svelte';
   import Chat from '$lib/components/Chat/Chat.svelte';
   import type {
     BorrowRequest,
