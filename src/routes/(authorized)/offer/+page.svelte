@@ -14,9 +14,13 @@
 
   $: $user_items = data.user_items;
 
-  let containerWidth = 1;
   let fontSize = 16; //1 rem = this much px
 
+  let width = 1352;
+
+  let containerWidth = 1352;
+
+  $: console.log(containerWidth);
   //Choose a maximum amount of rows, but have the width be fit to the rows.
   //A horrible solution that doesn't update often
   //desired width:
@@ -30,18 +34,19 @@
   //$: console.log('width: ' + String(width));
   //$: console.log('font-size: ' + String(fontSize));
   onMount(() => {
-    const reference = document.getElementById('measuring');
+    let reference = document.getElementById('measuring');
     if (reference) {
-      containerWidth = reference.clientWidth;
-      //console.log(containerWidth);
       const computedStyle = window.getComputedStyle(reference);
       fontSize = parseFloat(computedStyle.getPropertyValue('font-size'));
     }
   });
 </script>
 
-<div id="measuring" class="w-[100%]"></div>
-<div class="flex flex-wrap flex-shrink w-[{width}px] mt-6 gap-6">
+<div id="measuring" bind:clientWidth={containerWidth} class="w-[100%]"></div>
+<div
+  class="flex flex-wrap flex-shrink custom-width mt-6 gap-6"
+  style="--my-width:{width}"
+>
   {#each $user_items as offer (offer.item.id)}
     <ItemCard item={offer.item} owner={user} holder={offer.holder}>
       {#if offer.holder && user.id == offer.holder.id}
@@ -57,3 +62,9 @@
     </ItemCard>
   {/each}
 </div>
+
+<style>
+  .custom-width {
+    width: calc(var(--my-width) * 1px);
+  }
+</style>
