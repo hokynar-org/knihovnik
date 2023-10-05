@@ -7,8 +7,8 @@
   export let item: PublicItemSafe;
   export let owner: PublicUserSafe | null;
   export let holder: PublicUserSafe | null;
-  import { page } from '$app/stores';
   import { iconList } from '../IconSelector/iconList';
+  import { page } from '$app/stores';
   $: user = $page.data.user as PublicUserSafe;
   const imageAltText = 'todo: change this';
 

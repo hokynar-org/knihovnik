@@ -49,7 +49,7 @@
     {/if}
   </div>
 
-  <div class="pt-1 px-2 1 h-auto overflow-visible">
+  <div class="pt-1 px-4 1 h-auto overflow-visible">
     <div>
       <h4 class="py-1 mt-2 whitespace-nowrap overflow-hidden text-ellipsis">
         <a href="/item/{item.id}">{item.name}</a>
@@ -69,7 +69,7 @@
       {item.description}
     </div>
   </div>
-  <div class="mt-2 px-2 pt-2">
+  <div class="mt-2 px-4 pt-2">
     <slot />
   </div>
 

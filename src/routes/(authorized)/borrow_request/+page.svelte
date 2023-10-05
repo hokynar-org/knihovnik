@@ -18,7 +18,7 @@
         </div>
       </th>
       <th>
-        <h4 class="text-lg">
+        <h4 class="text-lg max-w-lg overflow-hidden">
           <a
             class="block p-3 hover:!bg-surface-300-600-token"
             href="/borrow_request/{borrow_request.borrow_request.id}"
