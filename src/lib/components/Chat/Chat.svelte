@@ -62,7 +62,7 @@
     <ChatSendCommunity {community} {messages} />
   </div>
 {:else if isRequestMessages(messages) && isBorrowRequestNotNull(borrow_request)}
-  {#if borrow_request.status !== 'CONFIRMED' && borrow_request.status !== 'PENDING' && borrow_request.status !== 'ABORTED'}
+  {#if borrow_request.status !== 'CONFIRMED' && borrow_request.status !== 'PENDING' && borrow_request.status !== 'ABORTED' && borrow_request.status !== 'DENIED'}
     <div class="flex my-2 w-full">
       <input class="input" type="text" bind:value={$composedMessage} />
       <ChatSendRequest {borrow_request} />
