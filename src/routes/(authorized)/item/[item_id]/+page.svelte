@@ -1,7 +1,7 @@
 <script>
   import { page } from '$app/stores';
   //import { page.svelte as history } from './history/+page.svelte';
-  import Page from './history/+page.svelte';
+  import History from './history/+page.svelte';
 
   let isItem = false;
   $: isItem =
@@ -10,5 +10,5 @@
 </script>
 
 {#if isItem}
-  <Page data={$page.data} />
+  <History data={$page.data} />
 {/if}

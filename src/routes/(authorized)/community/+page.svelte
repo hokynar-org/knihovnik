@@ -28,29 +28,9 @@
     {/if}
   </div>
 
-  <div>
-    <ol class="breadcrumb">
-      <li class:text-4xl={isSearch} class:text-2xl={!isSearch}>
-        {#if isSearch}
-          Search for a public community
-        {:else}
-          <a href={'/community/search'}>Search for a public community</a>
-        {/if}
-      </li>
-      <li class="crumb-separator text-3xl" aria-hidden>/</li>
+  <Search data={$page.data} />
 
-      <li class:text-4xl={!isSearch} class:text-2xl={isSearch}>
-        {#if !isSearch}
-          Create new community
-        {:else}
-          <a href={'/community/new'}>Create new community</a>
-        {/if}
-      </li>
-    </ol>
-  </div>
-  {#if isSearch}
-    <Search data={$page.data} />
-  {:else}
-    <New data={$page.data} />
-  {/if}
+  <h2 class="mt-12 text-4xl">
+    <a href={'/community/new'}>New community</a>
+  </h2>
 </div>

@@ -30,8 +30,8 @@
   }
 </script>
 
-<div>
-  <h3 class="mt-4 mb-2 text-xl">Users in this community</h3>
+<div class="mt-6">
+  <h3 class="mb-2 text-2xl">Users in this community</h3>
   {#each community_users as community_user}
     <a href={'/user/' + community_user.user.id}
       >{community_user.user.user_name}</a

@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { CommunityRelation } from '$lib/types';
+  import { page } from '$app/stores';
 
   export let data;
   $: community = data.community;
@@ -42,6 +43,10 @@
     }
     return (await res.json()) as CommunityRelation;
   };
+
+  let isAdminTab = false;
+  $: isAdminTab = String($page.url).includes('admin');
+  $: console.log(isAdminTab);
 </script>
 
 <h4 class="mb-2">Community: {community.name}</h4>
@@ -49,22 +54,6 @@
   {community.description}
 </p>
 
-<div>
-  <ol class="breadcrumb">
-    <li class="crumb">
-      <a class="anchor" href={'/community/' + community.id}>Home</a>
-    </li>
-    {#if role && role == 'ADMIN'}
-      <li class="crumb-separator" aria-hidden>/</li>
-
-      <li class="crumb">
-        <a class="anchor" href={'/community/' + community.id + '/admin'}
-          >Admin</a
-        >
-      </li>
-    {/if}
-  </ol>
-</div>
 <div>
   {#if role}
     Your role is {role}
@@ -147,5 +136,31 @@
       Request
     </button>
   {/if}
+
+  <div class="mt-4">
+    {#if role && role == 'ADMIN'}
+      <ol class="breadcrumb">
+        <li class="text-lg">
+          {#if !isAdminTab}
+            Home
+          {:else}
+            <a class="text-base" href={'/community/' + community.id}>Home</a>
+          {/if}
+        </li>
+
+        <li class="crumb-separator" aria-hidden>/</li>
+
+        <li class="text-lg">
+          {#if isAdminTab}
+            Admin dashboard
+          {:else}
+            <a class="text-base" href={'/community/' + community.id + '/admin'}
+              >Admin dashboard</a
+            >
+          {/if}
+        </li>
+      </ol>
+    {/if}
+  </div>
 </div>
 <slot />

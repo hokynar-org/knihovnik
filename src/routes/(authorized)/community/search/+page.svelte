@@ -19,6 +19,9 @@
   };
   let disabled = false;
   let searchedOnce = false;
+
+  $: console.log(searchedOnce);
+  $: console.log(found_communities.length);
 </script>
 
 <div>
@@ -58,13 +61,15 @@
     </div>
   </div>
 
-  <div class="w-xs">
-    <h2 class="text-2xl mt-8 mb-4">Found public communities</h2>
-    {#each found_communities as community (community.id)}
-      <a href={'/community/' + community.id}>{community.name} </a><br />
-    {/each}
-    {#if found_communities.length == 0 && searchedOnce}
-      <p>No communities found</p>
-    {/if}
-  </div>
+  {#if searchedOnce}
+    <div class="w-xs">
+      <h2 class="text-2xl mt-8 mb-4">Found public communities</h2>
+      {#each found_communities as community (community.id)}
+        <a href={'/community/' + community.id}>{community.name} </a><br />
+      {/each}
+      {#if found_communities.length == 0}
+        <p>No communities found</p>
+      {/if}
+    </div>
+  {/if}
 </div>
