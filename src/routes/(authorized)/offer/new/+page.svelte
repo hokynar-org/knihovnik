@@ -7,13 +7,18 @@
 
   const { form, enhance } = superForm(data.item_form);
   let files: string[] = [];
+  let selectedIconName: string | null;
   $: filesSerialized = files.join(',');
   $: $form.files = filesSerialized;
+  $: $form.hasMainPic = hasMainPic;
+  $: $form.iconName = selectedIconName;
+  $: console.log(hasMainPic, selectedIconName, $form.iconName);
   $form.visibility = false;
 
   let hasMainPic = true;
   function changeMain(): void {
     hasMainPic = !hasMainPic;
+    if (hasMainPic) selectedIconName = null;
   }
 </script>
 
@@ -25,7 +30,13 @@
 
   <p>* = mandatory</p>
 
-  <form method="POST" action="?/new_item" class="max-w-xs min-w-xs" use:enhance>
+  <form
+    method="POST"
+    action="?/new_item"
+    class="max-w-xs min-w-xs"
+    use:enhance
+    enctype="multipart/form-data"
+  >
     <label for="name" class="text-xl mt-4 mb-2">Name*</label>
     <input type="text" name="name" class="input" bind:value={$form.name} />
 
@@ -40,6 +51,8 @@
     />
 
     <input name="files" bind:value={filesSerialized} class="hidden" />
+    <input name="hasMainPic" bind:value={hasMainPic} class="hidden" />
+    <input name="iconName" bind:value={selectedIconName} class="hidden" />
 
     <label for="description" class="text-xl mt-4">Main picture*</label>
     <p class="mt-1">This will be used for thumbnails.</p>
@@ -69,7 +82,7 @@
       {#if hasMainPic}
         <FileUploader bind:filenames={files} />
       {:else}
-        <IconSelector />
+        <IconSelector bind:selectedIconName />
       {/if}
     </div>
 
@@ -100,7 +113,7 @@
     </div>
 
     <div class="flex content-center justify-center my-6">
-      <button class="btn variant-filled-primary">Submit</button>
+      <button type="submit" class="btn variant-filled-primary">Submit</button>
     </div>
   </form>
 </div>

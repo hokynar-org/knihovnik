@@ -57,6 +57,8 @@ export const item_select={
     holder_id: items.holder_id,
     image_src: items.image_src,
     offered: items.offered,
+    hasMainPic: items.hasMainPic,
+    iconName: items.iconName,
 };
 
 export const borrow_request_select={

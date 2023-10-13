@@ -1,3 +1,4 @@
+import type { IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import { writable } from 'svelte/store';
 
-export const selectedIconId = writable<number>(-1);
+export const selectedIcon = writable<IconDefinition|undefined>(undefined);

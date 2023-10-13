@@ -40,6 +40,17 @@
           alt={imageAltText}
         />
       </a>
+    {:else if !item.hasMainPic && item.iconName !== null}
+      <a href="/item/{item.id}/" class="w-[100%] py-auto">
+        <div class="flex justify-center w-[100%]">
+          <Fa
+            size="4x"
+            icon={iconList.findLast((value) => {
+              return value.iconName == item.iconName;
+            })}
+          />
+        </div>
+      </a>
     {:else}
       <a href="/item/{item.id}/" class="w-[100%] py-auto">
         <div class="flex justify-center w-[100%]">

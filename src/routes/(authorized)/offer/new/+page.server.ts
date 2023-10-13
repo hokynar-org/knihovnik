@@ -14,6 +14,8 @@ const item_form_schema = z.object({
   description: z.string().min(0),
   visibility: z.boolean(),
   files: z.string(),
+  hasMainPic: z.boolean(),
+  iconName:z.string().nullable()
 });
 
 export const load = (async ({ locals }) => {
@@ -36,6 +38,8 @@ export const actions: Actions = {
     }
     const user = locals.user;
     const form = await superValidate(request, item_form_schema);
+    // console.log(form.errors,form.data.hasMainPic,form.data.iconName);
+    // return fail(400, { form });
     if (!form.valid) {
       return fail(400, { form });
     }
@@ -43,6 +47,8 @@ export const actions: Actions = {
 
     try {
       const item = (await db.insert(items).values({
+        hasMainPic: form.data.hasMainPic,
+        iconName: form.data.iconName,
         name: form.data.name as string,
         description: form.data.description as string,
         owner_id: locals.user.id as number,

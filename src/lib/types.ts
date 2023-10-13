@@ -20,7 +20,7 @@ export interface UserRegister {
 
 export type PublicItemSafe = Pick<
   Item,
-  'name' | 'description' | 'id' | 'owner_id' | 'image_src' | 'offered'
+  'name' | 'description' | 'id' | 'owner_id' | 'image_src' | 'offered' | 'hasMainPic' | 'iconName'
 >;
 
 export interface Session {

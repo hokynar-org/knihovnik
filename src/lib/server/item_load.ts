@@ -36,6 +36,8 @@ export const getItem = async (item_id:number)=>{
             owner_id: result[0][0].item.owner_id,
             image_src: image_src,
             offered: result[0][0].item.offered,
+            hasMainPic: value.item.hasMainPic,
+            iconName: value.item.iconName,
         },
         holder: result[0][0].holder,
         owner: result[0][0].owner,
@@ -65,6 +67,8 @@ export const getJustItem = async (item_id:number)=>{
             owner_id: result[0].item.owner_id,
             image_src: image_src,
             offered: result[0].item.offered,
+            hasMainPic: value.item.hasMainPic,
+            iconName: value.item.iconName,
         },
         holder: result[0].holder,
         owner: result[0].owner,
@@ -105,6 +109,8 @@ export const getItems = async (user_id:number)=>{
                 owner_id: value.item.owner_id,
                 image_src: image_srcs[index],
                 offered: value.item.offered,
+                hasMainPic: value.item.hasMainPic,
+                iconName: value.item.iconName,
             },
             owner: value.owner
         }
@@ -135,6 +141,8 @@ export const getCommunityItems = async (community_id:number)=>{
                 owner_id: value.item.owner_id,
                 image_src: image_srcs[index],
                 offered: value.item.offered,
+                hasMainPic: value.item.hasMainPic,
+                iconName: value.item.iconName,
             },
             owner: value.owner
         }
@@ -163,6 +171,8 @@ export const getShelfItems = async (user_id:number)=>{
                 owner_id: value.item.owner_id,
                 image_src: image_srcs[index],
                 offered: value.item.offered,
+                hasMainPic: value.item.hasMainPic,
+                iconName: value.item.iconName,
             },
             owner: value.owner
         }
@@ -191,6 +201,8 @@ export const getMyItems = async (user_id:number)=>{
                 owner_id: value.item.owner_id,
                 image_src: image_srcs[index],
                 offered: value.item.offered,
+                hasMainPic: value.item.hasMainPic,
+                iconName: value.item.iconName,
             },
             holder:value.holder
         }
