@@ -17,11 +17,35 @@
     }
     return (await res.json()) as Community[];
   };
+
+  const lengthDisabled = 2;
   let disabled = false;
   let searchedOnce = false;
+  let enterPresses = 0;
 
-  $: console.log(searchedOnce);
-  $: console.log(found_communities.length);
+  function button_clicked() {
+    disabled = true;
+    search()
+      .then((value) => {
+        disabled = false;
+        found_communities = value;
+        searchedOnce = true;
+      })
+      .catch((reason) => {
+        disabled = false;
+        searchedOnce = true;
+      });
+  }
+
+  function enterPressed(event: KeyboardEvent): void {
+    if (event.key === 'Enter' || event.code === 'Enter') {
+      if (search_name.length > lengthDisabled) {
+        enterPresses = enterPresses + 1;
+      }
+    }
+  }
+
+  $: enterPresses > 0 && button_clicked();
 </script>
 
 <div>
@@ -33,23 +57,12 @@
         type="search"
         class="input w-full"
         placeholder="Search..."
+        on:keydown={enterPressed}
         bind:value={search_name}
       />
       <button
-        on:click={() => {
-          disabled = true;
-          search()
-            .then((value) => {
-              disabled = false;
-              found_communities = value;
-              searchedOnce = true;
-            })
-            .catch((reason) => {
-              disabled = false;
-              searchedOnce = true;
-            });
-        }}
-        disabled={search_name.length < 2 || disabled}
+        on:click={button_clicked}
+        disabled={search_name.length < lengthDisabled || disabled}
         class="variant-filled-primary w-fit"
       >
         {#if !disabled}
