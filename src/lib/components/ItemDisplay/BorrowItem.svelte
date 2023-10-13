@@ -75,7 +75,7 @@
   </div>
   <div>
     {#if borrow_request}
-      {borrow_request.status}
+      Status: {borrow_request.status}
     {/if}
   </div>
 </div>

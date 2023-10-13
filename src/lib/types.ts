@@ -20,7 +20,14 @@ export interface UserRegister {
 
 export type PublicItemSafe = Pick<
   Item,
-  'name' | 'description' | 'id' | 'owner_id' | 'image_src' | 'offered' | 'hasMainPic' | 'iconName'
+  | 'name'
+  | 'description'
+  | 'id'
+  | 'owner_id'
+  | 'image_src'
+  | 'offered'
+  | 'hasMainPic'
+  | 'iconName'
 >;
 
 export interface Session {
@@ -80,4 +87,13 @@ export interface NotificationBorrowRequest {
   user: PublicUserSafe;
   item: PublicItemSafe;
   borrow_request: BorrowRequest;
+}
+
+export interface last_request {
+  id: number;
+  status: string | null;
+  timestamp: Date | null;
+  item_id: number;
+  lender_id: number;
+  borrower_id: number;
 }

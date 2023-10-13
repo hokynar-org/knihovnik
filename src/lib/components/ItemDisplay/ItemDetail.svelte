@@ -1,0 +1,102 @@
+<script lang="ts">
+  import Fa from 'svelte-fa';
+  import { faCube, faUser } from '@fortawesome/free-solid-svg-icons';
+  import type { PublicItemSafe, PublicUserSafe } from '$lib/types';
+  import { iconList } from '../IconSelector/iconList';
+  import BorrowItem from './BorrowItem.svelte';
+  import { page } from '$app/stores';
+  import type { last_request } from '$lib/types';
+  export let last_requst: last_request | null;
+  $: user = $page.data.user as PublicUserSafe;
+
+  export let item: PublicItemSafe;
+  export let owner: PublicUserSafe | null;
+  export let holder: PublicUserSafe | null;
+
+  let imageAltText = 'TODO';
+
+  let clamped = true;
+  function toggleClamp() {
+    clamped = !clamped;
+  }
+</script>
+
+<div class="w-[80%] mx-6">
+  <div class="flex gap-4 justify-center">
+    <div
+      data-tooltip={imageAltText}
+      data-placement="top"
+      class="mr-2 w-[30%] overflow-hidden flex justify-center items-center"
+    >
+      {#if item.image_src !== null}
+        <img
+          class="object-cover w-[100%] h-[100%] max-h-60"
+          src={item.image_src}
+          alt={imageAltText}
+        />
+      {:else}
+        <div>
+          <Fa size="4x" icon={iconList[10]} />
+        </div>
+      {/if}
+    </div>
+
+    <div class="max-h grid grid-flow-row items-center">
+      <div>
+        <h2 class="text-3xl max-w-xs">
+          <a href="/item/{item.id}">{item.name}</a>
+        </h2>
+
+        <div class="mt-2 flex items-baseline">
+          <p><Fa icon={faUser} /></p>
+          <p class="pl-2">
+            {#if owner}
+              {#if owner.id == user.id}
+                You own this item
+              {:else}
+                This item is owned by <a href={'/user/' + owner.id}
+                  >{owner.user_name}</a
+                >
+              {/if}
+            {/if}
+          </p>
+        </div>
+        {#if holder}
+          <div class="flex items-baseline">
+            <p><Fa icon={faCube} /></p>
+            <p class="pl-2">
+              {#if holder.id == user.id}
+                You hold this item
+              {:else}
+                <a href={'/user/' + holder.id}>{holder.user_name}</a> holds this
+                item
+              {/if}
+            </p>
+          </div>
+        {/if}
+      </div>
+      <div>
+        {#if holder}
+          {#if user.id != holder.id}
+            <BorrowItem borrow_request={last_requst} {item} />
+          {/if}
+        {:else if owner && user.id != owner.id}
+          <BorrowItem borrow_request={last_requst} {item} />
+        {/if}
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-6 flex justify-center">
+    <div
+      class="overflow-hidden max-w-xl"
+      class:line-clamp={clamped}
+      on:click={toggleClamp}
+      on:keypress={toggleClamp}
+      role="button"
+      tabindex="0"
+    >
+      {item.description}
+    </div>
+  </div>
+</div>
