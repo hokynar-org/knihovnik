@@ -8,7 +8,7 @@
   export let cardGap = 1.5;
   export let cls = '';
 
-  $: console.log(containerWidth);
+  //$: console.log(containerWidth);
   //Choose a maximum amount of rows, but have the width be fit to the rows.
   //A horrible solution that doesn't update often
   //desired width:

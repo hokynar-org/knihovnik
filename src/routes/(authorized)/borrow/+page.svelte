@@ -6,18 +6,25 @@
   import type { PublicItemSafe, PublicUserSafe } from '$lib/types';
   import ItemGrid from '$lib/components/ItemDisplay/ItemGrid.svelte';
   import ItemCard from '$lib/components/ItemDisplay/ItemCard.svelte';
+  import ItemSearch from '$lib/components/ItemDisplay/ItemSearch.svelte';
   import { page } from '$app/stores';
   $: user = $page.data.user as PublicUserSafe;
 
   export let data;
+  let offersFiltered = data.offers;
+  let searchTerm: string;
+
+  //$: console.log(searchTerm);
 </script>
 
 <div>
   <h2 class="text-4xl mx-4">Items on offer</h2>
 </div>
 
+<ItemSearch cls="mt-6 " bind:searchTerm bind:offersFiltered />
+
 <ItemGrid cls="mt-6">
-  {#each data.offers as offer (offer.item.id)}
+  {#each offersFiltered as offer (offer.item.id)}
     <ItemCard item={offer.item} owner={offer.owner} holder={null}>
       <!-- {#if offer.user != data.user}
       <BorrowItem borrow_request={offer.borrow_request} item={offer.item} />
