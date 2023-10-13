@@ -1,13 +1,14 @@
 <script lang="ts">
   import type { CommunityRelation, PublicUserSafe } from '$lib/types';
-
   export let data;
   $: community = data.community;
   $: community_users = data.community_users;
 
   let found_users: PublicUserSafe[] = [];
   let search_name = '';
+  const lengthDisabled = 1;
   let disabled = false;
+  let searchedOnce = false;
   const search = async (user_name: string) => {
     const res = await fetch('/api/find_user/' + user_name, {
       method: 'POST',
@@ -77,6 +78,30 @@
     }
     return (await res.json()) as CommunityRelation;
   };
+
+  //Find and invite users: enter to press
+  function button_clicked_faiu() {
+    disabled = true;
+    search(search_name)
+      .then((value) => {
+        disabled = false;
+        found_users = value;
+        searchedOnce = true;
+      })
+      .catch((reason) => {
+        disabled = false;
+        searchedOnce = true;
+        found_users = [];
+      });
+  }
+
+  function enterPressed_faiu(event: KeyboardEvent): void {
+    if (event.key === 'Enter' || event.code === 'Enter') {
+      if (search_name.length > lengthDisabled) {
+        button_clicked_faiu();
+      }
+    }
+  }
 </script>
 
 <div class="mt-6">
@@ -178,52 +203,56 @@
     <br />
   {/each}
 </div>
-<h3 class="mt-4 mb-2 text-xl">Find and invite users</h3>
+
+<h3 class="mt-6 mb-2 text-xl">Find and invite users</h3>
 <div>
-  <input class="input" type="text" bind:value={search_name} />
+  <input
+    class="input"
+    type="text"
+    bind:value={search_name}
+    on:keydown={enterPressed_faiu}
+  />
   <div class="flex content-center justify-center my-3">
     <button
-      {disabled}
+      disabled={search_name.length < lengthDisabled || disabled}
       class="btn variant-filled-primary py-1"
-      on:click={() => {
-        disabled = true;
-        search(search_name)
-          .then((value) => {
-            disabled = false;
-            found_users = value;
-          })
-          .catch((reason) => {
-            disabled = false;
-            found_users = [];
-          });
-      }}
+      on:click={button_clicked_faiu}
     >
-      Hledej
+      Search
     </button>
   </div>
+  {#if searchedOnce}
+    <h3 class="text-lg">Found users</h3>
+  {/if}
   <div>
     {#each found_users as user (user.id)}
       <a href={'/user/' + user.id}>{user.user_name}</a>
-      <button
-        {disabled}
-        class="btn variant-filled-primary py-1 my-2"
-        on:click={() => {
-          disabled = true;
-          invite(user.id)
-            .then((value) => {
-              community_users = [
-                ...community_users,
-                { relation: value, user: user },
-              ];
-              disabled = false;
-            })
-            .catch((reason) => {
-              disabled = false;
-            });
-        }}
-      >
-        Invite
-      </button>
+      {#if !community_users.some((community_user) => community_user.user.id === user.id)}
+        <button
+          {disabled}
+          class="btn variant-filled-primary py-1 my-2"
+          on:click={() => {
+            disabled = true;
+            invite(user.id)
+              .then((value) => {
+                community_users = [
+                  ...community_users,
+                  { relation: value, user: user },
+                ];
+                disabled = false;
+              })
+              .catch((reason) => {
+                disabled = false;
+              });
+          }}
+        >
+          Invite
+        </button>
+      {:else}
+        ({community_users.find(
+          (community_user) => community_user.user.id === user.id,
+        )?.relation.role})
+      {/if}
     {/each}
   </div>
 </div>

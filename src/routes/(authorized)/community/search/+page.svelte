@@ -21,7 +21,6 @@
   const lengthDisabled = 2;
   let disabled = false;
   let searchedOnce = false;
-  let enterPresses = 0;
 
   function button_clicked() {
     disabled = true;
@@ -40,12 +39,10 @@
   function enterPressed(event: KeyboardEvent): void {
     if (event.key === 'Enter' || event.code === 'Enter') {
       if (search_name.length > lengthDisabled) {
-        enterPresses = enterPresses + 1;
+        button_clicked();
       }
     }
   }
-
-  $: enterPresses > 0 && button_clicked();
 </script>
 
 <div>
