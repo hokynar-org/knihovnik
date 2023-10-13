@@ -28,7 +28,7 @@
       {:else}
         <div class="flex items-baseline text-lg">
           <p><Fa icon={faClock} /></p>
-          <p class="pl-2 py-[.625rem]">You have borrowed this item</p>
+          <p class="pl-2 py-[.625rem]">You have lent this item</p>
         </div>
       {/if}
     </ItemCard>
