@@ -84,7 +84,7 @@
     <slot />
   </div>
 
-  {#if $$slots.name}
+  {#if $$slots}
     <div class="mt-2"></div>
   {/if}
 </div>

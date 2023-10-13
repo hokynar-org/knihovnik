@@ -52,15 +52,17 @@
         <OwnedBy {owner} />
         <HeldBy {holder} />
       </div>
-      <div>
-        {#if holder}
-          {#if user.id != holder.id}
+      {#if holder}
+        {#if user.id != holder.id}
+          <div class="mt-2">
             <BorrowItem borrow_request={last_requst} {item} />
-          {/if}
-        {:else if owner && user.id != owner.id}
-          <BorrowItem borrow_request={last_requst} {item} />
+          </div>
         {/if}
-      </div>
+      {:else if owner && user.id != owner.id}
+        <div class="mt-2">
+          <BorrowItem borrow_request={last_requst} {item} />
+        </div>
+      {/if}
     </div>
   </div>
 
@@ -73,7 +75,7 @@
       role="button"
       tabindex="0"
     >
-      {item.description}
+      {@html item.description.replace(/\n/g, '<br>')}
     </div>
   </div>
 </div>

@@ -86,6 +86,7 @@
       </div>
     </form>
   </div>
+
   <div class="mb-6">
     <h4 class="text-2xl">Visibility settings</h4>
     <p class="text-sm">Which communities can see and borrow this item?</p>
