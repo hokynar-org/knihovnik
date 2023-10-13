@@ -23,12 +23,12 @@
   }
 </script>
 
-<div class="w-[80%] mx-6">
+<div class="mx-6">
   <div class="flex gap-4 justify-center">
     <div
       data-tooltip={imageAltText}
       data-placement="top"
-      class="mr-2 w-[30%] overflow-hidden flex justify-center items-center"
+      class="mr-2 w-[25%] overflow-hidden flex justify-center items-center"
     >
       {#if item.image_src !== null}
         <img

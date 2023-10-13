@@ -17,40 +17,35 @@
 <label>
   <span class="text-xl">{label}</span>
   <div class="w-full flex justify-between rounded-token mt-1">
-    <input
-      class="input text-base border-none w-full rounded-tl-token rounded-bl-token rounded-none"
-      type="text"
-      readonly={!editing}
-      {name}
-      bind:value
-      use:init
-    />
     {#if editing}
-      <button
-        type="button"
-        class="btn w-min rounded-tr-token rounded-none variant-filled-surface rounded-br-token"
-        disabled={original != value}
-        on:click={() => {
-          editing = !editing;
-          self.focus({});
-        }}
-      >
-        <Fa class="self-center" icon={faPenToSquare} />
-      </button>
+      <input
+        class="input text-base border-none w-full rounded-tl-token rounded-bl-token rounded-none"
+        type="text"
+        readonly={!editing}
+        {name}
+        bind:value
+        use:init
+      />
     {:else}
-      <button
-        type="button"
-        class="btn w-min rounded-tr-token rounded-none variant-filled-primary rounded-br-token"
-        disabled={original != value}
-        on:click={() => {
-          editing = !editing;
-          self.focus();
-          self.setSelectionRange(value.length, value.length);
-        }}
-      >
-        <Fa class="self-center" icon={faPenToSquare} />
-      </button>
+      <p class="max-w-xs">{value}</p>
     {/if}
+    <button
+      type="button"
+      class="btn w-min rounded-tr-token rounded-br-token rounded-none variant-filled-primary"
+      class:rounded-tl-token={!editing}
+      class:rounded-bl-token={!editing}
+      class:variant-filled-surface={editing}
+      disabled={original != value}
+      on:click={() => {
+        editing = !editing;
+        self.focus();
+        if (editing) {
+          self.setSelectionRange(value.length, value.length);
+        }
+      }}
+    >
+      <Fa class="self-center" icon={faPenToSquare} />
+    </button>
   </div>
   <p class="text-error-300-600-token">{error ?? ''}</p>
 </label>
