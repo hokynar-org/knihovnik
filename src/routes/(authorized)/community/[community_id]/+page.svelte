@@ -1,5 +1,6 @@
 <script lang="ts">
-  import Item from '$lib/components/ItemDisplay/Item.svelte';
+  import ItemCard from '$lib/components/ItemDisplay/ItemCard.svelte';
+  import ItemGrid from '$lib/components/ItemDisplay/ItemGrid.svelte';
   import Chat from '$lib/components/Chat/Chat.svelte';
   import Fa from 'svelte-fa';
   import { faLockOpen } from '@fortawesome/free-solid-svg-icons';
@@ -55,14 +56,12 @@
   <Chat messages={community_messages} {user} {community} />
 </div>
 
-<div>
-  <h3 class="mt-4 mb-2 text-xl">Community Items</h3>
-  <div class="mt-6 w-full">
-    {#each community_items as offer (offer.item.id)}
-      <Item item={offer.item} owner={offer.owner} holder={null}></Item>
-    {/each}
-  </div>
-</div>
+<h3 class="mt-10 mb-2 text-2xl">Community Items</h3>
+<ItemGrid cls="mt-6 ">
+  {#each community_items as offer (offer.item.id)}
+    <ItemCard item={offer.item} owner={offer.owner} holder={null}></ItemCard>
+  {/each}
+</ItemGrid>
 
 <style>
 </style>
