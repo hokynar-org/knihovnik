@@ -4,6 +4,8 @@
   import type { PublicItemSafe, PublicUserSafe } from '$lib/types';
   import { iconList } from '../IconSelector/iconList';
   import BorrowItem from './BorrowItem.svelte';
+  import OwnedBy from './Status/OwnedBy.svelte';
+  import HeldBy from './Status/HeldBy.svelte';
   import { page } from '$app/stores';
   import type { last_request } from '$lib/types';
   export let last_requst: last_request | null;
@@ -43,37 +45,12 @@
 
     <div class="max-h grid grid-flow-row items-center">
       <div>
-        <h2 class="text-3xl max-w-xs">
+        <h2 class="mb-2 text-3xl max-w-xs">
           <a href="/item/{item.id}">{item.name}</a>
         </h2>
 
-        <div class="mt-2 flex items-baseline">
-          <p><Fa icon={faUser} /></p>
-          <p class="pl-2">
-            {#if owner}
-              {#if owner.id == user.id}
-                You own this item
-              {:else}
-                This item is owned by <a href={'/user/' + owner.id}
-                  >{owner.user_name}</a
-                >
-              {/if}
-            {/if}
-          </p>
-        </div>
-        {#if holder}
-          <div class="flex items-baseline">
-            <p><Fa icon={faCube} /></p>
-            <p class="pl-2">
-              {#if holder.id == user.id}
-                You hold this item
-              {:else}
-                <a href={'/user/' + holder.id}>{holder.user_name}</a> holds this
-                item
-              {/if}
-            </p>
-          </div>
-        {/if}
+        <OwnedBy {owner} />
+        <HeldBy {holder} />
       </div>
       <div>
         {#if holder}
