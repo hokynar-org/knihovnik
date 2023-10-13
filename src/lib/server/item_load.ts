@@ -20,7 +20,7 @@ export const getItem = async (item_id:number)=>{
         borrow_request: borrow_request_select,
         borrower: borrower_select,
         lender: lender_select,
-    }).from(borrow_requests).where(eq(borrow_requests.item_id,item_id))
+    }).from(borrow_requests).orderBy(borrow_requests.timestamp).where(eq(borrow_requests.item_id,item_id))
     .innerJoin(borrowers,    eq(borrow_requests.borrower_id  , borrowers.id))
     .innerJoin(lenders,      eq(borrow_requests.lender_id    , lenders.id));
     const result = await Promise.all([result_item,result_requests]);

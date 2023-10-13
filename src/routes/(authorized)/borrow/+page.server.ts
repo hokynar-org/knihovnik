@@ -13,7 +13,6 @@ export const load = (async ({ locals }) => {
   }
   const user = locals.user;
   const offers = await getItems(user.id);
-  console.log(offers)
   return {
     offers: offers as Offer[],
   };

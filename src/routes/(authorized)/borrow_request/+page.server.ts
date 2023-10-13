@@ -28,7 +28,7 @@ export const load = (async ({ locals }) => {
     item: item_select,
     borrow_request: borrow_request_select,
   })
-  .from(borrow_requests).where(or(eq(borrow_requests.lender_id,user_id),eq(borrow_requests.borrower_id,user_id)))
+  .from(borrow_requests).orderBy(borrow_requests.timestamp).where(or(eq(borrow_requests.lender_id,user_id),eq(borrow_requests.borrower_id,user_id)))
   .innerJoin(items,eq(borrow_requests.item_id,items.id))
   .innerJoin(borrowers,eq(borrow_requests.borrower_id,borrowers.id))
   .innerJoin(lenders,eq(borrow_requests.lender_id,lenders.id))
