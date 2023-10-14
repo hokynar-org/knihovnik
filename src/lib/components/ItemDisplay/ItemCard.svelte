@@ -29,7 +29,7 @@
 
 <div
   id="oneCard"
-  class="w-80 h-min rounded shadow-lg bg-surface-800 overflow-visible"
+  class="card w-80 h-min rounded shadow-lg variant-filled-surface-700 overflow-visible"
 >
   <div class="flex h-40 justify-center items-center py-auto">
     {#if item.hasMainPic && item.image_src !== null}
