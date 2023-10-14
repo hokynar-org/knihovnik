@@ -30,12 +30,21 @@
       data-placement="top"
       class="mr-2 w-[25%] overflow-hidden flex justify-center items-center"
     >
-      {#if item.image_src !== null}
+      {#if item.hasMainPic}
         <img
           class="object-cover w-[100%] h-[100%] max-h-60"
           src={item.image_src}
           alt={imageAltText}
         />
+      {:else if item.iconName}
+        <div>
+          <Fa
+            size="4x"
+            icon={iconList.findLast((value) => {
+              return value.iconName == item.iconName;
+            })}
+          />
+        </div>
       {:else}
         <div>
           <Fa size="4x" icon={iconList[10]} />
