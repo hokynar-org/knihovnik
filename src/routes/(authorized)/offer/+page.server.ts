@@ -5,16 +5,16 @@ import { eq } from 'drizzle-orm';
 import { z } from 'zod';
 import { superValidate } from 'sveltekit-superforms/server';
 import type { PageServerLoad } from './$types';
-import type { Item, PublicItemSafe } from '$lib/types';
+import type { UserOffer } from '$lib/types';
 import { getMyItems } from '$lib/server/item_load';
 
 export const load = (async ({ locals }) => {
-  if(!locals.user){
-    throw redirect(301,"/login")
+  if (!locals.user) {
+    throw redirect(301, '/login');
   }
-  const user = locals.user
+  const user = locals.user;
   const offers = await getMyItems(user.id);
   return {
-    user_items: offers,
+    user_items: offers as UserOffer[],
   };
 }) satisfies PageServerLoad;

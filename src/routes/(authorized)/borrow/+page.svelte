@@ -14,7 +14,6 @@
   let offersFiltered = data.offers;
   let searchTerm: string;
 
-  //$: console.log(searchTerm);
 </script>
 
 <div>

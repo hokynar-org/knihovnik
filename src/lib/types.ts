@@ -83,6 +83,11 @@ export interface Offer {
   owner: PublicUserSafe;
 }
 
+export interface UserOffer {
+  item: PublicItemSafe;
+  holder: PublicUserSafe;
+}
+
 export interface NotificationBorrowRequest {
   user: PublicUserSafe;
   item: PublicItemSafe;

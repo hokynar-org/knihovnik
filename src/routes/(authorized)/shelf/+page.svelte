@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Item from '$lib/components/ItemDisplay/Item.svelte';
+  import ItemSearch from '$lib/components/ItemDisplay/ItemSearch.svelte';
   import ItemGrid from '$lib/components/ItemDisplay/ItemGrid.svelte';
   import ItemCard from '$lib/components/ItemDisplay/ItemCard.svelte';
   import Fa from 'svelte-fa';
@@ -9,18 +9,23 @@
     faClock,
     faUser,
   } from '@fortawesome/free-solid-svg-icons';
-  import type { PublicItemSafe, PublicUserSafe } from '$lib/types';
+  import type { PublicUserSafe } from '$lib/types';
   import { page } from '$app/stores';
   $: user = $page.data.user as PublicUserSafe;
 
   export let data;
+
+  let offersFiltered = data.offers;
+  let searchTerm: string;
 </script>
 
 <h4 class="mb-2 text-4xl">Vaše Polička</h4>
-<h3 class="mb-6">Zde naleznete věci, které by se měly válet u Vás!</h3>
+<h3 class="">Zde naleznete věci, které by se měly válet u Vás!</h3>
 
-<ItemGrid>
-  {#each data.offers as offer (offer.item.id)}
+<ItemSearch cls="mt-6 " bind:searchTerm bind:offersFiltered />
+
+<ItemGrid cls="mt-6">
+  {#each offersFiltered as offer (offer.item.id)}
     <ItemCard item={offer.item} owner={offer.owner} holder={null}>
       <div class="pb-2 text-lg">
         <div class="flex items-baseline">

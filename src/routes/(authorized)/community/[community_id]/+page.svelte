@@ -1,4 +1,5 @@
 <script lang="ts">
+  import ItemSearch from '$lib/components/ItemDisplay/ItemSearch.svelte';
   import ItemCard from '$lib/components/ItemDisplay/ItemCard.svelte';
   import ItemGrid from '$lib/components/ItemDisplay/ItemGrid.svelte';
   import Chat from '$lib/components/Chat/Chat.svelte';
@@ -14,6 +15,9 @@
   $: community_users = data.community_users;
   $: community_messages = data.community_messages;
   $: community_items = data.community_items;
+
+  let offersFiltered = community_items;
+  let searchTerm: string;
 
   let fallback = false;
   if ($pusher) {
@@ -57,6 +61,7 @@
 </div>
 
 <h3 class="mt-10 mb-2 text-2xl">Community Items</h3>
+
 <ItemGrid cls="mt-6 ">
   {#each community_items as offer (offer.item.id)}
     <ItemCard item={offer.item} owner={offer.owner} holder={null}></ItemCard>

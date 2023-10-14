@@ -6,15 +6,21 @@
   import DeleteItem from '$lib/components/ItemDisplay/DeleteItem.svelte';
   import type { PageData } from './$types';
   import OfferItem from '$lib/OfferItem.svelte';
+  import ItemSearch from '$lib/components/ItemDisplay/ItemSearch.svelte';
   import ItemGrid from '$lib/components/ItemDisplay/ItemGrid.svelte';
   export let data: PageData;
   $: user = data.user;
 
   $: $user_items = data.user_items;
+
+  let offersFiltered = $user_items;
+  let searchTerm: string;
 </script>
 
+<ItemSearch cls="mt-6 " bind:searchTerm bind:offersFiltered />
+
 <ItemGrid cls="mt-6">
-  {#each $user_items as offer (offer.item.id)}
+  {#each offersFiltered as offer (offer.item.id)}
     <ItemCard item={offer.item} owner={user} holder={offer.holder}>
       {#if offer.holder && user.id == offer.holder.id}
         <div class="flex flex-wrap items-baseline text-lg">
