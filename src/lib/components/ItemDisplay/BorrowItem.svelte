@@ -6,9 +6,17 @@
   } from '$lib/types';
   export let borrow_request: BorrowRequest | null;
   export let item: PublicItemSafe;
+  export let isReturn: boolean = false;
   import { page } from '$app/stores';
   $: user = $page.data.user as PublicUserSafe;
   let disabled = false;
+
+  let borrow_text: string;
+  if (isReturn) {
+    borrow_text = 'Request return';
+  } else {
+    borrow_text = 'Borrow';
+  }
 
   //Change borrow state
   async function borrow() {
@@ -57,10 +65,11 @@
     {#if !borrow_request}
       <button
         class="btn variant-filled-primary py-1 my-2 w-24"
+        class:w-36={isReturn}
         on:click={borrow_button_click}
         {disabled}
       >
-        Borrow
+        {borrow_text}
       </button>
     {:else if borrow_request.status == 'PENDING'}
       <button
@@ -82,16 +91,11 @@
   </div>
   <div>
     {#if borrow_request}
-      <p>Status: {borrow_request.status}</p>
-      {#if borrow_request.borrower_id === user.id}
-        <button
-          class="btn variant-filled-primary py-1 my-2 w-34"
-          on:click={borrow_button_click}
-          {disabled}
-        >
-          Request return
-        </button>
-      {/if}
+      <p>
+        <a href={'/borrow_request/' + borrow_request.id}>
+          Status: {borrow_request.status}
+        </a>
+      </p>
     {/if}
   </div>
 </div>

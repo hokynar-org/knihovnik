@@ -65,7 +65,7 @@
       {#if holder}
         {#if user.id != holder.id}
           <div class="mt-2">
-            <BorrowItem borrow_request={last_requst} {item} />
+            <BorrowItem borrow_request={last_requst} {item} isReturn={true} />
           </div>
         {/if}
       {:else if owner && user.id != owner.id}
