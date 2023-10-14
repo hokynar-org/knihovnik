@@ -22,11 +22,17 @@ export const POST = (async ({locals, params}) => {
         throw error(404);
     }
     const item = found_items[0];
-    if (item.owner_id != locals.user.id) {
-        throw error(401);
-    }
-    if (item.holder_id != item.owner_id) {
-        throw error(400);
+    if(item.transfeType==="TRANSITIVE"){
+        if(item.owner_id != locals.user.id && item.holder_id != locals.user.id){
+            throw error(403);
+        }
+    } else {
+        if(item.owner_id != locals.user.id){
+            throw error(403);
+        }
+        if(item.holder_id != item.owner_id) {
+            throw error(400);
+        }
     }
     const new_offered= !item.offered;
     try{

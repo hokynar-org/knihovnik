@@ -45,7 +45,7 @@
         <a href={'/item/' + item.id + '/history'}>History</a>
       {/if}
     </li>
-    {#if user.id == owner.id && holder && user.id == holder.id}
+    {#if (user.id == owner.id && holder && user.id == holder.id) || (item.transfeType === 'TRANSITIVE' && holder && user.id == holder.id && user.id == owner.id)}
       <li class="crumb-separator text-{1.5}xl" aria-hidden>/</li>
 
       <li class="crumb" class:text-2xl={isEdit} class:text-xl={!isEdit}>
