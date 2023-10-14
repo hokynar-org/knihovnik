@@ -75,9 +75,17 @@
     }
   }
 
+  let callback: (() => void) | null;
+  $: messages,
+    (callback = () => {
+      if (isNearToScroll(chatWindow)) {
+        scrollToBottom(chatWindow);
+      }
+    });
   afterUpdate(() => {
-    if (isNearToScroll(chatWindow)) {
-      scrollToBottom(chatWindow);
+    if (!!callback) {
+      callback();
+      callback = null;
     }
   });
 </script>
