@@ -11,7 +11,6 @@
   } from '$lib/types';
   import { composedMessage, enterPresses } from '$lib/components/Chat/stores';
   import ChatSendRequest from './ChatSendRequest.svelte';
-  import { faUnderline } from '@fortawesome/free-solid-svg-icons';
 
   export let messages: CommunityMessage[] | RequestActionMessage[];
   export let user: PublicUserSafe; //To determine who writes "your" messages
@@ -52,6 +51,23 @@
     node.scroll({ top: node.scrollHeight, behavior: 'smooth' });
   };
 
+  function isNearToScroll(node: any): boolean | null {
+    if (node === undefined) {
+      return null;
+    }
+
+    const currentScrollDistance =
+      node.scrollHeight - node.scrollTop - node.clientHeight;
+
+    if (currentScrollDistance < 500) {
+      //The chat window height is 500px
+      //We scroll only if the distance is smaller than that.
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   function enterPressed(event: KeyboardEvent): void {
     //Registering Enter presses to send a message without pressing the button
     if (event.key === 'Enter' || event.code === 'Enter') {
@@ -59,10 +75,13 @@
     }
   }
 
-  //This is good, but not perfect
-  //first the scrolling happens and only then the new message appears.
-  //We are thus one message late.
-  $: messages, scrollToBottom(chatWindow);
+  //why Set Timeout? -> there was a race condition, this solves it
+  $: messages,
+    setTimeout(function () {
+      if (isNearToScroll(chatWindow)) {
+        scrollToBottom(chatWindow);
+      }
+    }, 0);
 </script>
 
 <div class="max-h-[500px] overflow-y-scroll pr-4 w-full" bind:this={chatWindow}>
