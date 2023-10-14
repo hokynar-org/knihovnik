@@ -69,9 +69,19 @@ export const POST = (async ({ request, params, locals, url, route }) => {
             type: 'CONFIRM',
             message: '',
             }).returning();
-        const new_item = await tx.update(items).set({
-          holder_id:borrow_request.borrower_id,offered:false
-        }).where(eq(items.id, borrow_request.item_id)).returning();
+        if(item.transfeType=="GIVE"){
+          await tx.update(items).set({
+            holder_id:borrow_request.borrower_id,
+            offered:false,
+            owner_id:borrow_request.borrower_id,
+          }).where(eq(items.id, borrow_request.item_id)).returning();
+        }
+        else{
+          await tx.update(items).set({
+            holder_id:borrow_request.borrower_id,
+            offered:false
+          }).where(eq(items.id, borrow_request.item_id)).returning();
+        }
         return [borrow_request,action]
       });
       await notifyUser({
