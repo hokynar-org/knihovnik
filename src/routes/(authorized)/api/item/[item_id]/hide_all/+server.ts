@@ -47,7 +47,7 @@ export const POST = (async ({locals, params,url}) => {
     }
     const community_id_arr = visible_communities.flatMap((value)=>{return value.community.id})
     try{
-        const deleted_visibilities = await db.delete(item_visibility).where(inArray(item_visibility.community_id,community_id_arr)).returning();
+        const deleted_visibilities = await db.delete(item_visibility).where(and(inArray(item_visibility.community_id,community_id_arr),eq(item_visibility.item_id,item.id))).returning();
         return json(deleted_visibilities);
     }
     catch{
