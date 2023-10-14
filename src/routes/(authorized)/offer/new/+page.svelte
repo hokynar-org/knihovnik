@@ -4,6 +4,11 @@
   import type { PageData } from './$types';
   import IconSelector from '$lib/components/IconSelector/IconSelector.svelte';
   import OptionPicker from '$lib/components/OptionPicker.svelte';
+  import {
+    faHandHoldingHand,
+    faHandHolding,
+    faHandsHolding,
+  } from '@fortawesome/free-solid-svg-icons';
   export let data: PageData;
 
   const { form, enhance } = superForm(data.item_form);
@@ -53,7 +58,8 @@
     />
     <label for="transferType" class="text-xl mt-4 mb-2">Transfer Type</label>
     <OptionPicker
-      options={['Borrow', 'Give', 'Transitive']}
+      options={['Borrow', 'Transitive', 'Give']}
+      emojis={[faHandHolding, faHandHoldingHand, faHandsHolding]}
       bind:selected={transferType}
     />
     <input name="transferType" bind:value={transferType} class="hidden" />
