@@ -1,7 +1,6 @@
 <script lang="ts">
   import Fa from 'svelte-fa';
   import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
-  let disabled = true;
   let editing = false;
   export let value: string;
   const original = value;
@@ -26,7 +25,7 @@
       bind:value
       bind:this={self}
     />
-    <p class="max-w-xs" class:hidden={editing}>{value}</p>
+    <p class="max-w-xs mr-3" class:hidden={editing}>{value}</p>
     <button
       type="button"
       class="btn w-min rounded-tr-token rounded-br-token rounded-none variant-filled-primary"

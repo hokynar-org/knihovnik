@@ -12,10 +12,10 @@ import type { Session } from '$lib/types.js';
 import { notifications } from '$lib/store.js';
 
 const schema = z.object({
-  user_name: z.string().min(2),
-  full_name: z.string().min(1),
+  user_name: z.string().min(2).max(25),
+  full_name: z.string().min(1).max(25),
   pronouns: z.string(),
-  bio: z.string(),
+  bio: z.string().max(500),
 });
 
 const schemaPassword = z.object({
@@ -24,7 +24,6 @@ const schemaPassword = z.object({
 });
 
 export const load = (async ({ locals }) => {
-
   const form = await superValidate(schema);
   const formPassword = await superValidate(schemaPassword);
 
