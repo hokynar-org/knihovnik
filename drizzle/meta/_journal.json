@@ -113,6 +113,13 @@
       "when": 1697209433947,
       "tag": "0015_lazy_purifiers",
       "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "5",
+      "when": 1697230583883,
+      "tag": "0016_sloppy_magneto",
+      "breakpoints": true
     }
   ]
 }

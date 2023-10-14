@@ -35,7 +35,8 @@ export const items = pgTable('items', {
     .notNull(),
   offered: boolean('offered').default(true).notNull(),
   hasMainPic: boolean('hasMainPic').default(true).notNull(),
-  iconName: text('iconName')
+  iconName: text('iconName'),
+  transfeType: text('transfeType'),
 });
 
 export const borrow_requests = pgTable('borrow_requests', {
