@@ -8,12 +8,20 @@
   import OfferItem from '$lib/OfferItem.svelte';
   import ItemSearch from '$lib/components/ItemDisplay/ItemSearch.svelte';
   import ItemGrid from '$lib/components/ItemDisplay/ItemGrid.svelte';
+  import type { UserOffer } from '$lib/types';
   export let data: PageData;
   $: user = data.user;
 
   $: $user_items = data.user_items;
 
-  let offersFiltered = $user_items;
+  let offersFiltered: UserOffer[] = [];
+  $: {
+    //Assign data once they are ready
+    if ($user_items.length > 0 && offersFiltered.length === 0) {
+      offersFiltered = $user_items;
+    }
+  }
+
   let searchTerm: string;
 </script>
 
