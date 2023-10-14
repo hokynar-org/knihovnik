@@ -32,7 +32,7 @@
   class="w-80 h-min rounded shadow-lg bg-surface-800 overflow-visible"
 >
   <div class="flex h-40 justify-center items-center py-auto">
-    {#if item.image_src !== null}
+    {#if item.hasMainPic && item.image_src !== null}
       <a href="/item/{item.id}/" class="h-[100%] w-[100%]">
         <img
           class="object-cover w-[100%] h-[100%] max-h-60 rounded"

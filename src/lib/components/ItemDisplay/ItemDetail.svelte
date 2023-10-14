@@ -30,7 +30,7 @@
       data-placement="top"
       class="mr-2 w-[25%] overflow-hidden flex justify-center items-center"
     >
-      {#if item.hasMainPic}
+      {#if item.hasMainPic && item.image_src !== null}
         <img
           class="object-cover w-[100%] h-[100%] max-h-60"
           src={item.image_src}
