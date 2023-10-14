@@ -17,8 +17,8 @@ import { z } from 'zod';
 import { superValidate } from 'sveltekit-superforms/server';
 
 const item_form_schema = z.object({
-  name: z.string().min(2).max(25),
-  description: z.string().min(0).max(500),
+  name: z.string().min(2).max(64),
+  description: z.string().min(0).max(512),
   files: z.string(),
 });
 

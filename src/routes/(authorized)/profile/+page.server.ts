@@ -12,8 +12,8 @@ import type { Session } from '$lib/types.js';
 import { notifications } from '$lib/store.js';
 
 const schema = z.object({
-  user_name: z.string().min(2).max(25),
-  full_name: z.string().min(1).max(25),
+  user_name: z.string().min(2).max(64),
+  full_name: z.string().min(1).max(64),
   pronouns: z.string(),
   bio: z.string().max(500),
 });
