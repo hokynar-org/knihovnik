@@ -30,7 +30,9 @@
         return;
       }
 
-      uploadedFiles.push({ filename, previewUrl });
+      //You can only upload 1 file -> to simplify things
+      //uploadedFiles.push({ filename, previewUrl });
+      uploadedFiles[0] = { filename, previewUrl };
       uploadedFiles = uploadedFiles;
     });
   };

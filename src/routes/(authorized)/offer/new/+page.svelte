@@ -98,12 +98,6 @@
       {/if}
     </div>
 
-    <label for="description" class="text-xl mt-4">Other pictures</label>
-    <p class="mt-1">Show important details of the item.</p>
-    <div class="mb-4 mt-2">
-      <FileUploader bind:filenames={files} />
-    </div>
-
     <div class="flex mt-4 mb-2">
       <div>
         <label for="visibility" class="text-xl mr-4"
