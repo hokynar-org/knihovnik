@@ -17,18 +17,16 @@
 <label>
   <span class="text-xl">{label}</span>
   <div class="w-full flex justify-between rounded-token mt-1">
-    {#if editing}
-      <input
-        class="input text-base border-none w-full rounded-tl-token rounded-bl-token rounded-none"
-        type="text"
-        readonly={!editing}
-        {name}
-        bind:value
-        use:init
-      />
-    {:else}
-      <p class="max-w-xs">{value}</p>
-    {/if}
+    <input
+      class="input text-base border-none w-full rounded-tl-token rounded-bl-token rounded-none"
+      class:hidden={!editing}
+      type="text"
+      readonly={!editing}
+      {name}
+      bind:value
+      bind:this={self}
+    />
+    <p class="max-w-xs" class:hidden={editing}>{value}</p>
     <button
       type="button"
       class="btn w-min rounded-tr-token rounded-br-token rounded-none variant-filled-primary"
@@ -38,9 +36,11 @@
       disabled={original != value}
       on:click={() => {
         editing = !editing;
-        self.focus();
-        if (editing) {
-          self.setSelectionRange(value.length, value.length);
+        if (self) {
+          self.focus();
+          if (editing) {
+            self.setSelectionRange(value.length, value.length);
+          }
         }
       }}
     >

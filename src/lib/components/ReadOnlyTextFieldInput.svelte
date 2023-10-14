@@ -19,18 +19,18 @@
 <label>
   <span class="text-xl">{label}</span>
   <div class="w-full flex justify-between rounded-token mt-1">
-    {#if editing}
-      <textarea
-        class="input text-base resize-none border-none w-full rounded-tl-token rounded-bl-token rounded-none"
-        {rows}
-        {name}
-        readonly={!editing}
-        bind:value
-        use:init
-      />
-    {:else}
-      <p class="max-w-sm">{@html value.replace(/\n/g, '<br>')}</p>
-    {/if}
+    <textarea
+      class="input text-base resize-none border-none w-full rounded-tl-token rounded-bl-token rounded-none"
+      {rows}
+      {name}
+      readonly={!editing}
+      bind:value
+      bind:this={self}
+      class:hidden={!editing}
+    />
+    <p class="max-w-sm" class:hidden={editing}>
+      {@html value.replace(/\n/g, '<br>')}
+    </p>
     <button
       type="button"
       class="btn w-min rounded-tr-token rounded-none variant-filled-primary rounded-br-token"
@@ -40,9 +40,11 @@
       disabled={original != value}
       on:click={() => {
         editing = !editing;
-        self.focus();
-        if (editing) {
-          self.setSelectionRange(value.length, value.length);
+        if (self) {
+          self.focus();
+          if (editing) {
+            self.setSelectionRange(value.length, value.length);
+          }
         }
       }}
     >
