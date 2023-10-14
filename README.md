@@ -4,9 +4,25 @@ Knihovna všeho - experimentální aplikace pro [knihovní ekonomiku](https://ww
 
 ## Jak devit
 
+### Instalace
+
+1. Používáme [pnpm](https://pnpm.io/installation)
 1. nejprve se musí stáhnout balíčky pomocí `pnpm install`
-2. poté se musí vytvořit `.env` soubor s potřebnými parametry (koukni do sekce [Co musí být v .env](#co-musí-být-v-env))
-3. dev server se zapíná pomocí `pnpm dev`
+1. poté se musí vytvořit `.env` soubor s potřebnými parametry (koukni do sekce [Co musí být v .env](#co-musí-být-v-env))
+1. dev server se zapíná pomocí `pnpm dev`
+
+### Know-how
+
+- Svelte & SvelteKit:
+  - [Co je to Svelte? (Rethinking reactivity)](https://www.youtube.com/watch?v=AdNJ3fydeao&pp=ygUVcmV0aGlua2luZyByZWFjdGl2aXR5)
+  - [Interaktivní tutorial](https://learn.svelte.dev/tutorial/welcome-to-svelte)
+- Tailwind
+  - [Docs](https://tailwindcss.com/docs/installation)
+- Skeleton
+  - [Video tutorial](https://www.youtube.com/watch?v=P_A0qQ7AuK8)
+  - [Docs](https://www.skeleton.dev/docs/get-started)
+
+TODO: backend (ukládání obrázků atp.)
 
 ## Co musí být v .env
 
