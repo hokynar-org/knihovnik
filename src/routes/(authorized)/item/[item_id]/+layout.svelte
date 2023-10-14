@@ -6,6 +6,7 @@
   import type { last_request } from '$lib/types';
   export let data: PageData;
   import { page } from '$app/stores';
+  import OfferItem from '$lib/OfferItem.svelte';
   $: user = data.user;
   $: item = data.item;
   $: owner = data.owner;
@@ -22,6 +23,9 @@
   <ItemDetail {item} {holder} {owner} {last_requst}></ItemDetail>
 </div>
 
+{#if (user.id == owner.id && holder && holder.id == owner.id) || (item.transfeType == 'TRANSITIVE' && holder && user.id == holder.id)}
+  <OfferItem {item} />
+{/if}
 <!--
 <div class="container mt-6 mb-6">
   <Item {item} {holder} {owner}>
@@ -45,7 +49,7 @@
         <a href={'/item/' + item.id + '/history'}>History</a>
       {/if}
     </li>
-    {#if (user.id == owner.id && holder && user.id == holder.id) || (item.transfeType === 'TRANSITIVE' && holder && user.id == holder.id && user.id != owner.id)}
+    {#if user.id == owner.id && holder && user.id == holder.id}
       <li class="crumb-separator text-{1.5}xl" aria-hidden>/</li>
 
       <li class="crumb" class:text-2xl={isEdit} class:text-xl={!isEdit}>
