@@ -38,6 +38,7 @@ export const getItem = async (item_id:number)=>{
             offered: result[0][0].item.offered,
             hasMainPic: result[0][0].item.hasMainPic,
             iconName: result[0][0].item.iconName,
+            transfeType:result[0][0].item.transfeType,
         },
         holder: result[0][0].holder,
         owner: result[0][0].owner,
@@ -69,6 +70,7 @@ export const getJustItem = async (item_id:number)=>{
             offered: result[0].item.offered,
             hasMainPic: result[0].item.hasMainPic,
             iconName: result[0].item.iconName,
+            transfeType:result[0].item.transfeType,
         },
         holder: result[0].holder,
         owner: result[0].owner,
@@ -111,6 +113,7 @@ export const getItems = async (user_id:number)=>{
                 offered: value.item.offered,
                 hasMainPic: value.item.hasMainPic,
                 iconName: value.item.iconName,
+                transfeType:value.item.transfeType,
             },
             owner: value.owner
         }
@@ -143,6 +146,7 @@ export const getCommunityItems = async (community_id:number)=>{
                 offered: value.item.offered,
                 hasMainPic: value.item.hasMainPic,
                 iconName: value.item.iconName,
+                transfeType:value.item.transfeType,
             },
             owner: value.owner
         }
@@ -173,6 +177,7 @@ export const getShelfItems = async (user_id:number)=>{
                 offered: value.item.offered,
                 hasMainPic: value.item.hasMainPic,
                 iconName: value.item.iconName,
+                transfeType:value.item.transfeType,
             },
             owner: value.owner
         }
@@ -203,6 +208,7 @@ export const getMyItems = async (user_id:number)=>{
                 offered: value.item.offered,
                 hasMainPic: value.item.hasMainPic,
                 iconName: value.item.iconName,
+                transfeType:value.item.transfeType,
             },
             holder:value.holder
         }

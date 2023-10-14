@@ -3,8 +3,8 @@
   import Fa from 'svelte-fa';
   import type { PublicItemSafe, PublicUserSafe } from '$lib/types';
   export let item: PublicItemSafe;
-  export let owner: PublicUserSafe | null;
-  export let holder: PublicUserSafe | null;
+  // export let owner: PublicUserSafe | null;
+  // export let holder: PublicUserSafe | null;
 
   import { iconList } from '../IconSelector/iconList';
   const imageAltText = 'todo: change this';

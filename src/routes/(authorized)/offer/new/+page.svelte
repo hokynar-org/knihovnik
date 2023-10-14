@@ -3,16 +3,18 @@
   import FileUploader from '$lib/components/FileUploader.svelte';
   import type { PageData } from './$types';
   import IconSelector from '$lib/components/IconSelector/IconSelector.svelte';
+  import OptionPicker from '$lib/components/OptionPicker.svelte';
   export let data: PageData;
 
   const { form, enhance } = superForm(data.item_form);
   let files: string[] = [];
   let selectedIconName: string | null;
+  let transferType: string;
   $: filesSerialized = files.join(',');
   $: $form.files = filesSerialized;
   $: $form.hasMainPic = hasMainPic;
   $: $form.iconName = selectedIconName;
-  $: console.log(hasMainPic, selectedIconName, $form.iconName);
+  // $: console.log(hasMainPic, selectedIconName, $form.iconName);
   $form.visibility = false;
 
   let hasMainPic = true;
@@ -49,11 +51,15 @@
       bind:value={$form.description}
       style="resize: none;"
     />
-
+    <label for="transferType" class="text-xl mt-4 mb-2">Transfer Type</label>
+    <OptionPicker
+      options={['Borrow', 'Give', 'Transitive']}
+      bind:selected={transferType}
+    />
+    <input name="transferType" bind:value={transferType} class="hidden" />
     <input name="files" bind:value={filesSerialized} class="hidden" />
     <input name="hasMainPic" bind:value={hasMainPic} class="hidden" />
     <input name="iconName" bind:value={selectedIconName} class="hidden" />
-
     <label for="description" class="text-xl mt-4">Main picture*</label>
     <p class="mt-1">This will be used for thumbnails.</p>
 

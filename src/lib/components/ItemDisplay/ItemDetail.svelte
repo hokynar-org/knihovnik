@@ -51,6 +51,7 @@
 
         <OwnedBy {owner} />
         <HeldBy {holder} />
+        Transfer Type: {item.transfeType}
       </div>
       {#if holder}
         {#if user.id != holder.id}

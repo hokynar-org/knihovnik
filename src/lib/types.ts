@@ -28,6 +28,7 @@ export type PublicItemSafe = Pick<
   | 'offered'
   | 'hasMainPic'
   | 'iconName'
+  | 'transfeType'
 >;
 
 export interface Session {

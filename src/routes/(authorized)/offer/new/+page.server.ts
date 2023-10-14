@@ -15,7 +15,8 @@ const item_form_schema = z.object({
   visibility: z.boolean(),
   files: z.string(),
   hasMainPic: z.boolean(),
-  iconName:z.string().nullable()
+  iconName:z.string().nullable(),
+  transferType:z.enum(["Borrow","Give","Transitive"]),
 });
 
 export const load = (async ({ locals }) => {
@@ -47,6 +48,7 @@ export const actions: Actions = {
 
     try {
       const item = (await db.insert(items).values({
+        transfeType: form.data.transferType.toUpperCase(),
         hasMainPic: form.data.hasMainPic,
         iconName: form.data.iconName,
         name: form.data.name as string,

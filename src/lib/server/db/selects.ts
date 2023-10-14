@@ -59,6 +59,7 @@ export const item_select={
     offered: items.offered,
     hasMainPic: items.hasMainPic,
     iconName: items.iconName,
+    transfeType:items.transfeType
 };
 
 export const borrow_request_select={
