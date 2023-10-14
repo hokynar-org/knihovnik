@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { goto } from '$app/navigation';
+  import { goto, beforeNavigate } from '$app/navigation';
   import PromiseButton from '$lib/components/PromiseButton.svelte';
   import ReadOnlyTextFieldInput from '$lib/components/ReadOnlyTextFieldInput.svelte';
   import ReadOnlyTextInput from '$lib/components/ReadOnlyTextInput.svelte';
@@ -60,6 +60,10 @@
       throw new Error(String(response.status));
     }
   };
+
+  beforeNavigate(({ cancel }) => {
+    //cancel();
+  });
 </script>
 
 <div class="space-y-8">

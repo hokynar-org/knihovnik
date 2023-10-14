@@ -6,9 +6,9 @@
   import BorrowItem from './BorrowItem.svelte';
   import OwnedBy from './Status/OwnedBy.svelte';
   import HeldBy from './Status/HeldBy.svelte';
-  import { page } from '$app/stores';
   import type { last_request } from '$lib/types';
   export let last_requst: last_request | null;
+  import { page } from '$app/stores';
   $: user = $page.data.user as PublicUserSafe;
 
   export let item: PublicItemSafe;
