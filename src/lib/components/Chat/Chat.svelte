@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
+  import { onMount, afterUpdate } from 'svelte';
   import ChatMessage from '$lib/components/Chat/ChatMessage.svelte';
   import ChatSendCommunity from './ChatSendCommunity.svelte';
   import type {
@@ -75,13 +75,11 @@
     }
   }
 
-  //why Set Timeout? -> there was a race condition, this solves it
-  $: messages,
-    setTimeout(function () {
-      if (isNearToScroll(chatWindow)) {
-        scrollToBottom(chatWindow);
-      }
-    }, 0);
+  afterUpdate(() => {
+    if (isNearToScroll(chatWindow)) {
+      scrollToBottom(chatWindow);
+    }
+  });
 </script>
 
 <div class="max-h-[500px] overflow-y-scroll pr-4 w-full" bind:this={chatWindow}>
