@@ -8,6 +8,7 @@
   import OfferItem from '$lib/components/ItemDisplay/Actions/OfferItem.svelte';
   import ItemSearch from '$lib/components/ItemDisplay/ItemSearch.svelte';
   import ItemGrid from '$lib/components/ItemDisplay/ItemGrid.svelte';
+  import TransferType from '$lib/components/ItemDisplay/Status/TransferType.svelte';
   import type { UserOffer } from '$lib/types';
   export let data: PageData;
   $: user = data.user;
@@ -29,7 +30,8 @@
 
 <ItemGrid cls="mt-6">
   {#each offersFiltered as offer (offer.item.id)}
-    <ItemCard item={offer.item} owner={user} holder={offer.holder}>
+    <ItemCard item={offer.item}>
+      <TransferType item={offer.item} />
       {#if offer.holder && user.id == offer.holder.id}
         <div class="flex flex-wrap items-baseline text-lg">
           <div class="mx-auto">

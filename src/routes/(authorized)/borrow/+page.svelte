@@ -7,13 +7,13 @@
   import ItemCard from '$lib/components/ItemDisplay/ItemCard.svelte';
   import ItemSearch from '$lib/components/ItemDisplay/ItemSearch.svelte';
   import OwnedBy from '$lib/components/ItemDisplay/Status/OwnedBy.svelte';
+  import TransferType from '$lib/components/ItemDisplay/Status/TransferType.svelte';
   import { page } from '$app/stores';
   $: user = $page.data.user as PublicUserSafe;
 
   export let data;
   let offersFiltered = data.offers;
   let searchTerm: string;
-
 </script>
 
 <div>
@@ -24,12 +24,13 @@
 
 <ItemGrid cls="mt-6">
   {#each offersFiltered as offer (offer.item.id)}
-    <ItemCard item={offer.item} owner={offer.owner} holder={null}>
+    <ItemCard item={offer.item}>
       <!-- {#if offer.user != data.user}
       <BorrowItem borrow_request={offer.borrow_request} item={offer.item} />
     {/if} -->
       <div class="pb-2 text-lg">
         <OwnedBy owner={offer.owner} />
+        <TransferType item={offer.item} />
 
         {#if offer.item.offered && offer.owner && offer.owner.id != user.id}
           <div class="flex items-baseline">

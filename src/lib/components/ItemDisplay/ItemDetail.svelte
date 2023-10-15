@@ -7,6 +7,7 @@
   import OfferItem from '$lib/components/ItemDisplay/Actions/OfferItem.svelte';
   import OwnedBy from './Status/OwnedBy.svelte';
   import HeldBy from './Status/HeldBy.svelte';
+  import TransferType from './Status/TransferType.svelte';
   import type { last_request } from '$lib/types';
   export let last_requst: last_request | null;
   import { page } from '$app/stores';
@@ -61,7 +62,7 @@
 
         <OwnedBy {owner} />
         <HeldBy {holder} />
-        Transfer Type: {item.transfeType}
+        <TransferType {item} />
       </div>
       {#if holder}
         {#if user.id != holder.id}

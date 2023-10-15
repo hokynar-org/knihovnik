@@ -64,7 +64,7 @@
 
 <ItemGrid cls="mt-6 ">
   {#each community_items as offer (offer.item.id)}
-    <ItemCard item={offer.item} owner={offer.owner} holder={null}></ItemCard>
+    <ItemCard item={offer.item}></ItemCard>
   {/each}
 </ItemGrid>
 

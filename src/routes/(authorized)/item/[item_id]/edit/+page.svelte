@@ -3,6 +3,12 @@
   import PromiseButton from '$lib/components/PromiseButton.svelte';
   import ReadOnlyTextFieldInput from '$lib/components/ReadOnlyTextFieldInput.svelte';
   import ReadOnlyTextInput from '$lib/components/ReadOnlyTextInput.svelte';
+  import OptionPicker from '$lib/components/OptionPicker.svelte';
+  import {
+    faHandHoldingHand,
+    faHandHolding,
+    faHandsHolding,
+  } from '@fortawesome/free-solid-svg-icons';
   import { superForm } from 'sveltekit-superforms/client';
   export let data;
   const { form, errors } = superForm(data.form);
@@ -13,6 +19,8 @@
   const old_name = data.item.name;
   const old_description = data.item.description;
   $: disabled = old_name == $form.name && old_description == $form.description;
+  let transferType: string;
+
   const change_visibility = async (community_id: number) => {
     const res = await fetch(
       '/api/item/' + item.id + '/' + community_id + '/visibility',
@@ -66,7 +74,7 @@
   });
 </script>
 
-<div class="space-y-8">
+<div class="mt-8">
   <div>
     <form method="POST" action="?/edit" class="grid grid-cols-1 gap-4">
       <ReadOnlyTextInput
@@ -91,8 +99,15 @@
     </form>
   </div>
 
-  <div class="mb-6">
-    <h4 class="text-2xl">Visibility settings</h4>
+  <div class="mt-6">
+    <h4 class="text-2xl">Transfer type</h4>
+
+    <OptionPicker
+      options={['Borrow', 'Transitive', 'Give']}
+      emojis={[faHandHolding, faHandHoldingHand, faHandsHolding]}
+      bind:selected={transferType}
+    />
+    <h4 class="text-2xl mt-6">Visibility settings</h4>
     <p class="text-sm">Which communities can see and borrow this item?</p>
     <div class="grid grid-cols-2 justify-items-center mt-4">
       <span>
@@ -179,7 +194,7 @@
     </div>
   </div>
 
-  <div>
+  <div class="mt-6">
     <h4 class="text-2xl">Deletion</h4>
     <p class="mb-2">Warning: this cannot be undone.</p>
 
