@@ -1,12 +1,9 @@
 <script lang="ts">
   import ItemDetail from '$lib/components/ItemDisplay/ItemDetail.svelte';
-  import Item from '$lib/components/ItemDisplay/Item.svelte';
-  import BorrowItem from '$lib/components/ItemDisplay/BorrowItem.svelte';
   import type { PageData } from './$types';
   import type { last_request } from '$lib/types';
   export let data: PageData;
   import { page } from '$app/stores';
-  import OfferItem from '$lib/OfferItem.svelte';
   $: user = data.user;
   $: item = data.item;
   $: owner = data.owner;
@@ -19,13 +16,10 @@
   $: isEdit = String($page.url).includes('edit');
 </script>
 
-<div class="container mt-6 mb-6">
+<div class="container mt-6">
   <ItemDetail {item} {holder} {owner} {last_requst}></ItemDetail>
 </div>
 
-{#if (user.id == owner.id && holder && holder.id == owner.id) || (item.transfeType == 'TRANSITIVE' && holder && user.id == holder.id)}
-  <OfferItem {item} />
-{/if}
 <!--
 <div class="container mt-6 mb-6">
   <Item {item} {holder} {owner}>
@@ -40,7 +34,7 @@
 </div>
 -->
 
-<div>
+<div class="mt-6">
   <ol class="breadcrumb">
     <li class:text-2xl={!isEdit} class:text-xl={isEdit}>
       {#if !isEdit}

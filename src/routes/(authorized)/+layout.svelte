@@ -10,6 +10,8 @@
     filter,
     storePopup,
   } from '@skeletonlabs/skeleton';
+  import { Modal, modalStore } from '@skeletonlabs/skeleton';
+  import type { ModalSettings, ModalComponent } from '@skeletonlabs/skeleton';
   import {
     computePosition,
     autoUpdate,
@@ -56,6 +58,7 @@
   <title>Knihovník {uread_string_brace}</title>
 </svelte:head>
 
+<Modal />
 <AppDrawer user={data.user} />
 <AppShell>
   <svelte:fragment slot="header">

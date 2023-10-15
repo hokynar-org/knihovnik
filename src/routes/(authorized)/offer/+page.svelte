@@ -3,9 +3,9 @@
   import Fa from 'svelte-fa';
   import { faClock } from '@fortawesome/free-solid-svg-icons';
   import { user_items } from '$lib/store';
-  import DeleteItem from '$lib/components/ItemDisplay/DeleteItem.svelte';
+  import DeleteItem from '$lib/components/ItemDisplay/Actions/DeleteItem.svelte';
   import type { PageData } from './$types';
-  import OfferItem from '$lib/OfferItem.svelte';
+  import OfferItem from '$lib/components/ItemDisplay/Actions/OfferItem.svelte';
   import ItemSearch from '$lib/components/ItemDisplay/ItemSearch.svelte';
   import ItemGrid from '$lib/components/ItemDisplay/ItemGrid.svelte';
   import type { UserOffer } from '$lib/types';

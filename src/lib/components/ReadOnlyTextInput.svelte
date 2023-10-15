@@ -1,4 +1,7 @@
 <script lang="ts">
+  import { beforeNavigate } from '$app/navigation';
+  import { modalStore } from '@skeletonlabs/skeleton';
+  import type { ModalSettings, ModalComponent } from '@skeletonlabs/skeleton';
   import Fa from 'svelte-fa';
   import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
   let editing = false;
@@ -11,6 +14,31 @@
   function init(el: HTMLInputElement) {
     self = el;
   }
+
+  let cancelNav = false;
+  const modal: ModalSettings = {
+    type: 'confirm',
+    // Data
+    title: 'Please Confirm',
+    body: 'Are you sure you wish to proceed?',
+    // TRUE if confirm pressed, FALSE if cancel pressed
+    response: (r: boolean) => {
+      cancelNav = !r;
+      console.log('response:', r);
+    },
+  };
+
+  beforeNavigate(({ cancel }) => {
+    if (editing) {
+      modalStore.trigger(modal);
+      if (cancelNav) {
+        cancel();
+        cancelNav = false;
+      }
+    }
+
+    console.log('we are here');
+  });
 </script>
 
 <label>

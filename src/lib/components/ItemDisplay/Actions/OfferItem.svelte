@@ -1,5 +1,9 @@
 <script lang="ts">
-  import type { BorrowRequest, PublicItemSafe, PublicUserSafe } from './types';
+  import type {
+    BorrowRequest,
+    PublicItemSafe,
+    PublicUserSafe,
+  } from '../../../types';
   export let item: PublicItemSafe;
   import { user_items } from '$lib/store';
   $: items = $user_items.flatMap((value) => {
@@ -18,7 +22,7 @@
   let disabled = false;
 </script>
 
-<div class="flex flex-col justify-between h-full">
+<div class="flex flex-col justify-between">
   <div>
     {#if !item.offered}
       <button

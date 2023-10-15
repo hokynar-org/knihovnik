@@ -1,6 +1,6 @@
 <script lang="ts">
   import { user_items } from '$lib/store';
-  import type { UserOffer } from '../../types';
+  import type { UserOffer } from '../../../types';
   export let offer: UserOffer;
 
   let disabled = false;

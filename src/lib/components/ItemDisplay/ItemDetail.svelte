@@ -3,7 +3,8 @@
   import { faCube, faUser } from '@fortawesome/free-solid-svg-icons';
   import type { PublicItemSafe, PublicUserSafe } from '$lib/types';
   import { iconList } from '../IconSelector/iconList';
-  import BorrowItem from './BorrowItem.svelte';
+  import BorrowItem from './Actions/BorrowItem.svelte';
+  import OfferItem from '$lib/components/ItemDisplay/Actions/OfferItem.svelte';
   import OwnedBy from './Status/OwnedBy.svelte';
   import HeldBy from './Status/HeldBy.svelte';
   import type { last_request } from '$lib/types';
@@ -72,6 +73,10 @@
         <div class="mt-2">
           <BorrowItem borrow_request={last_requst} {item} />
         </div>
+      {/if}
+
+      {#if (owner && user.id == owner.id && holder && holder.id == owner.id) || (item.transfeType == 'TRANSITIVE' && holder && user.id == holder.id)}
+        <OfferItem {item} />
       {/if}
     </div>
   </div>
