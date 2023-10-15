@@ -26,7 +26,7 @@
 
 <ItemGrid cls="mt-6">
   {#each offersFiltered as offer (offer.item.id)}
-    <ItemCard item={offer.item} owner={offer.owner} holder={null}>
+    <ItemCard item={offer.item}>
       <div class="pb-2 text-lg">
         <div class="flex items-baseline">
           <p><Fa icon={faUser} /></p>

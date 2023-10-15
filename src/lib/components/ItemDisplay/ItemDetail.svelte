@@ -26,11 +26,13 @@
 </script>
 
 <div class="mx-6">
-  <div class="flex gap-4 justify-center">
+  <div
+    class=" gap-4 justify-center sm:grid sm:grid-flow-row sm:grid-rows-1 lg:flex"
+  >
     <div
       data-tooltip={imageAltText}
       data-placement="top"
-      class="mr-2 w-[25%] overflow-hidden flex justify-center items-center"
+      class="mr-2 lg:w-[25%] overflow-hidden flex justify-center items-center"
     >
       {#if item.hasMainPic && item.image_src !== null}
         <img

@@ -2,7 +2,7 @@
   import type { PageData } from './$types';
   import { request_actions, pusher } from '$lib/store';
   export let data: PageData;
-  import Item from '$lib/components/ItemDisplay/Item.svelte';
+  import ItemCard from '$lib/components/ItemDisplay/ItemCard.svelte';
   import Chat from '$lib/components/Chat/Chat.svelte';
   import type {
     BorrowRequest,
@@ -319,5 +319,5 @@
 </div>
 
 <div class="mt-6">
-  <Item {item} holder={null} owner={null} />
+  <ItemCard {item} />
 </div>
