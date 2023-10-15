@@ -10,6 +10,7 @@
   import TransferType from './Status/TransferType.svelte';
   import type { last_request } from '$lib/types';
   export let last_requst: last_request | null;
+  import { modalStore, type ModalSettings } from '@skeletonlabs/skeleton';
   import { page } from '$app/stores';
   $: user = $page.data.user as PublicUserSafe;
 
@@ -23,18 +24,36 @@
   function toggleClamp() {
     clamped = !clamped;
   }
+
+  let displayImage: boolean = item.hasMainPic && item.image_src !== null;
+  const imageView: ModalSettings = {
+    type: 'alert',
+    title: 'Image preview',
+    body: '',
+    image: item.image_src!,
+  };
+  function triggerModal(): void {
+    if (displayImage) {
+      modalStore.trigger(imageView);
+    }
+  }
 </script>
 
 <div class="mx-6">
   <div
     class=" gap-4 justify-center sm:grid sm:grid-flow-row sm:grid-rows-1 lg:flex"
   >
+    <!--TODO idk how to make this div non-button if there is no image-->
     <div
       data-tooltip={imageAltText}
       data-placement="top"
+      on:click={triggerModal}
+      on:keydown={triggerModal}
+      tabindex={displayImage ? 0 : -1}
+      role="button"
       class="mr-2 lg:w-[25%] overflow-hidden flex justify-center items-center"
     >
-      {#if item.hasMainPic && item.image_src !== null}
+      {#if displayImage}
         <img
           class="object-cover w-[100%] h-[100%] max-h-60"
           src={item.image_src}
