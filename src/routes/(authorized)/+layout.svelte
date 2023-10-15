@@ -81,10 +81,10 @@
       });
 
       prom.then((r: any) => {
-        console.log('resolved response:', r);
+        //console.log('resolved response:', r);
         if (r) {
           editingAtLeastOne = false;
-          console.log('going');
+          //console.log('going');
           $editFieldsNo = 0;
           goto(to!.url);
         }

@@ -14,7 +14,7 @@
     self = el;
   }
 
-  $: console.log('Edit fields no: ', $editFieldsNo);
+  //$: console.log('Edit fields no: ', $editFieldsNo);
   $editFieldsNo = $editFieldsNo + 1;
   $: {
     //Keeping track of how many editing fields we have

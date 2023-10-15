@@ -43,14 +43,14 @@
   <div
     class=" gap-4 justify-center sm:grid sm:grid-flow-row sm:grid-rows-1 lg:flex"
   >
-    <!--TODO idk how to make this div non-button if there is no image-->
+    <!--TODO This works, but svelte thiks its not accessible. Maybe a bug?-->
     <div
-      data-tooltip={imageAltText}
       data-placement="top"
-      on:click={triggerModal}
-      on:keydown={triggerModal}
-      tabindex={displayImage ? 0 : -1}
-      role="button"
+      data-tooltip={displayImage ? imageAltText : null}
+      on:click={displayImage ? triggerModal : null}
+      on:keydown={displayImage ? triggerModal : null}
+      tabindex={displayImage ? 0 : null}
+      role={displayImage ? 'button' : null}
       class="mr-2 lg:w-[25%] overflow-hidden flex justify-center items-center"
     >
       {#if displayImage}
