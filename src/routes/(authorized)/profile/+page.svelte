@@ -2,8 +2,8 @@
   import { superForm } from 'sveltekit-superforms/client';
   import { page } from '$app/stores';
   import type { PageData } from './$types';
-  import ReadOnlyTextInput from '$lib/components/ReadOnlyTextInput.svelte';
-  import ReadOnlyTextFieldInput from '$lib/components/ReadOnlyTextFieldInput.svelte';
+  import ReadOnlyTextInput from '$lib/components/EditingInput/ReadOnlyTextInput.svelte';
+  import ReadOnlyTextFieldInput from '$lib/components/EditingInput/ReadOnlyTextFieldInput.svelte';
   import { afterUpdate, onMount } from 'svelte';
 
   export let data: PageData;

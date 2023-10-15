@@ -1,10 +1,12 @@
 <script lang="ts">
-  import { beforeNavigate } from '$app/navigation';
+  import { afterNavigate, beforeNavigate, goto } from '$app/navigation';
   import { modalStore } from '@skeletonlabs/skeleton';
   import type { ModalSettings, ModalComponent } from '@skeletonlabs/skeleton';
   import Fa from 'svelte-fa';
   import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
+  import { editFieldsNo } from './stores';
   let editing = false;
+
   export let value: string;
   const original = value;
   export let label: string;
@@ -15,29 +17,19 @@
     self = el;
   }
 
-  let cancelNav = false;
-  const modal: ModalSettings = {
-    type: 'confirm',
-    // Data
-    title: 'Please Confirm',
-    body: 'Are you sure you wish to proceed?',
-    // TRUE if confirm pressed, FALSE if cancel pressed
-    response: (r: boolean) => {
-      cancelNav = !r;
-      console.log('response:', r);
-    },
-  };
-
-  beforeNavigate(({ cancel }) => {
+  //$: console.log('Edit fields no: ', $editFieldsNo);
+  $editFieldsNo = $editFieldsNo + 1;
+  $: {
+    //Keeping track of how many editing fields we have
     if (editing) {
-      modalStore.trigger(modal);
-      if (cancelNav) {
-        cancel();
-        cancelNav = false;
-      }
+      editFieldsNo.update((n) => n + 1);
+    } else {
+      editFieldsNo.update((n) => n - 1);
     }
+  }
 
-    console.log('we are here');
+  afterNavigate(() => {
+    editing = false;
   });
 </script>
 

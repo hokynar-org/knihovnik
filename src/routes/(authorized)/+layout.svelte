@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { beforeNavigate, goto } from '$app/navigation';
   import { navigating, page } from '$app/stores';
   import Spinner from '$lib/components/Spinner.svelte';
   import { faBars, faBell } from '@fortawesome/free-solid-svg-icons';
@@ -26,6 +27,7 @@
   import AppDrawer from './(components)/AppDrawer.svelte';
   import { notifications, pusher } from '$lib/store';
   import type { Notification } from '$lib/types';
+  import { editFieldsNo } from '$lib/components/EditingInput/stores';
 
   export let data;
 
@@ -52,6 +54,42 @@
   }).length;
   $: uread_string = unread == 0 ? '' : String(unread);
   $: uread_string_brace = unread == 0 ? '' : '(' + String(unread) + ')';
+
+  //Warn about unsaved data before navigating
+  let editingAtLeastOne: boolean = false;
+  $: {
+    if ($editFieldsNo > 0) {
+      editingAtLeastOne = true;
+    } else {
+      editingAtLeastOne = false;
+    }
+  }
+  beforeNavigate(async ({ cancel, to }) => {
+    if (editingAtLeastOne) {
+      cancel();
+
+      const prom = new Promise<boolean>((resolve) => {
+        const unsavedEdit: ModalSettings = {
+          type: 'confirm',
+          title: 'You have unsaved work',
+          body: 'Are you sure you wish to proceed?',
+          response: (r: boolean) => {
+            resolve(r);
+          },
+        };
+        modalStore.trigger(unsavedEdit);
+      });
+
+      prom.then((r: any) => {
+        console.log('resolved response:', r);
+        if (r) {
+          editingAtLeastOne = false;
+          console.log('going');
+          goto(to!.url);
+        }
+      });
+    }
+  });
 </script>
 
 <svelte:head>

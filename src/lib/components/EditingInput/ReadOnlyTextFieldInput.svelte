@@ -1,6 +1,9 @@
 <script lang="ts">
+  import { afterNavigate } from '$app/navigation';
   import Fa from 'svelte-fa';
   import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
+  import { editFieldsNo } from './stores';
+
   let disabled = true;
   let editing = false;
   export let value: string;
@@ -14,6 +17,20 @@
   }
 
   export let rows = 8;
+
+  $editFieldsNo = $editFieldsNo + 1;
+  $: {
+    //Keeping track of how many editing fields we have
+    if (editing) {
+      editFieldsNo.update((n) => n + 1);
+    } else {
+      editFieldsNo.update((n) => n - 1);
+    }
+  }
+
+  afterNavigate(() => {
+    editing = false;
+  });
 </script>
 
 <label>
