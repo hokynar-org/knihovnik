@@ -85,6 +85,7 @@
         if (r) {
           editingAtLeastOne = false;
           console.log('going');
+          $editFieldsNo = 0;
           goto(to!.url);
         }
       });

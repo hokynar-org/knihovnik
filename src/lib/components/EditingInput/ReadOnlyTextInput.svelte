@@ -1,7 +1,4 @@
 <script lang="ts">
-  import { afterNavigate, beforeNavigate, goto } from '$app/navigation';
-  import { modalStore } from '@skeletonlabs/skeleton';
-  import type { ModalSettings, ModalComponent } from '@skeletonlabs/skeleton';
   import Fa from 'svelte-fa';
   import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
   import { editFieldsNo } from './stores';
@@ -17,7 +14,7 @@
     self = el;
   }
 
-  //$: console.log('Edit fields no: ', $editFieldsNo);
+  $: console.log('Edit fields no: ', $editFieldsNo);
   $editFieldsNo = $editFieldsNo + 1;
   $: {
     //Keeping track of how many editing fields we have
@@ -27,10 +24,6 @@
       editFieldsNo.update((n) => n - 1);
     }
   }
-
-  afterNavigate(() => {
-    editing = false;
-  });
 </script>
 
 <label>

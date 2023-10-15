@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { afterNavigate } from '$app/navigation';
   import Fa from 'svelte-fa';
   import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
   import { editFieldsNo } from './stores';
@@ -27,10 +26,6 @@
       editFieldsNo.update((n) => n - 1);
     }
   }
-
-  afterNavigate(() => {
-    editing = false;
-  });
 </script>
 
 <label>
