@@ -79,6 +79,15 @@ export type RequestActionMessage = {
 
 export type Notification = InferModel<typeof notifications>;
 
+export type GroupNotificaton = {
+  url: string | null;
+  text: string | null;
+  read: boolean;
+  user_id: number;
+  timestamp: Date;
+  ids: number[];
+}
+
 export interface Offer {
   item: PublicItemSafe;
   owner: PublicUserSafe;

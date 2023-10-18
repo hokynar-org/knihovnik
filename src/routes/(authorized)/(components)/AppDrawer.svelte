@@ -4,8 +4,8 @@
   import Sidebar from './Sidebar.svelte';
   import type { PrivateUserSafe } from '$lib/types';
   export let user: PrivateUserSafe;
-  import { notifications } from '$lib/store';
-  import Notification from '$lib/Notification.svelte';
+  import { notifications, groupNotificatons } from '$lib/store';
+  import GroupNotification from '$lib/GroupNotification.svelte';
   import Fa from 'svelte-fa';
   import {
     faExclamationCircle,
@@ -15,6 +15,11 @@
   async function deleteNotification() {
     const response = await fetch('/api/notifications/delete', {
       method: 'POST',
+      body: JSON.stringify({
+        ids: $notifications.map((value) => {
+          return value.id;
+        }),
+      }),
     });
     if (!response.ok) {
       throw new Error(String(response.status));
@@ -23,6 +28,11 @@
   async function readNotification() {
     const response = await fetch('/api/notifications/read', {
       method: 'POST',
+      body: JSON.stringify({
+        ids: $notifications.map((value) => {
+          return value.id;
+        }),
+      }),
     });
     if (!response.ok) {
       throw new Error(String(response.status));
@@ -91,9 +101,9 @@
         {/if}
       </div>
       <ol>
-        {#each $notifications as notification (notification.id)}
+        {#each $groupNotificatons as gNotification (gNotification.ids[0])}
           <li>
-            <Notification {notification} />
+            <GroupNotification groupNotification={gNotification} />
           </li>
         {/each}
       </ol>

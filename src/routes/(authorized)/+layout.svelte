@@ -24,13 +24,15 @@
   import UserButton from './(components)/UserButton.svelte';
   import Sidebar from './(components)/Sidebar.svelte';
   import AppDrawer from './(components)/AppDrawer.svelte';
-  import { notifications, pusher } from '$lib/store';
-  import type { Notification } from '$lib/types';
+  import { groupNotificatons, notifications, pusher } from '$lib/store';
+  import type { GroupNotificaton, Notification } from '$lib/types';
+  // import Notification from '$lib/Notification.svelte';
 
   export let data;
 
   $: user = data.user;
   $: $notifications = data.notifications;
+  $: $groupNotificatons = notificationsToGroupNotifications($notifications);
   storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow });
   $pusher = new Pusher(data.pusher.key, {
     cluster: data.pusher.cluster,
@@ -52,6 +54,34 @@
   }).length;
   $: uread_string = unread == 0 ? '' : String(unread);
   $: uread_string_brace = unread == 0 ? '' : '(' + String(unread) + ')';
+  const notificationsToGroupNotifications = (notifications: Notification[]) => {
+    const group_notifications: GroupNotificaton[] = [];
+    notifications.forEach((notification) => {
+      const index = group_notifications.findIndex((value) => {
+        return (
+          value.text === notification.text &&
+          value.url === notification.url &&
+          value.read === notification.read
+        );
+      });
+      if (index == -1) {
+        group_notifications.push({
+          url: notification.url,
+          text: notification.text,
+          read: notification.read,
+          user_id: notification.user_id,
+          timestamp: notification.timestamp,
+          ids: [notification.id],
+        });
+      } else {
+        group_notifications[index].ids.push(notification.id);
+        if (group_notifications[index].timestamp < notification.timestamp) {
+          group_notifications[index].timestamp = notification.timestamp;
+        }
+      }
+    });
+    return group_notifications;
+  };
 </script>
 
 <svelte:head>
