@@ -25,8 +25,8 @@
   import UserButton from './(components)/UserButton.svelte';
   import Sidebar from './(components)/Sidebar.svelte';
   import AppDrawer from './(components)/AppDrawer.svelte';
-  import { notifications, pusher } from '$lib/store';
-  import type { Notification } from '$lib/types';
+  import { notifications, groupNotificatons, pusher } from '$lib/store';
+  import type { Notification, GroupNotificaton } from '$lib/types';
   import { editFieldsNo } from '$lib/components/EditingInput/stores';
 
   export let data;
