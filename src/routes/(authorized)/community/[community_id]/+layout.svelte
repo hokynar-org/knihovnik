@@ -1,8 +1,8 @@
 <script lang="ts">
   import type { CommunityRelation } from '$lib/types';
-  import { page } from '$app/stores';
-
+  import { navigating, page } from '$app/stores';
   export let data;
+  console.log($page.route.id);
   $: community = data.community;
   $: community_users = data.community_users;
   $: role = data.role;
@@ -141,7 +141,7 @@
     {#if role && role == 'ADMIN'}
       <ol class="breadcrumb">
         <li class="text-lg">
-          {#if !isAdminTab}
+          {#if $page.route.id == '/(authorized)/community/[community_id]'}
             Home
           {:else}
             <a class="text-base" href={'/community/' + community.id}>Home</a>
@@ -151,11 +151,22 @@
         <li class="crumb-separator" aria-hidden>/</li>
 
         <li class="text-lg">
-          {#if isAdminTab}
+          {#if $page.route.id == '/(authorized)/community/[community_id]/admin'}
             Admin dashboard
           {:else}
             <a class="text-base" href={'/community/' + community.id + '/admin'}
               >Admin dashboard</a
+            >
+          {/if}
+        </li>
+        <li class="crumb-separator" aria-hidden>/</li>
+        <li class="text-lg">
+          {#if $page.route.id == '/(authorized)/community/[community_id]/admin/edit'}
+            Settings
+          {:else}
+            <a
+              class="text-base"
+              href={'/community/' + community.id + '/admin/edit'}>Settings</a
             >
           {/if}
         </li>

@@ -1,8 +1,10 @@
 import { db } from '$lib/server/db/drizzle';
-import { user_community_relations } from '$lib/server/db/schema';
+import { communities, user_community_relations } from '$lib/server/db/schema';
 import { and, eq } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
-import { error, redirect } from '@sveltejs/kit';
+import { error, redirect, type Actions, fail } from '@sveltejs/kit';
+import { z } from 'zod';
+import { superValidate } from 'sveltekit-superforms/server';
 
 export const load = (async ({ locals,params }) => {
   if(!locals.user){
@@ -19,7 +21,6 @@ export const load = (async ({ locals,params }) => {
   }
   const user_relation=user_relations[0];
   if(user_relation.role!='ADMIN'){
-    throw error(401);
+    throw error(403);
   }
-
 }) satisfies PageServerLoad;

@@ -84,9 +84,9 @@ export const request_actionsRelations = relations(
 
 export const communities = pgTable('communities', {
   id: serial('id').primaryKey(),
-  name: text('name'),
+  name: text('name').notNull(),
   description: text('description'),
-  visibility: boolean('visibility').default(false),
+  visibility: boolean('visibility').default(false).notNull(),
 });
 
 export const user_community_relations = pgTable('user_community_relations', {
