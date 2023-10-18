@@ -1,8 +1,8 @@
 <script lang="ts">
   import { goto, beforeNavigate } from '$app/navigation';
   import PromiseButton from '$lib/components/PromiseButton.svelte';
-  import ReadOnlyTextFieldInput from '$lib/components/ReadOnlyTextFieldInput.svelte';
-  import ReadOnlyTextInput from '$lib/components/ReadOnlyTextInput.svelte';
+  import ReadOnlyTextFieldInput from '$lib/components/EditingInput/ReadOnlyTextFieldInput.svelte';
+  import ReadOnlyTextInput from '$lib/components/EditingInput/ReadOnlyTextInput.svelte';
   import OptionPicker from '$lib/components/OptionPicker.svelte';
   import {
     faHandHoldingHand,
@@ -68,10 +68,6 @@
       throw new Error(String(response.status));
     }
   };
-
-  beforeNavigate(({ cancel }) => {
-    //cancel();
-  });
 </script>
 
 <div class="mt-8">
