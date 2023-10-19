@@ -20,6 +20,7 @@ const item_form_schema = z.object({
   name: z.string().min(2).max(64),
   description: z.string().min(0).max(512),
   files: z.string(),
+  transferType:z.enum(["Borrow","Give","Transitive"]),
 });
 
 export const load = (async ({ locals, params }) => {
@@ -80,6 +81,7 @@ export const actions: Actions = {
       await db
         .update(items)
         .set({
+          transfeType: form.data.transferType,
           name: form.data.name,
           description: form.data.description,
         })

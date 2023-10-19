@@ -16,10 +16,22 @@
   $: community_visibility = data.community_visibility;
   $: $form.name = data.item.name;
   $: $form.description = data.item.description;
+  $: $form.transferType = data.item.transfeType as
+    | 'Borrow'
+    | 'Give'
+    | 'Transitive';
+  $: $form.transferType = transferType;
   const old_name = data.item.name;
   const old_description = data.item.description;
-  $: disabled = old_name == $form.name && old_description == $form.description;
-  let transferType: string;
+  const old_transferType = data.item.transfeType as
+    | 'Borrow'
+    | 'Give'
+    | 'Transitive';
+  $: disabled =
+    old_name == $form.name &&
+    old_description == $form.description &&
+    old_transferType == $form.transferType;
+  let transferType: 'Borrow' | 'Give' | 'Transitive' = old_transferType;
 
   const change_visibility = async (community_id: number) => {
     const res = await fetch(
@@ -86,6 +98,13 @@
         bind:value={$form.description}
         error={$errors.description}
       />
+      <h4 class="text-2xl">Transfer type</h4>
+      <input name="transferType" bind:value={transferType} class="hidden" />
+      <OptionPicker
+        options={['Borrow', 'Transitive', 'Give']}
+        emojis={[faHandHolding, faHandHoldingHand, faHandsHolding]}
+        bind:selected={transferType}
+      />
 
       <div class="self-end justify-self-center col-span-full">
         <button {disabled} class="btn variant-filled-primary"
@@ -96,13 +115,6 @@
   </div>
 
   <div class="mt-6">
-    <h4 class="text-2xl">Transfer type</h4>
-
-    <OptionPicker
-      options={['Borrow', 'Transitive', 'Give']}
-      emojis={[faHandHolding, faHandHoldingHand, faHandsHolding]}
-      bind:selected={transferType}
-    />
     <h4 class="text-2xl mt-6">Visibility settings</h4>
     <p class="text-sm">Which communities can see and borrow this item?</p>
     <div class="grid grid-cols-2 justify-items-center mt-4">
