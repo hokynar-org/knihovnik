@@ -8,24 +8,36 @@
     faXmark,
     faClock,
     faUser,
+    faArrowLeft,
+    faArrowRight,
   } from '@fortawesome/free-solid-svg-icons';
   import type { PublicUserSafe } from '$lib/types';
   import { page } from '$app/stores';
+  import { onMount } from 'svelte';
+  import ItemPageBar from '$lib/components/ItemDisplay/ItemPageBar.svelte';
   $: user = $page.data.user as PublicUserSafe;
 
   export let data;
 
-  let offersFiltered = data.offers;
-  let searchTerm: string;
+  let offers = data.offers;
+  let offset = data.offset;
+  let limit = data.limit;
+  let length = data.length;
+  let search = data.search;
+
+  $: offers = data.offers;
+  $: offset = data.offset;
+  $: limit = data.limit;
+  $: length = data.length;
+  $: search = data.search;
 </script>
 
 <h4 class="mb-2 text-4xl">Vaše Polička</h4>
 <h3 class="">Zde naleznete věci, které by se měly válet u Vás!</h3>
 
-<ItemSearch cls="mt-6 " bind:searchTerm bind:offersFiltered />
-
+<ItemPageBar {limit} {offset} {length} {search} root="/shelf" />
 <ItemGrid cls="mt-6">
-  {#each offersFiltered as offer (offer.item.id)}
+  {#each offers as offer (offer.item.id)}
     <ItemCard item={offer.item}>
       <div class="pb-2 text-lg">
         <div class="flex items-baseline">

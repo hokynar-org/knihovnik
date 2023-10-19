@@ -13,7 +13,7 @@ import { error, redirect } from '@sveltejs/kit';
 import { getCommunityItems, getShelfItems } from '$lib/server/item_load';
 import { user_select } from '$lib/server/db/selects';
 
-export const load = (async ({ locals, params }) => {
+export const load = (async ({ locals, params, url }) => {
   if (!locals.user) {
     throw redirect(301, '/login');
   }
@@ -64,12 +64,19 @@ export const load = (async ({ locals, params }) => {
     throw error(404);
   }
   const community = found_communities[0];
-  const community_items = getCommunityItems(community.id);
+  const limit = Number(url.searchParams.get('limit'))?Number(url.searchParams.get('limit')):4
+  const offset = Number(url.searchParams.get('offset'))?Number(url.searchParams.get('offset')):0
+  const search = url.searchParams.get('search')?url.searchParams.get('search'):null
+  const {offers, length} = await getCommunityItems(community_id, offset, limit,search);
   return {
     community: community,
     community_users: community_users,
     community_messages: messages,
     role: user_relation.length == 0 ? null : user_relation[0].role,
-    community_items: community_items as Promise<Offer[]>,
+    community_items: offers,
+    length: length,
+    limit: limit,
+    offset: offset,
+    search: search,
   };
 }) satisfies LayoutServerLoad;

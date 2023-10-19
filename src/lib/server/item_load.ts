@@ -1,6 +1,6 @@
 import { db } from "./db/drizzle";
 import { borrow_requests, item_visibility, items, user_community_relations, users } from "./db/schema";
-import { and, eq, or } from "drizzle-orm";
+import { and, eq, ilike, or } from "drizzle-orm";
 import { getFileUrl } from "./bucket";
 import type { BorrowRequest, PublicItemSafe, PublicUserSafe } from "$lib/types";
 import { item_select,borrow_request_select,borrowers,lenders,owners,holders,holder_select,borrower_select,lender_select,owner_select } from "./db/selects";
@@ -77,21 +77,20 @@ export const getJustItem = async (item_id:number)=>{
     }
 }
 
-export const getItems = async (user_id:number, offset?:number, limit?:number)=>{
-    
+export const getItems = async (user_id:number, offset:number, limit:number, search:string|null)=>{
+    const q = search?or(ilike(items.name,'%'+search+'%'),ilike(items.description,'%'+search+'%')):undefined
     const db_result:{owner:PublicUserSafe,item:PublicItemSafe}[] =
     await db.selectDistinct({
         owner: owner_select,
         item: item_select,
     })
-    .from(items).where(eq(items.offered,true))
+    .from(items).where(and(q,eq(items.offered,true)))
     .innerJoin(owners,  eq(items.owner_id, owners.id))
     .innerJoin(item_visibility,eq(item_visibility.item_id,items.id))
     .innerJoin(user_community_relations,and(eq(item_visibility.community_id,user_community_relations.community_id),and(eq(user_community_relations.user_id, user_id),or(eq(user_community_relations.role, 'ADMIN'),eq(user_community_relations.role, 'MEMBER')))))
-
     const length = db_result.length;
 
-    const result = db_result.slice((offset && offset>=0)?offset:0,((offset && offset>=0)?offset:0)+((limit && limit>0)?limit:4))
+    const result = db_result.slice((offset>=0)?offset:0,((offset>=0)?offset:0)+((limit>0)?limit:4))
     const image_srcs_promise = result.flatMap((value)=>{
         return getFileUrl(value.item.image_src)
     })
@@ -116,15 +115,18 @@ export const getItems = async (user_id:number, offset?:number, limit?:number)=>{
     return {offers:offers, length:length}
 }
 
-export const getCommunityItems = async (community_id:number)=>{
-    const result:{owner:PublicUserSafe,item:PublicItemSafe}[] =
+export const getCommunityItems = async (community_id:number, offset:number, limit:number, search:string|null)=>{
+    const q = search?or(ilike(items.name,'%'+search+'%'),ilike(items.description,'%'+search+'%')):undefined
+    const db_result:{owner:PublicUserSafe,item:PublicItemSafe}[] =
     await db.select({
         owner: owner_select,
         item: item_select,
     })
-    .from(items).where(and(eq(items.offered,true),eq(items.holder_id,items.owner_id)))
+    .from(items).where(and(q,eq(items.offered,true),eq(items.holder_id,items.owner_id)))
     .innerJoin(item_visibility,and(eq(items.id,item_visibility.item_id),eq(item_visibility.community_id,community_id)))
     .innerJoin(owners,  eq(items.owner_id, owners.id))
+    const length = db_result.length
+    const result = db_result.slice((offset>=0)?offset:0,((offset>=0)?offset:0)+((limit>0)?limit:4));
     const image_srcs_promise = result.flatMap((value)=>{
         return getFileUrl(value.item.image_src)
     })
@@ -145,17 +147,20 @@ export const getCommunityItems = async (community_id:number)=>{
             owner: value.owner
         }
     })
-    return offers
+    return {offers:offers, length:length}
 }
 
-export const getShelfItems = async (user_id:number)=>{
-    const result:{owner:PublicUserSafe,item:PublicItemSafe}[] =
+export const getShelfItems = async (user_id:number, offset:number, limit:number, search:string|null)=>{
+    const q = search?or(ilike(items.name,'%'+search+'%'),ilike(items.description,'%'+search+'%')):undefined
+    const db_result:{owner:PublicUserSafe,item:PublicItemSafe}[] =
     await db.select({
         owner: owner_select,
         item: item_select,
     })
-    .from(items).where(eq(items.holder_id,user_id))
+    .from(items).where(and(q,eq(items.holder_id,user_id)))
     .innerJoin(owners,  eq(items.owner_id, owners.id))
+    const length = db_result.length
+    const result = db_result.slice((offset>=0)?offset:0,((offset>=0)?offset:0)+((limit>0)?limit:4))
     const image_srcs_promise = result.flatMap((value)=>{
         return getFileUrl(value.item.image_src)
     })
@@ -176,17 +181,19 @@ export const getShelfItems = async (user_id:number)=>{
             owner: value.owner
         }
     })
-    return offers
+    return {offers:offers, length:length}
 }
 
-export const getMyItems = async (user_id:number)=>{
-    const result:{holder:PublicUserSafe,item:PublicItemSafe}[] =
+export const getMyItems = async (user_id:number, offset:number, limit:number, search:string|null)=>{
+    const q = search?or(ilike(items.name,'%'+search+'%'),ilike(items.description,'%'+search+'%')):undefined
+    const db_result:{holder:PublicUserSafe,item:PublicItemSafe}[] =
     await db.select({
         item: item_select,
         holder: holder_select,
-    }).from(items).where(eq(items.owner_id,user_id))
+    }).from(items).where(and(q,eq(items.owner_id,user_id)))
     .innerJoin(holders, eq(items.holder_id, holders.id));
-
+    const length = db_result.length
+    const result = db_result.slice((offset>=0)?offset:0,((offset>=0)?offset:0)+((limit>0)?limit:4))
     const image_srcs_promise = result.flatMap((value)=>{
         return getFileUrl(value.item.image_src)
     })
@@ -207,5 +214,5 @@ export const getMyItems = async (user_id:number)=>{
             holder:value.holder
         }
     })
-    return offers
+    return {offers:offers, length:length}
 }

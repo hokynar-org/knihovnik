@@ -2,7 +2,6 @@
   import type { CommunityRelation } from '$lib/types';
   import { navigating, page } from '$app/stores';
   export let data;
-  console.log($page.route.id);
   $: community = data.community;
   $: community_users = data.community_users;
   $: role = data.role;
@@ -46,7 +45,6 @@
 
   let isAdminTab = false;
   $: isAdminTab = String($page.url).includes('admin');
-  $: console.log(isAdminTab);
 </script>
 
 <h4 class="mb-2">Community: {community.name}</h4>

@@ -1,8 +1,11 @@
 <script lang="ts">
   import ItemCard from '$lib/components/ItemDisplay/ItemCard.svelte';
   import Fa from 'svelte-fa';
-  import { faClock } from '@fortawesome/free-solid-svg-icons';
-  import { user_items } from '$lib/store';
+  import {
+    faArrowLeft,
+    faArrowRight,
+    faClock,
+  } from '@fortawesome/free-solid-svg-icons';
   import DeleteItem from '$lib/components/ItemDisplay/Actions/DeleteItem.svelte';
   import type { PageData } from './$types';
   import OfferItem from '$lib/components/ItemDisplay/Actions/OfferItem.svelte';
@@ -10,26 +13,28 @@
   import ItemGrid from '$lib/components/ItemDisplay/ItemGrid.svelte';
   import TransferType from '$lib/components/ItemDisplay/Status/TransferType.svelte';
   import type { UserOffer } from '$lib/types';
+  import ItemPageBar from '$lib/components/ItemDisplay/ItemPageBar.svelte';
   export let data: PageData;
   $: user = data.user;
+  let offers = data.user_items;
+  let offset = data.offset;
+  let limit = data.limit;
+  let length = data.length;
+  let search = data.search;
 
-  $: $user_items = data.user_items;
-
-  let offersFiltered: UserOffer[] = [];
-  $: {
-    //Assign data once they are ready
-    if ($user_items.length > 0 && offersFiltered.length === 0) {
-      offersFiltered = $user_items;
-    }
-  }
+  $: offers = data.user_items;
+  $: offset = data.offset;
+  $: limit = data.limit;
+  $: length = data.length;
+  $: search = data.search;
 
   let searchTerm: string;
 </script>
 
-<ItemSearch cls="mt-6 " bind:searchTerm bind:offersFiltered />
+<ItemPageBar {limit} {offset} {length} {search} root="/offer" />
 
 <ItemGrid cls="mt-6">
-  {#each offersFiltered as offer (offer.item.id)}
+  {#each offers as offer (offer.item.id)}
     <ItemCard item={offer.item}>
       <TransferType item={offer.item} />
       {#if offer.holder && user.id == offer.holder.id}

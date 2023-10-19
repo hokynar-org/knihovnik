@@ -14,13 +14,22 @@
   import OwnedBy from '$lib/components/ItemDisplay/Status/OwnedBy.svelte';
   import TransferType from '$lib/components/ItemDisplay/Status/TransferType.svelte';
   import { page } from '$app/stores';
+  import ItemPageBar from '$lib/components/ItemDisplay/ItemPageBar.svelte';
   $: user = $page.data.user as PublicUserSafe;
 
   export let data;
-  $: offersFiltered = data.offers;
+
+  let offers = data.offers;
+  let offset = data.offset;
+  let limit = data.limit;
+  let length = data.length;
+  let search = data.search;
+
+  $: offers = data.offers;
   $: offset = data.offset;
   $: limit = data.limit;
   $: length = data.length;
+  $: search = data.search;
 
   let searchTerm: string;
 </script>
@@ -29,46 +38,9 @@
   <h2 class="text-4xl mx-4">Items on offer</h2>
 </div>
 
-<div class="flex mt-6 items-center">
-  <ItemSearch cls="" bind:searchTerm bind:offersFiltered />
-  <div class="grid grid-cols-2">
-    {#if offset - limit >= 0}
-      <a
-        class="btn-icon h-10 variant-filled-primary rounded-r-none"
-        href="./borrow/?offset={Math.max(offset - limit, 0)}&limit={Math.max(
-          limit,
-          1,
-        )}"
-      >
-        <Fa icon={faArrowLeft} />
-      </a>
-    {:else}
-      <button
-        disabled={true}
-        class="btn-icon h-10 variant-filled-primary rounded-r-none"
-      >
-        <Fa icon={faArrowLeft} />
-      </button>
-    {/if}
-    {#if offset + limit < length}
-      <a
-        class="btn-icon h-10 variant-filled-primary rounded-l-none"
-        href="./borrow/?offset={offset + limit}&limit={Math.max(limit, 1)}"
-      >
-        <Fa icon={faArrowRight} />
-      </a>
-    {:else}
-      <button
-        disabled={true}
-        class="btn-icon h-10 variant-filled-primary rounded-l-none"
-      >
-        <Fa icon={faArrowRight} />
-      </button>
-    {/if}
-  </div>
-</div>
+<ItemPageBar {limit} {offset} {length} {search} root="/borrow" />
 <ItemGrid cls="mt-6">
-  {#each offersFiltered as offer (offer.item.id)}
+  {#each offers as offer (offer.item.id)}
     <ItemCard item={offer.item}>
       <!-- {#if offer.user != data.user}
       <BorrowItem borrow_request={offer.borrow_request} item={offer.item} />

@@ -4,19 +4,36 @@
   import ItemGrid from '$lib/components/ItemDisplay/ItemGrid.svelte';
   import Chat from '$lib/components/Chat/Chat.svelte';
   import Fa from 'svelte-fa';
-  import { faLockOpen } from '@fortawesome/free-solid-svg-icons';
+  import {
+    faArrowLeft,
+    faArrowRight,
+    faLockOpen,
+  } from '@fortawesome/free-solid-svg-icons';
   import { pusher } from '$lib/store.js';
   import type { CommunityMessage } from '$lib/types';
-  import { onDestroy } from 'svelte';
-
+  import { onDestroy, onMount } from 'svelte';
+  import ItemPageBar from '$lib/components/ItemDisplay/ItemPageBar.svelte';
   export let data;
+
+  let community_items = data.community_items;
+  let offset = data.offset;
+  let limit = data.limit;
+  let length = data.length;
+  let search = data.search;
+
+  $: community_items = data.community_items;
+  $: offset = data.offset;
+  $: limit = data.limit;
+  $: length = data.length;
+  $: search = data.search;
+
   $: user = data.user;
   $: community = data.community;
   $: community_users = data.community_users;
   $: community_messages = data.community_messages;
   $: community_items = data.community_items;
 
-  let offersFiltered = community_items;
+  $: offersFiltered = community_items;
   let searchTerm: string;
 
   let fallback = false;
@@ -33,6 +50,9 @@
   } else {
     fallback = true;
   }
+  // onMount(() => {
+  //   console.log(limit, length, offset);
+  // });
 </script>
 
 <div class="mt-6">
@@ -61,7 +81,13 @@
 </div>
 
 <h3 class="mt-10 mb-2 text-2xl">Community Items</h3>
-
+<ItemPageBar
+  {limit}
+  {offset}
+  {length}
+  {search}
+  root="/community/{community.id}"
+/>
 <ItemGrid cls="mt-6 ">
   {#each community_items as offer (offer.item.id)}
     <ItemCard item={offer.item}></ItemCard>

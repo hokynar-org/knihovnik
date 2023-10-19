@@ -7,13 +7,20 @@ import { redirect } from '@sveltejs/kit';
 import { getFileUrl } from '$lib/server/bucket';
 import { getShelfItems } from '$lib/server/item_load';
 
-export const load = (async ({ locals }) => {
+export const load = (async ({ locals, url }) => {
   if (!locals.user) {
     redirect(301, '/');
   }
   const user = locals.user;
-  const offers = await getShelfItems(user.id);
+  const limit = Number(url.searchParams.get('limit'))?Number(url.searchParams.get('limit')):4
+  const offset = Number(url.searchParams.get('offset'))?Number(url.searchParams.get('offset')):0
+  const search = url.searchParams.get('search')?url.searchParams.get('search'):null
+  const {offers, length} = await getShelfItems(user.id, offset, limit, search);
   return {
     offers: offers as Offer[],
+    limit: limit,
+    offset: offset,
+    length:length,
+    search:search,
   };
 }) satisfies PageServerLoad;

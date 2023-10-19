@@ -13,18 +13,17 @@ export const load = (async ({ locals, url,setHeaders }) => {
   if (!locals.user) {
     throw redirect(301, '/login');
   }
-  // if (!url.searchParams.get('limit') || !url.searchParams.get('offset')){
-  //   throw redirect(301  , '/borrow?offset='+defOffset+'&limit='+defLimit);
-  // }
+  const user = locals.user;
   const limit = Number(url.searchParams.get('limit'))?Number(url.searchParams.get('limit')):4
   const offset = Number(url.searchParams.get('offset'))?Number(url.searchParams.get('offset')):0
-  const user = locals.user;
-  const {offers, length} = await getItems(user.id, offset, limit);
-  // setHeaders({'cache-control': 'max-age=60'})
+  const search = url.searchParams.get('search')?url.searchParams.get('search'):null
+
+  const {offers, length} = await getItems(user.id, offset, limit, search);
   return {
     offers: offers as Offer[],
     length: length,
     limit: limit,
-    offset: offset
+    offset: offset,
+    search: search,
   };
 }) satisfies PageServerLoad;
