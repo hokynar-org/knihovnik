@@ -80,7 +80,7 @@ export const getJustItem = async (item_id:number)=>{
 export const getItems = async (user_id:number, offset?:number, limit?:number)=>{
     
     const db_result:{owner:PublicUserSafe,item:PublicItemSafe}[] =
-    await db.select({
+    await db.selectDistinct({
         owner: owner_select,
         item: item_select,
     })
@@ -91,22 +91,11 @@ export const getItems = async (user_id:number, offset?:number, limit?:number)=>{
     .offset((offset && offset>=0)?offset:0).limit((limit && limit>0)?limit:4)
 
     const result: { owner: PublicUserSafe; item: PublicItemSafe; }[] = [];
-    db_result.forEach((value)=>{
-        if(result.filter((fvaleu)=>{
-            if(fvaleu.item.id==value.item.id){
-                return true
-            }
-            
-        }).length==0){
-            result.push(value);
-        }
-        // result.push(value)
-    });
-    const image_srcs_promise = result.flatMap((value)=>{
+    const image_srcs_promise = db_result.flatMap((value)=>{
         return getFileUrl(value.item.image_src)
     })
     const image_srcs = await Promise.all(image_srcs_promise)
-    const offers = result.flatMap((value,index)=>{
+    const offers = db_result.flatMap((value,index)=>{
         return {
             item: {
                 name:value.item.name,
