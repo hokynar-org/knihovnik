@@ -88,14 +88,16 @@ export const getItems = async (user_id:number, offset?:number, limit?:number)=>{
     .innerJoin(owners,  eq(items.owner_id, owners.id))
     .innerJoin(item_visibility,eq(item_visibility.item_id,items.id))
     .innerJoin(user_community_relations,and(eq(item_visibility.community_id,user_community_relations.community_id),and(eq(user_community_relations.user_id, user_id),or(eq(user_community_relations.role, 'ADMIN'),eq(user_community_relations.role, 'MEMBER')))))
-    .offset((offset && offset>=0)?offset:0).limit((limit && limit>0)?limit:4)
 
-    const result: { owner: PublicUserSafe; item: PublicItemSafe; }[] = [];
-    const image_srcs_promise = db_result.flatMap((value)=>{
+    const length = db_result.length;
+
+    const result = db_result.slice((offset && offset>=0)?offset:0,((offset && offset>=0)?offset:0)+((limit && limit>0)?limit:4))
+    const image_srcs_promise = result.flatMap((value)=>{
         return getFileUrl(value.item.image_src)
     })
+
     const image_srcs = await Promise.all(image_srcs_promise)
-    const offers = db_result.flatMap((value,index)=>{
+    const offers = result.flatMap((value,index)=>{
         return {
             item: {
                 name:value.item.name,
@@ -111,7 +113,7 @@ export const getItems = async (user_id:number, offset?:number, limit?:number)=>{
             owner: value.owner
         }
     })
-    return offers
+    return {offers:offers, length:length}
 }
 
 export const getCommunityItems = async (community_id:number)=>{

@@ -19,6 +19,9 @@
   export let data;
   $: offersFiltered = data.offers;
   $: offset = data.offset;
+  $: limit = data.limit;
+  $: length = data.length;
+
   let searchTerm: string;
 </script>
 
@@ -28,15 +31,22 @@
 
 <ItemSearch cls="mt-6 " bind:searchTerm bind:offersFiltered />
 <div class="flex">
-  <a
-    class="btn variant-filled-primary"
-    href="./borrow/?offset={Math.max(offset - 4, 0)}"
-  >
-    <Fa icon={faArrowLeft} />
-  </a>
-  <a class="btn variant-filled-primary" href="./borrow/?offset={offset + 4}">
-    <Fa icon={faArrowRight} />
-  </a>
+  {#if offset - limit >= 0}
+    <a
+      class="btn variant-filled-primary"
+      href="./borrow/?offset={Math.max(offset - limit, 0)}"
+    >
+      <Fa icon={faArrowLeft} />
+    </a>
+  {/if}
+  {#if offset + limit < length}
+    <a
+      class="btn variant-filled-primary"
+      href="./borrow/?offset={offset + limit}"
+    >
+      <Fa icon={faArrowRight} />
+    </a>
+  {/if}
 </div>
 <ItemGrid cls="mt-6">
   {#each offersFiltered as offer (offer.item.id)}
