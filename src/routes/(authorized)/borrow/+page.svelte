@@ -29,24 +29,43 @@
   <h2 class="text-4xl mx-4">Items on offer</h2>
 </div>
 
-<ItemSearch cls="mt-6 " bind:searchTerm bind:offersFiltered />
-<div class="flex">
-  {#if offset - limit >= 0}
-    <a
-      class="btn variant-filled-primary"
-      href="./borrow/?offset={Math.max(offset - limit, 0)}"
-    >
-      <Fa icon={faArrowLeft} />
-    </a>
-  {/if}
-  {#if offset + limit < length}
-    <a
-      class="btn variant-filled-primary"
-      href="./borrow/?offset={offset + limit}"
-    >
-      <Fa icon={faArrowRight} />
-    </a>
-  {/if}
+<div class="flex mt-6 items-center">
+  <ItemSearch cls="" bind:searchTerm bind:offersFiltered />
+  <div class="grid grid-cols-2">
+    {#if offset - limit >= 0}
+      <a
+        class="btn-icon h-10 variant-filled-primary rounded-r-none"
+        href="./borrow/?offset={Math.max(offset - limit, 0)}&limit={Math.max(
+          limit,
+          1,
+        )}"
+      >
+        <Fa icon={faArrowLeft} />
+      </a>
+    {:else}
+      <button
+        disabled={true}
+        class="btn-icon h-10 variant-filled-primary rounded-r-none"
+      >
+        <Fa icon={faArrowLeft} />
+      </button>
+    {/if}
+    {#if offset + limit < length}
+      <a
+        class="btn-icon h-10 variant-filled-primary rounded-l-none"
+        href="./borrow/?offset={offset + limit}&limit={Math.max(limit, 1)}"
+      >
+        <Fa icon={faArrowRight} />
+      </a>
+    {:else}
+      <button
+        disabled={true}
+        class="btn-icon h-10 variant-filled-primary rounded-l-none"
+      >
+        <Fa icon={faArrowRight} />
+      </button>
+    {/if}
+  </div>
 </div>
 <ItemGrid cls="mt-6">
   {#each offersFiltered as offer (offer.item.id)}

@@ -36,7 +36,7 @@
 
 <div id="measuring" bind:clientWidth={containerWidth} class="w-[100%]"></div>
 <div
-  class="flex flex-wrap flex-shrink custom-width gap-6 {cls}"
+  class="grid 2xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-2 {cls}"
   style="--my-width:{width}"
 >
   <slot />
