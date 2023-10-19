@@ -77,8 +77,8 @@ export const getJustItem = async (item_id:number)=>{
     }
 }
 
-
-export const getItems = async (user_id:number)=>{
+export const getItems = async (user_id:number, offset?:number, limit?:number)=>{
+    
     const db_result:{owner:PublicUserSafe,item:PublicItemSafe}[] =
     await db.select({
         owner: owner_select,
@@ -86,7 +86,9 @@ export const getItems = async (user_id:number)=>{
     })
     .from(items).where(eq(items.offered,true))
     .innerJoin(owners,  eq(items.owner_id, owners.id))
-    .innerJoin(item_visibility,eq(item_visibility.item_id,items.id)).innerJoin(user_community_relations,and(eq(item_visibility.community_id,user_community_relations.community_id),and(eq(user_community_relations.user_id, user_id),or(eq(user_community_relations.role, 'ADMIN'),eq(user_community_relations.role, 'MEMBER')))));
+    .innerJoin(item_visibility,eq(item_visibility.item_id,items.id))
+    .innerJoin(user_community_relations,and(eq(item_visibility.community_id,user_community_relations.community_id),and(eq(user_community_relations.user_id, user_id),or(eq(user_community_relations.role, 'ADMIN'),eq(user_community_relations.role, 'MEMBER')))))
+    .offset((offset && offset>=0)?offset:0).limit((limit && limit>0)?limit:4)
 
     const result: { owner: PublicUserSafe; item: PublicItemSafe; }[] = [];
     db_result.forEach((value)=>{
@@ -94,9 +96,11 @@ export const getItems = async (user_id:number)=>{
             if(fvaleu.item.id==value.item.id){
                 return true
             }
+            
         }).length==0){
             result.push(value);
         }
+        // result.push(value)
     });
     const image_srcs_promise = result.flatMap((value)=>{
         return getFileUrl(value.item.image_src)
@@ -120,7 +124,6 @@ export const getItems = async (user_id:number)=>{
     })
     return offers
 }
-
 
 export const getCommunityItems = async (community_id:number)=>{
     const result:{owner:PublicUserSafe,item:PublicItemSafe}[] =

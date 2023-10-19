@@ -12,7 +12,6 @@
   <form method="POST" action="?/edit_community" class="max-w-sm min-w-sm">
     <label for="name" class="text-xl mt-4 mb-2">Name</label>
     <input type="text" name="name" class="input" bind:value={$form.name} />
-
     <label for="description" class="text-xl mt-4 mb-2">Description</label>
     <textarea
       id="description"

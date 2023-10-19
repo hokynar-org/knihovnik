@@ -1,6 +1,11 @@
 <script lang="ts">
   import Fa from 'svelte-fa';
-  import { faCheck, faUser } from '@fortawesome/free-solid-svg-icons';
+  import {
+    faCheck,
+    faUser,
+    faArrowLeft,
+    faArrowRight,
+  } from '@fortawesome/free-solid-svg-icons';
   import Item from '$lib/components/ItemDisplay/Item.svelte';
   import type { PublicItemSafe, PublicUserSafe } from '$lib/types';
   import ItemGrid from '$lib/components/ItemDisplay/ItemGrid.svelte';
@@ -12,7 +17,8 @@
   $: user = $page.data.user as PublicUserSafe;
 
   export let data;
-  let offersFiltered = data.offers;
+  $: offersFiltered = data.offers;
+  $: offset = data.offset;
   let searchTerm: string;
 </script>
 
@@ -21,7 +27,17 @@
 </div>
 
 <ItemSearch cls="mt-6 " bind:searchTerm bind:offersFiltered />
-
+<div class="flex">
+  <a
+    class="btn variant-filled-primary"
+    href="./borrow/?offset={Math.max(offset - 4, 0)}"
+  >
+    <Fa icon={faArrowLeft} />
+  </a>
+  <a class="btn variant-filled-primary" href="./borrow/?offset={offset + 4}">
+    <Fa icon={faArrowRight} />
+  </a>
+</div>
 <ItemGrid cls="mt-6">
   {#each offersFiltered as offer (offer.item.id)}
     <ItemCard item={offer.item}>

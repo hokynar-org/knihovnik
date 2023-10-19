@@ -1,5 +1,5 @@
 import { db } from '$lib/server/db/drizzle';
-import { communities, user_community_relations } from '$lib/server/db/schema';
+import { communities, community_messages, item_visibility, user_community_relations } from '$lib/server/db/schema';
 import { and, eq } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
 import { error, redirect, type Actions, fail } from '@sveltejs/kit';
@@ -85,7 +85,12 @@ export const actions: Actions = {
       return fail(403, { form });
     }
     try {
-      const [community] = (await db.delete(communities).where(eq(communities.id,community_id)).returning());
+      await db.transaction(async (tx)=>{
+        const [visibility] = (await tx.delete(item_visibility).where(eq(item_visibility.community_id,community_id)).returning())
+        const [relations] = (await tx.delete(user_community_relations).where(eq(user_community_relations.community_id,community_id)).returning())
+        const [community_message] = (await tx.delete(community_messages).where(eq(community_messages.community_id,community_id)).returning());
+        const [community] = (await tx.delete(communities).where(eq(communities.id,community_id)).returning());
+      })
     } catch (error) {
       return fail(500, { message: 'Internal Error' });
     }
