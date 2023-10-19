@@ -58,8 +58,11 @@
     />
     <label for="transferType" class="text-xl mt-4 mb-2">Transfer Type</label>
     <OptionPicker
-      options={['Borrow', 'Transitive', 'Give']}
-      emojis={[faHandHolding, faHandHoldingHand, faHandsHolding]}
+      options={[
+        { name: 'Borrow', value: 'BORROW', icon: faHandHolding },
+        { name: 'Transitive', value: 'TRANSITIVE', icon: faHandHoldingHand },
+        { name: 'Give', value: 'GIVE', icon: faHandsHolding },
+      ]}
       bind:selected={transferType}
     />
     <input name="transferType" bind:value={transferType} class="hidden" />

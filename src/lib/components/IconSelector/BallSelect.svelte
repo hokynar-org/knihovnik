@@ -14,8 +14,8 @@
   on:click={() => {
     selectIcon(icon);
   }}
-  class:bg-surface-600={$selectedIcon == icon}
-  class:bg-surface-800={$selectedIcon != icon}
+  class:bg-surface-300-600-token={$selectedIcon == icon}
+  class:bg-surface-100-800-token={$selectedIcon != icon}
 >
   <Fa size="2x" {icon} />
 </button>

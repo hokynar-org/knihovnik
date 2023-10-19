@@ -17,21 +17,21 @@
   $: $form.name = data.item.name;
   $: $form.description = data.item.description;
   $: $form.transferType = data.item.transfeType as
-    | 'Borrow'
-    | 'Give'
-    | 'Transitive';
+    | 'BORROW'
+    | 'GIVE'
+    | 'TRANSITIVE';
   $: $form.transferType = transferType;
   const old_name = data.item.name;
   const old_description = data.item.description;
   const old_transferType = data.item.transfeType as
-    | 'Borrow'
-    | 'Give'
-    | 'Transitive';
+    | 'BORROW'
+    | 'GIVE'
+    | 'TRANSITIVE';
   $: disabled =
     old_name == $form.name &&
     old_description == $form.description &&
     old_transferType == $form.transferType;
-  let transferType: 'Borrow' | 'Give' | 'Transitive' = old_transferType;
+  let transferType: 'BORROW' | 'GIVE' | 'TRANSITIVE' = old_transferType;
 
   const change_visibility = async (community_id: number) => {
     const res = await fetch(
@@ -101,8 +101,11 @@
       <h4 class="text-2xl">Transfer type</h4>
       <input name="transferType" bind:value={transferType} class="hidden" />
       <OptionPicker
-        options={['Borrow', 'Transitive', 'Give']}
-        emojis={[faHandHolding, faHandHoldingHand, faHandsHolding]}
+        options={[
+          { name: 'Borrow', value: 'BORROW', icon: faHandHolding },
+          { name: 'Transitive', value: 'TRANSITIVE', icon: faHandHoldingHand },
+          { name: 'Give', value: 'GIVE', icon: faHandsHolding },
+        ]}
         bind:selected={transferType}
       />
 

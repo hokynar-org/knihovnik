@@ -20,7 +20,7 @@ const item_form_schema = z.object({
   name: z.string().min(2).max(64),
   description: z.string().min(0).max(512),
   files: z.string(),
-  transferType:z.enum(["Borrow","Give","Transitive"]),
+  transferType:z.enum(["BORROW","GIVE","TRANSITIVE"]),
 });
 
 export const load = (async ({ locals, params }) => {
