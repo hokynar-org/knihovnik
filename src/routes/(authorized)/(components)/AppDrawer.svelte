@@ -8,6 +8,7 @@
   import GroupNotification from '$lib/GroupNotification.svelte';
   import Fa from 'svelte-fa';
   import {
+    faArrowRightToBracket,
     faExclamationCircle,
     faSpinner,
     faTrash,
@@ -74,7 +75,17 @@
   {:else if id === 'notifications'}
     <menu class="p-2">
       <div class="border-b-2 border-surface-300-600-token">
-        <h2 class="h2 pb-2">Notifications</h2>
+        <div class="flex justify-between">
+          <h2 class="h2 pb-2">Notifications</h2>
+          <button
+            class="btn-icon"
+            on:click={() => {
+              drawerStore.close();
+            }}
+          >
+            <Fa scale={'2x'} icon={faArrowRightToBracket} />
+          </button>
+        </div>
         {#if $notifications.filter((notification) => {
           return !notification.read;
         }).length > 0}
