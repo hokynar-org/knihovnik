@@ -1,27 +1,21 @@
 <script lang="ts">
   import Fa from 'svelte-fa';
-  import {
-    faCheck,
-    faUser,
-    faArrowLeft,
-    faArrowRight,
-  } from '@fortawesome/free-solid-svg-icons';
-  import Item from '$lib/components/ItemDisplay/Item.svelte';
+  import { faCheck } from '@fortawesome/free-solid-svg-icons';
   import type { PublicItemSafe, PublicUserSafe } from '$lib/types';
   import ItemGrid from '$lib/components/ItemDisplay/ItemGrid.svelte';
   import ItemCard from '$lib/components/ItemDisplay/ItemCard.svelte';
-  import ItemSearch from '$lib/components/ItemDisplay/ItemSearch.svelte';
   import OwnedBy from '$lib/components/ItemDisplay/Status/OwnedBy.svelte';
   import TransferType from '$lib/components/ItemDisplay/Status/TransferType.svelte';
   import { page } from '$app/stores';
   import ItemPageBar from '$lib/components/ItemDisplay/ItemPageBar.svelte';
+  import ItemPaginator from '$lib/components/ItemDisplay/ItemPaginator.svelte';
   $: user = $page.data.user as PublicUserSafe;
 
   export let data;
 
   let offers = data.offers;
-  let offset = data.offset;
-  let limit = data.limit;
+  let offset = data.offset; //Start from item no. offset
+  let limit = data.limit; //Maximum number of items displayed
   let length = data.length;
   let search = data.search;
 
@@ -67,3 +61,4 @@
     <p>There are no items you can borrow right now :/</p>
   {/if}
 </ItemGrid>
+<ItemPaginator {offset} {limit} {search} {length} root="/borrow" cls="mt-6" />

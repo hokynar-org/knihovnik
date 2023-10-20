@@ -1,11 +1,8 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
   import Fa from 'svelte-fa';
-  import {
-    faArrowLeft,
-    faArrowRight,
-    faMagnifyingGlass,
-  } from '@fortawesome/free-solid-svg-icons';
+  import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+  import ItemPaginator from './ItemPaginator.svelte';
   export let limit: number;
   export let length: number;
   export let offset: number;
@@ -35,7 +32,7 @@
   $: console.log(leftURL);
 </script>
 
-<div class="grid grid-cols-[5fr,1fr] mt-6 gap-2 items-center w-min-fit">
+<div class="grid grid-cols-2 mt-6 gap-2 items-center w-min-fit">
   <div class="input-group input-group-divider flex">
     <input
       type="search"
@@ -53,36 +50,5 @@
       <Fa icon={faMagnifyingGlass} />
     </a>
   </div>
-  <div class="grid grid-cols-2">
-    <button
-      disabled={!(offset - limit >= 0)}
-      class="w-fit btn-icon h-10 variant-filled-primary rounded-r-none"
-      on:click={() =>
-        goto(
-          root +
-            '?offset=' +
-            Math.max(offset - limit, 0) +
-            '&limit=' +
-            Math.max(limit, 1) +
-            (search && search.length > 0 ? '&search=' + search : ''),
-        )}
-    >
-      <Fa icon={faArrowLeft} />
-    </button>
-    <button
-      disabled={!(offset + limit < length)}
-      class="w-fit btn-icon h-10 variant-filled-primary rounded-l-none"
-      on:click={() =>
-        goto(
-          root +
-            '?offset=' +
-            (offset + limit) +
-            '&limit=' +
-            Math.max(limit, 1) +
-            (search && search.length > 0 ? '&search=' + search : ''),
-        )}
-    >
-      <Fa icon={faArrowRight} />
-    </button>
-  </div>
+  <ItemPaginator {offset} {limit} {root} {search} {length} />
 </div>

@@ -1,19 +1,14 @@
 <script lang="ts">
   import ItemCard from '$lib/components/ItemDisplay/ItemCard.svelte';
   import Fa from 'svelte-fa';
-  import {
-    faArrowLeft,
-    faArrowRight,
-    faClock,
-  } from '@fortawesome/free-solid-svg-icons';
-  import DeleteItem from '$lib/components/ItemDisplay/Actions/DeleteItem.svelte';
+  import { faClock } from '@fortawesome/free-solid-svg-icons';
   import type { PageData } from './$types';
   import OfferItem from '$lib/components/ItemDisplay/Actions/OfferItem.svelte';
   import ItemSearch from '$lib/components/ItemDisplay/ItemSearch.svelte';
   import ItemGrid from '$lib/components/ItemDisplay/ItemGrid.svelte';
   import TransferType from '$lib/components/ItemDisplay/Status/TransferType.svelte';
-  import type { UserOffer } from '$lib/types';
   import ItemPageBar from '$lib/components/ItemDisplay/ItemPageBar.svelte';
+  import ItemPaginator from '$lib/components/ItemDisplay/ItemPaginator.svelte';
   export let data: PageData;
   $: user = data.user;
   let offers = data.user_items;
@@ -55,3 +50,5 @@
     </ItemCard>
   {/each}
 </ItemGrid>
+
+<ItemPaginator {offset} {limit} {search} {length} root="/offer" cls="mt-6" />

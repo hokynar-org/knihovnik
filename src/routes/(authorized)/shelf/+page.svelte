@@ -1,5 +1,4 @@
 <script lang="ts">
-  import ItemSearch from '$lib/components/ItemDisplay/ItemSearch.svelte';
   import ItemGrid from '$lib/components/ItemDisplay/ItemGrid.svelte';
   import ItemCard from '$lib/components/ItemDisplay/ItemCard.svelte';
   import Fa from 'svelte-fa';
@@ -8,13 +7,11 @@
     faXmark,
     faClock,
     faUser,
-    faArrowLeft,
-    faArrowRight,
   } from '@fortawesome/free-solid-svg-icons';
   import type { PublicUserSafe } from '$lib/types';
   import { page } from '$app/stores';
-  import { onMount } from 'svelte';
   import ItemPageBar from '$lib/components/ItemDisplay/ItemPageBar.svelte';
+  import ItemPaginator from '$lib/components/ItemDisplay/ItemPaginator.svelte';
   $: user = $page.data.user as PublicUserSafe;
 
   export let data;
@@ -77,3 +74,5 @@
     </ItemCard>
   {/each}
 </ItemGrid>
+
+<ItemPaginator {offset} {limit} {search} {length} root="/shelf" cls="mt-6" />
