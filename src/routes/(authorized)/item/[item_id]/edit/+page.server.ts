@@ -20,6 +20,8 @@ const item_form_schema = z.object({
   name: z.string().min(2).max(64),
   description: z.string().min(0).max(512),
   files: z.string(),
+  hasMainPic: z.boolean(),
+  iconName:z.string().nullable(),
   transferType:z.enum(["BORROW","GIVE","TRANSITIVE"]),
 });
 
@@ -60,9 +62,13 @@ export const actions: Actions = {
     if (!Number(params.item_id)) {
       throw error(400);
     }
+
     const item_id = Number(params.item_id);
 
     const form = await superValidate(request, item_form_schema);
+    if (!form.valid) {
+      return fail(400, { form });
+    }
 
     const found_items = await db
       .select()
@@ -73,19 +79,28 @@ export const actions: Actions = {
       return fail(404, { form });
     }
 
-    if (!form.valid) {
-      return fail(400, { form });
-    }
+    const item = found_items[0];
+
+    const toNewIcon = !form.data.hasMainPic && form.data.iconName
+    const toNewImage = form.data.hasMainPic && form.data.files
+    const change = toNewIcon || toNewImage
+
+    const new_hasMainPick = change?form.data.hasMainPic:item.hasMainPic;
+    const new_image_src   = !toNewIcon ?(change&&toNewImage?form.data.files   :item.image_src):null;
+    const new_iconName    = !toNewImage?(change&&toNewIcon ?form.data.iconName:item.iconName) :null;
 
     try {
-      await db
+      const new_item = await db
         .update(items)
         .set({
           transfeType: form.data.transferType,
           name: form.data.name,
           description: form.data.description,
+          hasMainPic:new_hasMainPick,
+          image_src: new_image_src,
+          iconName: new_iconName,
         })
-        .where(eq(items.id, item_id));
+        .where(eq(items.id, item_id)).returning();
     } catch (error) {
       console.error(error);
       return fail(500, { message: 'Internal Error' });

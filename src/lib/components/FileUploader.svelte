@@ -3,10 +3,10 @@
   import { FileDropzone } from '@skeletonlabs/skeleton';
   import Fa from 'svelte-fa';
   let localFiles: FileList | undefined;
-  let uploadedFiles: { filename: string; previewUrl: string }[] = [];
+  let uploadedFile: { filename: string; previewUrl: string } | null = null;
 
-  export let filenames: string[] = [];
-  $: filenames = uploadedFiles.map(({ filename }) => filename);
+  export let fileName: string | null = null;
+  $: fileName = uploadedFile?.filename ? uploadedFile?.filename : null;
 
   const localFileAdded = () => {
     if (localFiles === undefined) return;
@@ -32,41 +32,45 @@
 
       //You can only upload 1 file -> to simplify things
       //uploadedFiles.push({ filename, previewUrl });
-      uploadedFiles[0] = { filename, previewUrl };
-      uploadedFiles = uploadedFiles;
+      uploadedFile = { filename, previewUrl };
     });
   };
 
-  const deleteImage = (index: number) => {
-    uploadedFiles.splice(index, 1);
-    uploadedFiles = uploadedFiles;
+  const deleteImage = () => {
+    uploadedFile = null;
   };
 </script>
 
-<div class="dropzone-previews flex flex-row gap-4 flex-wrap">
-  {#each uploadedFiles as { previewUrl: url }, i (url)}
+<div class="h-40">
+  {#if uploadedFile}
     <div
-      class="p-0 border-2 rounded-container-token border-surface-500 bg-surface-500 overflow-hidden relative"
+      class="p-0 w-fit border-2 rounded-container-token border-surface-500 bg-surface-500 overflow-hidden relative"
     >
-      <img src={url} class="max-h-16" alt={url} />
+      <img
+        src={uploadedFile.previewUrl}
+        class="max-h-40"
+        alt={uploadedFile.previewUrl}
+      />
       <span
         class="block absolute top-1 right-1 rounded-full bg-surface-400 hover:bg-surface-700 cursor-pointer"
-        on:click={() => deleteImage(i)}
+        on:click={() => deleteImage()}
         on:keypress={({ key }) => {
-          if (key === 'Enter') deleteImage(i);
+          if (key === 'Enter') deleteImage();
         }}
         role="button"
         tabindex="0"
-        aria-label="Delete image {i}"
+        aria-label="Delete image"
       >
         <Fa icon={faClose} class="aspect-square" />
       </span>
     </div>
-  {/each}
+  {:else}
+    <FileDropzone
+      name="picture"
+      bind:files={localFiles}
+      on:change={localFileAdded}
+      multiple
+      regionInterface="!h-24"
+    />
+  {/if}
 </div>
-<FileDropzone
-  name="picture"
-  bind:files={localFiles}
-  on:change={localFileAdded}
-  multiple
-/>

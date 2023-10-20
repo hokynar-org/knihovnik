@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { selectedIcon } from '$lib/components/IconSelector/stores';
+  import { selectedIconNameStore } from '$lib/components/IconSelector/stores';
   import type { IconDefinition } from '@fortawesome/free-solid-svg-icons';
   export let icon: IconDefinition;
   import Fa from 'svelte-fa';
   function selectIcon(icon: IconDefinition) {
-    $selectedIcon = icon;
+    $selectedIconNameStore = icon.iconName;
   }
 </script>
 
@@ -14,8 +14,8 @@
   on:click={() => {
     selectIcon(icon);
   }}
-  class:bg-surface-300-600-token={$selectedIcon == icon}
-  class:bg-surface-100-800-token={$selectedIcon != icon}
+  class:bg-surface-300-600-token={$selectedIconNameStore == icon.iconName}
+  class:bg-surface-100-800-token={$selectedIconNameStore != icon.iconName}
 >
   <Fa size="2x" {icon} />
 </button>

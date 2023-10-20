@@ -12,11 +12,9 @@
   export let data: PageData;
 
   const { form, enhance } = superForm(data.item_form);
-  let files: string[] = [];
+  let fileName: string | null = null;
   let selectedIconName: string | null;
   let transferType: string;
-  $: filesSerialized = files.join(',');
-  $: $form.files = filesSerialized;
   $: $form.hasMainPic = hasMainPic;
   $: $form.iconName = selectedIconName;
   // $: console.log(hasMainPic, selectedIconName, $form.iconName);
@@ -66,7 +64,7 @@
       bind:selected={transferType}
     />
     <input name="transferType" bind:value={transferType} class="hidden" />
-    <input name="files" bind:value={filesSerialized} class="hidden" />
+    <input name="files" bind:value={fileName} class="hidden" />
     <input name="hasMainPic" bind:value={hasMainPic} class="hidden" />
     <input name="iconName" bind:value={selectedIconName} class="hidden" />
     <label for="description" class="text-xl mt-4">Main picture*</label>
@@ -95,7 +93,7 @@
 
     <div class="mb-4 mt-3">
       {#if hasMainPic}
-        <FileUploader bind:filenames={files} />
+        <FileUploader bind:fileName />
       {:else}
         <IconSelector bind:selectedIconName />
       {/if}
