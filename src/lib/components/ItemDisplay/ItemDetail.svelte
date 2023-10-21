@@ -20,7 +20,7 @@
 
   let imageAltText = 'TODO';
 
-  let clamped = true;
+  let clamped = false;
   function toggleClamp() {
     clamped = !clamped;
   }
@@ -51,7 +51,7 @@
       on:keydown={displayImage ? triggerModal : null}
       tabindex={displayImage ? 0 : null}
       role={displayImage ? 'button' : null}
-      class="mr-2 lg:w-[25%] overflow-hidden flex justify-center items-center"
+      class="mr-2 lg:w-[25%] overflow-hidden flex justify-center items-center shadow-xl"
     >
       {#if displayImage}
         <img
@@ -104,14 +104,7 @@
   </div>
 
   <div class="mt-6 flex justify-center">
-    <div
-      class="overflow-hidden max-w-xl"
-      class:line-clamp={clamped}
-      on:click={toggleClamp}
-      on:keypress={toggleClamp}
-      role="button"
-      tabindex="0"
-    >
+    <div class="overflow-hidden max-w-xl" class:line-clamp={clamped}>
       {@html item.description.replace(/\n/g, '<br>')}
     </div>
   </div>

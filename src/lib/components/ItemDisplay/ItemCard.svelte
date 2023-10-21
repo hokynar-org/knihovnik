@@ -31,7 +31,7 @@
   id="oneCard"
   class="card w-80 h-min rounded shadow-lg variant-filled-surface-700 overflow-visible"
 >
-  <div class="flex h-40 justify-center items-center py-auto">
+  <div class="flex h-40 justify-center items-center py-auto shadow-lg">
     {#if item.hasMainPic && item.image_src !== null}
       <a href="/item/{item.id}/" class="h-[100%] w-[100%]">
         <img
@@ -66,19 +66,17 @@
         <a href="/item/{item.id}">{item.name}</a>
       </h4>
     </div>
-    <div
-      id="textbox"
-      style="--fsize:{fontSize}"
-      class="mt-2 min-h-12e text-min-height"
-      class:line-clamp={clamped}
-      class:overflow-hidden={clamped}
-      on:click={toggleClamp}
-      on:keypress={toggleClamp}
-      role="button"
-      tabindex="0"
+    <a class="font-normal" href="/item/{item.id}">
+      <div
+        id="textbox"
+        style="--fsize:{fontSize}"
+        class="mt-2 min-h-12e text-min-height"
+        class:line-clamp={clamped}
+        class:overflow-hidden={clamped}
+      >
+        {item.description}
+      </div></a
     >
-      {item.description}
-    </div>
   </div>
   <div class="mt-2 px-4 pt-2">
     <slot />
