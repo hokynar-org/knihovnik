@@ -36,7 +36,7 @@ export const POST = (async ({params, locals, url}) => {
         role: 'REQUESTED',
     }).returning())[0];
     await notifyAdmins(community_id,{
-        url:"/community/"+String(community_id)+"/users",
+        url:"/community/"+String(community_id)+"/admin",
         text:"User "+user.user_name+" wants to join " + community.name+" community",
     })
 

@@ -38,9 +38,11 @@
 </script>
 
 <h4 class="mb-2">Community: {community.name}</h4>
-<p>
-  {community.description}
-</p>
+{#if community.description}
+  <p>
+    {community.description}
+  </p>
+{/if}
 
 <div class="mt-6">
   {#if role}
