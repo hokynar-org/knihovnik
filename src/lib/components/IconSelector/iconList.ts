@@ -10,6 +10,11 @@ import {
   faDiceD20,
   faShirt,
   faStar,
+  faPerson,
+  faSeedling,
+  faJoint,
+  faDice,
+  faTornado,
 } from '@fortawesome/free-solid-svg-icons';
 
 export const iconList = [
@@ -24,4 +29,9 @@ export const iconList = [
   faDiceD20,
   faShirt,
   faStar,
+  faPerson,
+  faSeedling,
+  faJoint,
+  faDice,
+  faTornado,
 ];
