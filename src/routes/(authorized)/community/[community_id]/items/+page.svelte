@@ -27,7 +27,7 @@
   {offset}
   {length}
   {search}
-  root="/community/{community.id}"
+  root="/community/{community.id}/items"
 />
 <ItemGrid cls="mt-6 ">
   {#each community_items as offer (offer.item.id)}
@@ -39,6 +39,6 @@
   {limit}
   {search}
   {length}
-  root="/community/{community.id}"
+  root="/community/{community.id}/items"
   cls="mt-6"
 />

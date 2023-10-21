@@ -1,4 +1,4 @@
-import { borrow_requests, items, users, request_actions } from "./schema"
+import { borrow_requests, items, users, request_actions, communities, user_community_relations } from "./schema"
 import { alias } from "drizzle-orm/pg-core";
 
 export const holders= alias(users,'holders');
@@ -90,3 +90,16 @@ export const request_action_message_select={
     user_name: users.user_name,
 };
 
+export const community_select={
+    id:communities.id,
+    name:communities.name,
+    description:communities.description,
+    visibility:communities.visibility,
+}
+
+export const user_community_relation_select={
+    community_id:user_community_relations.community_id,
+    role:user_community_relations.role,
+    timestamp:user_community_relations.timestamp,
+    user_id:user_community_relations.user_id,
+}

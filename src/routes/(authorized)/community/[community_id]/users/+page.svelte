@@ -19,28 +19,26 @@
   };
 </script>
 
-{#if role && (role == 'MEMBER' || role == 'ADMIN')}
-  <div class="mt-6">
-    Your role is {role}
-    <button
-      {disabled}
-      class="btn variant-filled-error py-1 my-2"
-      on:click={() => {
-        disabled = true;
-        leave()
-          .then((value) => {
-            disabled = false;
+<div class="mt-6">
+  Your role is {role}
+  <button
+    {disabled}
+    class="btn variant-filled-error py-1 my-2"
+    on:click={() => {
+      disabled = true;
+      leave()
+        .then((value) => {
+          disabled = false;
 
-            role = null;
-          })
-          .catch((reason) => {
-            disabled = false;
-          });
-      }}
-    >
-      Leave
-    </button>
-  </div>
-{/if}
+          role = null;
+        })
+        .catch((reason) => {
+          disabled = false;
+        });
+    }}
+  >
+    Leave
+  </button>
+</div>
 
 <CommunityUsers {community_users} cls="mt-6" />

@@ -2,10 +2,9 @@
   import type { CommunityRelation } from '$lib/types';
   import Fa from 'svelte-fa';
   import { faClock } from '@fortawesome/free-solid-svg-icons';
-  import { navigating, page } from '$app/stores';
+  import { page } from '$app/stores';
   export let data;
   $: community = data.community;
-  $: community_users = data.community_users;
   $: role = data.role;
   let disabled = false;
   const confirm = async () => {
@@ -35,9 +34,6 @@
     }
     return (await res.json()) as CommunityRelation;
   };
-
-  let isAdminTab = false;
-  $: isAdminTab = String($page.url).includes('admin');
 </script>
 
 <h4 class="mb-2">Community: {community.name}</h4>
@@ -58,13 +54,6 @@
               disabled = true;
               confirm()
                 .then((value) => {
-                  community_users = community_users.flatMap((fvalue) => {
-                    if (value.user_id != fvalue.user.id) {
-                      return fvalue;
-                    } else {
-                      return { relation: value, user: fvalue.user };
-                    }
-                  });
                   role = 'MEMBER';
                   disabled = false;
                 })
@@ -82,9 +71,6 @@
               disabled = true;
               reject()
                 .then((value) => {
-                  community_users = community_users.filter((fvalue) => {
-                    value.user_id != fvalue.user.id;
-                  });
                   role = null;
                   disabled == false;
                 })
@@ -141,6 +127,18 @@
           {:else}
             <a class="text-base" href={'/community/' + community.id + '/items'}
               >Items</a
+            >
+          {/if}
+        </li>
+
+        <li class="crumb-separator" aria-hidden>/</li>
+
+        <li class="text-lg">
+          {#if $page.route.id == '/(authorized)/community/[community_id]/chat'}
+            Chat
+          {:else}
+            <a class="text-base" href={'/community/' + community.id + '/chat'}
+              >Chat</a
             >
           {/if}
         </li>
