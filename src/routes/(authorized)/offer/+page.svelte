@@ -33,7 +33,7 @@
     <ItemCard item={offer.item}>
       <TransferType item={offer.item} />
       {#if offer.holder && user.id == offer.holder.id}
-        <div class="flex flex-wrap items-baseline text-lg">
+        <div class="flex flex-wrap items-center text-lg">
           <div class="mx-auto">
             <a href={'/item/' + offer.item.id + '/edit'}>Edit</a>
           </div>
@@ -42,7 +42,7 @@
           </div>
         </div>
       {:else}
-        <div class="flex items-baseline text-lg">
+        <div class="flex items-center text-lg">
           <p><Fa icon={faClock} /></p>
           <p class="pl-2 py-[.625rem]">You have lent this item</p>
         </div>

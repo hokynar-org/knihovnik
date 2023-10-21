@@ -8,7 +8,7 @@
 </script>
 
 {#if holder}
-  <div class="flex items-baseline">
+  <div class="flex items-center">
     <p><Fa icon={faCube} /></p>
     <p class="pl-2">
       {#if holder.id == user.id}

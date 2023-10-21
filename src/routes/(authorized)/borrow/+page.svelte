@@ -44,12 +44,12 @@
         <TransferType item={offer.item} />
 
         {#if offer.item.offered && offer.owner && offer.owner.id != user.id}
-          <div class="flex items-baseline">
+          <div class="flex items-center">
             <p><Fa icon={faCheck} /></p>
             <p class="pl-2">You can borrow this item</p>
           </div>
         {:else if offer.item.offered && offer.owner && offer.owner.id == user.id}
-          <div class="flex items-baseline">
+          <div class="flex items-center">
             <p><Fa icon={faCheck} /></p>
             <p class="pl-2">Others can borrow your item</p>
           </div>

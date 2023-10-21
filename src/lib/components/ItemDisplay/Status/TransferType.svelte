@@ -22,7 +22,7 @@
 </script>
 
 {#if item}
-  <div class="flex items-baseline">
+  <div class="flex items-center">
     <p><Fa icon={faIcon} /></p>
     <p class="pl-2">Transfer Type: {item.transfeType}</p>
   </div>

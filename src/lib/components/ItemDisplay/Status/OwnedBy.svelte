@@ -8,7 +8,7 @@
 </script>
 
 {#if owner}
-  <div class="flex items-baseline">
+  <div class="flex items-center">
     <p><Fa icon={faUser} /></p>
     <p class="pl-2">
       {#if owner.id == user.id}
