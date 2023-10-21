@@ -17,7 +17,6 @@ export const load = (async ({ locals, params, url, parent }) => {
   if (!locals.user) {
     throw redirect(301, '/login');
   }
-  const user = locals.user;
   if (!params.community_id) {
     throw error(400);
   }

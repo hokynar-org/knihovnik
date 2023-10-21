@@ -5,6 +5,7 @@ import {borrow_requests, communities, items, notifications, request_actions, use
 import { and, eq, or } from 'drizzle-orm';
 import type { BorrowRequest, Item, PublicItemSafe } from '$lib/types';
 import { pusher } from '$lib/server/pusher';
+import { notifyUser } from '$lib/server/notification';
 
 export const POST = (async ({params, locals, url}) => {
     if (!locals.user) {
@@ -55,12 +56,11 @@ export const POST = (async ({params, locals, url}) => {
         role:'ADMIN',
     }).where(and(eq(user_community_relations.community_id, community_id),eq(user_community_relations.user_id, user_id))).returning())[0];
 
-    // const notification = await db.insert(notifications).values({
-    //         user_id: user_id,
-    //         text: "User " + user.user_name + " invited you to " + community.name,
-    //         url: '/community/'+String(community_id),
-    //     }).returning();
-    // await pusher.sendToUser(String(user_id), "notification", notification[0]);
+    await notifyUser({
+        user_id: user_id,
+        text: "User " + user.user_name + " promoted you to admin of " + community.name+ " community",
+        url: '/community/'+String(community_id)
+    })
 
     return json(new_relations);
 }) satisfies RequestHandler;

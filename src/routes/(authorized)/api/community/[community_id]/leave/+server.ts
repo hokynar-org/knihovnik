@@ -5,6 +5,7 @@ import {borrow_requests, communities, item_visibility, items, notifications, req
 import { and, asc, eq, or } from 'drizzle-orm';
 import type { BorrowRequest, Item, PublicItemSafe } from '$lib/types';
 import { pusher } from '$lib/server/pusher';
+import { notifyAdmins } from '$lib/server/notification';
 
 export const POST = (async ({params, locals, url}) => {
     if (!locals.user) {
@@ -48,14 +49,17 @@ export const POST = (async ({params, locals, url}) => {
         await db.update(user_community_relations).set({
             role: 'ADMIN',
         }).where(and(eq(user_community_relations.community_id, community_id),eq(user_community_relations.user_id, new_relations[0].user_id)));
+        await notifyAdmins(community_id,{
+            url:"/community/"+String(community_id)+"/users",
+            text:"User "+user.user_name+" left " + community.name+" community",
+        })
     }
-
-    // const notification = await db.insert(notifications).values({
-    //         user_id: user_id,
-    //         text: "User " + user.user_name + " invited you to " + community.name,
-    //         url: '/community/'+String(community_id),
-    //     }).returning();
-    // await pusher.sendToUser(String(user_id), "notification", notification[0]);
+    else{
+        await notifyAdmins(community_id,{
+            url:"/community/"+String(community_id)+"/users",
+            text:"User "+user.user_name+" left " + community.name+" community",
+        })
+    }
     
     return json(deleted_relation);
 }) satisfies RequestHandler;

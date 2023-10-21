@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { goto } from '$app/navigation';
   import CommunityUsers from '$lib/components/Community/CommunityUsers.svelte';
   import type { CommunityRelation } from '$lib/types.js';
   export let data;
@@ -29,7 +30,7 @@
       leave()
         .then((value) => {
           disabled = false;
-
+          goto('/community/');
           role = null;
         })
         .catch((reason) => {

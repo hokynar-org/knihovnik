@@ -5,6 +5,7 @@ import {borrow_requests, communities, items, notifications, request_actions, use
 import { and, eq, or } from 'drizzle-orm';
 import type { BorrowRequest, Item, PublicItemSafe } from '$lib/types';
 import { pusher } from '$lib/server/pusher';
+import { notifyUser } from '$lib/server/notification';
 
 export const POST = (async ({params, locals, url}) => {
     if (!locals.user) {
@@ -51,6 +52,10 @@ export const POST = (async ({params, locals, url}) => {
         throw error(401);
     }
     const deleted_relations = (await db.delete(user_community_relations).where(and(eq(user_community_relations.community_id, community_id),eq(user_community_relations.user_id, user_id))).returning())[0];
-
+    await notifyUser({
+        user_id: user_id,
+        text: "User " + user.user_name + " discarded your invitation to " + community.name+ " community",
+        url: community.visibility?'/community/'+String(community_id):null
+    })
     return json(deleted_relations);
 }) satisfies RequestHandler;

@@ -3,6 +3,7 @@
   import Fa from 'svelte-fa';
   import { faClock } from '@fortawesome/free-solid-svg-icons';
   import { page } from '$app/stores';
+  import { goto } from '$app/navigation';
   export let data;
   $: community = data.community;
   $: role = data.role;
@@ -72,6 +73,7 @@
               reject()
                 .then((value) => {
                   role = null;
+                  goto('/community');
                   disabled == false;
                 })
                 .catch((reason) => {
@@ -89,7 +91,7 @@
         <p class="pl-2">Requested to join</p>
       </div>
     {/if}
-  {:else}
+  {:else if community.visibility}
     <div class="mb-6 w-fit mx-auto">
       <button
         class="btn variant-filled-primary py-1 my-2"
