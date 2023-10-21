@@ -4,7 +4,6 @@
   import type { PageData } from './$types';
   import ReadOnlyTextInput from '$lib/components/EditingInput/ReadOnlyTextInput.svelte';
   import ReadOnlyTextFieldInput from '$lib/components/EditingInput/ReadOnlyTextFieldInput.svelte';
-  import { afterUpdate, onMount } from 'svelte';
 
   export let data: PageData;
 
@@ -24,7 +23,7 @@
     old_user_name == $form.user_name &&
     old_full_name == $form.full_name &&
     old_pronouns == $form.pronouns &&
-    old_bio == $form.pronouns;
+    old_bio == $form.bio;
 </script>
 
 <div class="w-xs">

@@ -39,7 +39,6 @@
     method="POST"
     action="?/new_item"
     class="max-w-xs min-w-xs"
-    use:enhance
     enctype="multipart/form-data"
   >
     <label for="name" class="text-xl mt-4 mb-2">Name*</label>

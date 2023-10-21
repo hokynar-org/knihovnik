@@ -161,7 +161,7 @@
         {/if}
       </div>
       <div class="self-end justify-self-center col-span-full">
-        <button {disabled} class="btn variant-filled-primary"
+        <button {disabled} class="btn variant-filled-primary" type="submit"
           >Save changes</button
         >
       </div>

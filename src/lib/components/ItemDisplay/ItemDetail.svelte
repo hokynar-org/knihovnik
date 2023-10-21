@@ -28,7 +28,7 @@
   let displayImage: boolean = item.hasMainPic && item.image_src !== null;
   const imageView: ModalSettings = {
     type: 'alert',
-    title: 'Image preview',
+    title: '',
     body: '',
     image: item.image_src!,
   };

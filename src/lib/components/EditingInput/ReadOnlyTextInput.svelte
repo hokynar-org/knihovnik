@@ -16,9 +16,11 @@
 
   //$: console.log('Edit fields no: ', $editFieldsNo);
   $editFieldsNo = $editFieldsNo + 1;
+  let isChanged: boolean;
+  $: isChanged = original != value;
   $: {
     //Keeping track of how many editing fields we have
-    if (editing) {
+    if (isChanged) {
       editFieldsNo.update((n) => n + 1);
     } else {
       editFieldsNo.update((n) => n - 1);
