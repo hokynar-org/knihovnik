@@ -56,6 +56,11 @@ export type PublicUserSafe = Pick<
   'user_name' | 'id' | 'pronouns' | 'bio' | 'full_name'
 >;
 
+export type CommunityUserSafe = {
+  relation: CommunityRelation;
+  user: PublicUserSafe;
+};
+
 export type CommunityMessage = {
   id: number;
   timestamp: Date | null;
@@ -86,7 +91,7 @@ export type GroupNotificaton = {
   user_id: number;
   timestamp: Date;
   ids: number[];
-}
+};
 
 export interface Offer {
   item: PublicItemSafe;

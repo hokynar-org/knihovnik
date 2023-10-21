@@ -135,17 +135,41 @@
     </button>
   {/if}
 
-  <div class="mt-4">
-    {#if role && role == 'ADMIN'}
-      <ol class="breadcrumb">
-        <li class="text-lg">
-          {#if $page.route.id == '/(authorized)/community/[community_id]'}
-            Home
-          {:else}
-            <a class="text-base" href={'/community/' + community.id}>Home</a>
-          {/if}
-        </li>
+  <div class="mt-6">
+    <ol class="breadcrumb">
+      <li class="text-lg">
+        {#if $page.route.id == '/(authorized)/community/[community_id]'}
+          Home
+        {:else}
+          <a class="text-base" href={'/community/' + community.id}>Home</a>
+        {/if}
+      </li>
 
+      <li class="crumb-separator" aria-hidden>/</li>
+
+      <li class="text-lg">
+        {#if $page.route.id == '/(authorized)/community/[community_id]/items'}
+          Items
+        {:else}
+          <a class="text-base" href={'/community/' + community.id + '/items'}
+            >Items</a
+          >
+        {/if}
+      </li>
+
+      <li class="crumb-separator" aria-hidden>/</li>
+
+      <li class="text-lg">
+        {#if $page.route.id == '/(authorized)/community/[community_id]/users'}
+          Users
+        {:else}
+          <a class="text-base" href={'/community/' + community.id + '/users'}
+            >Users</a
+          >
+        {/if}
+      </li>
+
+      {#if role && role == 'ADMIN'}
         <li class="crumb-separator" aria-hidden>/</li>
 
         <li class="text-lg">
@@ -168,8 +192,8 @@
             >
           {/if}
         </li>
-      </ol>
-    {/if}
+      {/if}
+    </ol>
   </div>
 </div>
 <slot />

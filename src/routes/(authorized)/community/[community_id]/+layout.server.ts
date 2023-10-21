@@ -8,7 +8,7 @@ import {
 } from '$lib/server/db/schema';
 import { and, eq, not, or } from 'drizzle-orm';
 import type { LayoutServerLoad } from './$types';
-import type { CommunityMessage, Offer } from '$lib/types';
+import type { CommunityMessage, CommunityUserSafe } from '$lib/types';
 import { error, redirect } from '@sveltejs/kit';
 import { getCommunityItems, getShelfItems } from '$lib/server/item_load';
 import { user_select } from '$lib/server/db/selects';
@@ -64,13 +64,24 @@ export const load = (async ({ locals, params, url }) => {
     throw error(404);
   }
   const community = found_communities[0];
-  const limit = Number(url.searchParams.get('limit'))?Number(url.searchParams.get('limit')):4
-  const offset = Number(url.searchParams.get('offset'))?Number(url.searchParams.get('offset')):0
-  const search = url.searchParams.get('search')?url.searchParams.get('search'):null
-  const {offers, length} = await getCommunityItems(community_id, offset, limit,search);
+  const limit = Number(url.searchParams.get('limit'))
+    ? Number(url.searchParams.get('limit'))
+    : 4;
+  const offset = Number(url.searchParams.get('offset'))
+    ? Number(url.searchParams.get('offset'))
+    : 0;
+  const search = url.searchParams.get('search')
+    ? url.searchParams.get('search')
+    : null;
+  const { offers, length } = await getCommunityItems(
+    community_id,
+    offset,
+    limit,
+    search,
+  );
   return {
     community: community,
-    community_users: community_users,
+    community_users: community_users as CommunityUserSafe[],
     community_messages: messages,
     role: user_relation.length == 0 ? null : user_relation[0].role,
     community_items: offers,

@@ -1,40 +1,15 @@
 <script lang="ts">
-  import ItemSearch from '$lib/components/ItemDisplay/ItemSearch.svelte';
-  import ItemCard from '$lib/components/ItemDisplay/ItemCard.svelte';
-  import ItemGrid from '$lib/components/ItemDisplay/ItemGrid.svelte';
   import Chat from '$lib/components/Chat/Chat.svelte';
   import Fa from 'svelte-fa';
-  import {
-    faArrowLeft,
-    faArrowRight,
-    faLockOpen,
-  } from '@fortawesome/free-solid-svg-icons';
+  import { faLockOpen } from '@fortawesome/free-solid-svg-icons';
   import { pusher } from '$lib/store.js';
   import type { CommunityMessage } from '$lib/types';
-  import { onDestroy, onMount } from 'svelte';
-  import ItemPageBar from '$lib/components/ItemDisplay/ItemPageBar.svelte';
+  import { onDestroy } from 'svelte';
   export let data;
-
-  let community_items = data.community_items;
-  let offset = data.offset;
-  let limit = data.limit;
-  let length = data.length;
-  let search = data.search;
-
-  $: community_items = data.community_items;
-  $: offset = data.offset;
-  $: limit = data.limit;
-  $: length = data.length;
-  $: search = data.search;
 
   $: user = data.user;
   $: community = data.community;
-  $: community_users = data.community_users;
   $: community_messages = data.community_messages;
-  $: community_items = data.community_items;
-
-  $: offersFiltered = community_items;
-  let searchTerm: string;
 
   let fallback = false;
   if ($pusher) {
@@ -50,21 +25,7 @@
   } else {
     fallback = true;
   }
-  // onMount(() => {
-  //   console.log(limit, length, offset);
-  // });
 </script>
-
-<div class="mt-6">
-  <h3 class="mb-2 text-2xl">Users in this community</h3>
-  {#each community_users as community_user}
-    <a href={'/user/' + community_user.user.id}
-      >{community_user.user.user_name}</a
-    >
-    ({community_user.relation.role})
-    <br />
-  {/each}
-</div>
 
 <div class="mt-6 border-solid border-2 pl-4 w-modal">
   <div
@@ -79,20 +40,3 @@
   </div>
   <Chat messages={community_messages} {user} {community} />
 </div>
-
-<h3 class="mt-10 mb-2 text-2xl">Community Items</h3>
-<ItemPageBar
-  {limit}
-  {offset}
-  {length}
-  {search}
-  root="/community/{community.id}"
-/>
-<ItemGrid cls="mt-6 ">
-  {#each community_items as offer (offer.item.id)}
-    <ItemCard item={offer.item}></ItemCard>
-  {/each}
-</ItemGrid>
-
-<style>
-</style>
