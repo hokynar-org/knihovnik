@@ -6,30 +6,30 @@
   <div class="">
     <ol class="breadcrumb">
       <li class="text-lg">
-        {#if $page.route.id == '/(authorized)/community'}
+        {#if $page.route.id == '/(authorized)/communities'}
           Your communities
         {:else}
-          <a class="text-base" href={'/community'}>Your communities</a>
+          <a class="text-base" href={'/communities'}>Your communities</a>
         {/if}
       </li>
 
       <li class="crumb-separator" aria-hidden>/</li>
 
       <li class="text-lg">
-        {#if $page.route.id == '/(authorized)/community/search'}
+        {#if $page.route.id == '/(authorized)/communities/search'}
           Find a community
         {:else}
-          <a class="text-base" href={'/community/search'}>Find a community</a>
+          <a class="text-base" href={'/communities/search'}>Find a community</a>
         {/if}
       </li>
 
       <li class="crumb-separator" aria-hidden>/</li>
 
       <li class="text-lg">
-        {#if $page.route.id == '/(authorized)/community/new'}
+        {#if $page.route.id == '/(authorized)/communities/new'}
           New Community
         {:else}
-          <a class="text-base" href={'/community/new'}>New Community</a>
+          <a class="text-base" href={'/communities/new'}>New Community</a>
         {/if}
       </li>
     </ol>

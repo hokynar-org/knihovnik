@@ -2,8 +2,6 @@
   import type { PageData } from './$types';
   export let data: PageData;
   import { page } from '$app/stores';
-  import New from './new/+page.svelte';
-  import Search from './search/+page.svelte';
   import CommunityCard from '$lib/components/Community/CommunityCard.svelte';
 
   $: user_communities = data.user_communities;
@@ -31,8 +29,4 @@
       </p>
     {/if}
   </div>
-
-  <h2 class="mt-12 text-4xl">
-    <a href={'/community/new'}>New community</a>
-  </h2>
 </div>

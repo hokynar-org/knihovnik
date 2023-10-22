@@ -94,7 +94,7 @@ export const actions: Actions = {
     } catch (error) {
       return fail(500, { message: 'Internal Error' });
     }
-    throw redirect(301, '/community');
+    throw redirect(301, '/communities');
   },
 }
 

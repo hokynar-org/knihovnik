@@ -30,7 +30,7 @@
       leave()
         .then((value) => {
           disabled = false;
-          goto('/community/');
+          goto('/communities');
           role = null;
         })
         .catch((reason) => {

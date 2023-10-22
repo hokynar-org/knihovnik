@@ -24,7 +24,8 @@
     >Requests</MenuItem
   >
   <MenuItem href="/shelf" icon={faCube} {current}>Shelf</MenuItem>
-  <MenuItem href="/community" icon={faUserGroup} {current}>Community</MenuItem>
+  <MenuItem href="/communities" icon={faUserGroup} {current}>Community</MenuItem
+  >
 
   <svelte:fragment slot="trail">
     {#if isAdmin}

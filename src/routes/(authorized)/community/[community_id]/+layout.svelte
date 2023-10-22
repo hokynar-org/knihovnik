@@ -75,7 +75,7 @@
               reject()
                 .then((value) => {
                   role = null;
-                  goto('/community');
+                  goto('/communities');
                   disabled == false;
                 })
                 .catch((reason) => {
