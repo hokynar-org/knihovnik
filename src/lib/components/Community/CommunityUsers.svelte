@@ -6,11 +6,27 @@
 
 <div class={cls}>
   <h3 class="mb-2 text-2xl">Users in this community</h3>
-  {#each community_users as community_user}
-    <a href={'/user/' + community_user.user.id}
-      >{community_user.user.user_name}</a
-    >
-    ({community_user.relation.role})
-    <br />
-  {/each}
+  <table class="table-fixed table max-w-lg">
+    <thead>
+      <tr>
+        <th> User Name </th>
+        <th> Role </th>
+      </tr>
+    </thead>
+    <tbody>
+      {#each community_users as community_user}
+        <tr>
+          <td>
+            <a href={'/user/' + community_user.user.id}
+              >{community_user.user.user_name}</a
+            >
+          </td>
+          <td>
+            {community_user.relation.role}
+          </td>
+        </tr>
+      {/each}
+    </tbody><tbody />
+    <table />
+  </table>
 </div>

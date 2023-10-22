@@ -200,44 +200,64 @@
 
 <div class="mt-6">
   <h3 class="mb-2 text-xl">Users in this community</h3>
-  {#each community_users as community_user}
-    <a href={'/user/' + community_user.user.id}
-      >{community_user.user.user_name}</a
-    >
-    ({community_user.relation.role})
-    {#if community_user.relation.role == 'MEMBER'}
-      <button
-        {disabled}
-        class="btn variant-filled-error py-1 my-2"
-        on:click={() => kick_pressed(community_user)}
-      >
-        Kick
-      </button>
-      <button
-        class="btn variant-filled-primary py-1 my-2"
-        {disabled}
-        on:click={() => promote_pressed(community_user)}
-      >
-        Promote
-      </button>
-    {:else if community_user.relation.role == 'REQUESTED'}
-      <button
-        {disabled}
-        class="btn variant-filled-error py-1 my-2"
-        on:click={() => deny_pressed(community_user)}
-      >
-        Deny
-      </button>
-      <button
-        class="btn variant-filled-primary py-1 my-2"
-        {disabled}
-        on:click={() => accept_pressed(community_user)}
-      >
-        Accept
-      </button>
-    {/if}
-    <br />
-  {/each}
+  <table class="table-fixed table max-w-lg">
+    <thead>
+      <tr>
+        <th> User Name </th>
+        <th> Role </th>
+        <th> Actions </th>
+      </tr>
+    </thead>
+    <tbody>
+      {#each community_users as community_user}
+        <tr>
+          <td>
+            <a href={'/user/' + community_user.user.id}
+              >{community_user.user.user_name}</a
+            >
+          </td>
+          <td>
+            {community_user.relation.role}
+          </td>
+          <td>
+            {#if community_user.relation.role == 'MEMBER'}
+              <button
+                {disabled}
+                class="btn variant-filled-error p-2"
+                on:click={() => kick_pressed(community_user)}
+              >
+                Kick
+              </button>
+              <button
+                class="btn variant-filled-primary p-2"
+                {disabled}
+                on:click={() => promote_pressed(community_user)}
+              >
+                Promote
+              </button>
+            {:else if community_user.relation.role == 'REQUESTED'}
+              <button
+                {disabled}
+                class="btn variant-filled-error p-2"
+                on:click={() => deny_pressed(community_user)}
+              >
+                Deny
+              </button>
+              <button
+                class="btn variant-filled-primary py-1 my-2"
+                {disabled}
+                on:click={() => accept_pressed(community_user)}
+              >
+                Accept
+              </button>
+            {:else}
+              <div></div>
+            {/if}
+          </td></tr
+        >
+      {/each}
+    </tbody>
+  </table>
 </div>
 
 <h3 class="mt-6 mb-2 text-xl">Find and invite users</h3>

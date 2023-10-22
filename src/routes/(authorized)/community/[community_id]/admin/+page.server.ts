@@ -36,7 +36,7 @@ export const load = (async ({ locals,params }) => {
   })
   .from(user_community_relations)
   .where(eq(user_community_relations.community_id, community_id))
-  .innerJoin(users, eq(users.id, user_community_relations.user_id));
+  .innerJoin(users, eq(users.id, user_community_relations.user_id)).orderBy((users.user_name));
   return {
     community_users:community_users
   };
