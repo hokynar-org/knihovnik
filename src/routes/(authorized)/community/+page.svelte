@@ -4,6 +4,7 @@
   import { page } from '$app/stores';
   import New from './new/+page.svelte';
   import Search from './search/+page.svelte';
+  import CommunityCard from '$lib/components/Community/CommunityCard.svelte';
 
   $: user_communities = data.user_communities;
 
@@ -13,13 +14,16 @@
 <div>
   <div class="w-xs">
     <h2 class="text-4xl mb-4">Your communities</h2>
-
-    {#each user_communities as community (community.communities.id)}
-      <a href={'/community/' + community.communities.id}
-        >{community.communities.name} ({community.user_community_relations
-          .role})</a
-      ><br />
-    {/each}
+    <div
+      class="grid 2xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-2"
+    >
+      {#each user_communities as community}
+        <CommunityCard
+          community={community.communities}
+          relation={community.user_community_relations}
+        />
+      {/each}
+    </div>
     {#if user_communities.length == 0}
       <p>
         You aren't in any community just yet. Try searching for one or create a
@@ -27,8 +31,6 @@
       </p>
     {/if}
   </div>
-
-  <Search data={$page.data} />
 
   <h2 class="mt-12 text-4xl">
     <a href={'/community/new'}>New community</a>

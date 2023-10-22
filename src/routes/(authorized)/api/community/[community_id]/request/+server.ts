@@ -39,6 +39,5 @@ export const POST = (async ({params, locals, url}) => {
         url:"/community/"+String(community_id)+"/admin",
         text:"User "+user.user_name+" wants to join " + community.name+" community",
     })
-
     return json(new_relations);
 }) satisfies RequestHandler;
