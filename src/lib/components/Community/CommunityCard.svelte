@@ -2,6 +2,7 @@
   import { onMount } from 'svelte';
   import Fa from 'svelte-fa';
   import type { Community, CommunityRelation } from '$lib/types';
+  import { faLock } from '@fortawesome/free-solid-svg-icons';
   export let community: Community;
   export let relation: CommunityRelation | null;
 
@@ -15,10 +16,13 @@
       class="card w-80 h-min rounded shadow-lg variant-filled-surface-700 overflow-visible hover:shadow-xl"
     >
       <div class="pt-1 px-4 1 h-auto overflow-visible">
-        <div>
+        <div class="flex flex-row justify-between items-center">
           <h4 class="py-1 mt-2 whitespace-nowrap overflow-hidden text-ellipsis">
             {community.name}
           </h4>
+          {#if !community.visibility}
+            <Fa icon={faLock} />
+          {/if}
         </div>
         <div
           id="textbox"

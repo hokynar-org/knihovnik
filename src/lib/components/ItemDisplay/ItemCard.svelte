@@ -33,7 +33,7 @@
       id="oneCard"
       class="card w-80 h-min rounded shadow-lg variant-filled-surface-700 overflow-visible hover:shadow-xl"
     >
-      <div class="flex h-40 justify-center items-center py-auto shadow-lg">
+      <div class="flex h-40 justify-center items-center py-auto shadow-md">
         {#if item.hasMainPic && item.image_src !== null}
           <div class="h-full w-full">
             <img
@@ -92,9 +92,5 @@
 <style>
   .text-min-height {
     min-height: calc(1.5 * var(--fsize) * 1px * 4); /* 4 lines of text */
-  }
-
-  .text-max-height {
-    max-height: calc(1.5 * var(--fsize) * 1px * 4); /* 4 lines of text */
   }
 </style>
