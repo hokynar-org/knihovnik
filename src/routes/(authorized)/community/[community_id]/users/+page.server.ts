@@ -6,7 +6,7 @@ import {
   user_community_relations,
   users,
 } from '$lib/server/db/schema';
-import { and, eq, not, or } from 'drizzle-orm';
+import { and, eq, not, or, sql } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
 import type { CommunityMessage, CommunityUserSafe } from '$lib/types';
 import { error, redirect } from '@sveltejs/kit';
@@ -37,7 +37,7 @@ export const load = (async ({ locals, params, url, parent }) => {
     })
     .from(user_community_relations)
     .where(eq(user_community_relations.community_id, community_id))
-    .innerJoin(users, eq(users.id, user_community_relations.user_id)).orderBy((users.user_name))
+    .innerJoin(users, eq(users.id, user_community_relations.user_id)).orderBy(sql`lower(${users.user_name})`)
   return {
     community_users:community_users
   };
