@@ -31,25 +31,21 @@ export const actions: Actions = {
     }
     const user = locals.user;
     const form = await superValidate(request, community_form_schema);
-    console.log(form.data)
     if (!form.valid) {
       return fail(400, { form });
     }
 
-    try {
-      const community = (await db.insert(communities).values({
-        name: form.data.name as string,
-        description: form.data.description as string,
-        visibility: form.data.visibility,
-      }).returning())[0];
-      await db.insert(user_community_relations).values({
-        community_id:community.id,
-        user_id:user.id,
-        role:'ADMIN',
-      });
-      redirect(301, '/community/'+community.id)
-    } catch (error) {
-      return fail(500, { message: 'Internal Error' });
-    }
+    const community = (await db.insert(communities).values({
+      name: form.data.name as string,
+      description: form.data.description as string,
+      visibility: form.data.visibility,
+    }).returning())[0];
+    await db.insert(user_community_relations).values({
+      community_id:community.id,
+      user_id:user.id,
+      role:'ADMIN',
+    });
+    throw redirect(301, '/community/'+community.id)
   },
+
 };

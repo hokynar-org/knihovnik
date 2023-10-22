@@ -3,7 +3,7 @@
   import Fa from 'svelte-fa';
   import type { Community, CommunityRelation } from '$lib/types';
   export let community: Community;
-  export let relation: CommunityRelation;
+  export let relation: CommunityRelation | null;
 
   var fontSize = 16;
 </script>
@@ -31,14 +31,16 @@
     >
   </div>
   <div class="my-2 px-4 pt-2">
-    {#if relation.role == 'MEMBER'}
-      You are a member
-    {:else if relation.role == 'ADMIN'}
-      You are a admin
-    {:else if relation.role == 'INVITED'}
-      You have been invited
-    {:else if relation.role == 'REQUESTED'}
-      Your request is pending
+    {#if relation}
+      {#if relation.role == 'MEMBER'}
+        You are a member
+      {:else if relation.role == 'ADMIN'}
+        You are a admin
+      {:else if relation.role == 'INVITED'}
+        You have been invited
+      {:else if relation.role == 'REQUESTED'}
+        Your request is pending
+      {/if}
     {/if}
   </div>
 </div>
@@ -46,9 +48,5 @@
 <style>
   .text-min-height {
     min-height: calc(1.5 * var(--fsize) * 1px * 4); /* 4 lines of text */
-  }
-
-  .text-max-height {
-    max-height: calc(1.5 * var(--fsize) * 1px * 4); /* 4 lines of text */
   }
 </style>

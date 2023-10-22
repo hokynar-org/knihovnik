@@ -29,7 +29,6 @@
     '&limit=' +
     Math.max(limit, 1) +
     (search && search!.length > 0 ? '&search=' + search : '');
-  $: console.log(leftURL);
 </script>
 
 <div class="grid grid-cols-2 mt-6 gap-2 items-center w-min-fit">

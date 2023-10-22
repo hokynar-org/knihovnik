@@ -62,6 +62,7 @@ export const actions: Actions = {
     }
     throw redirect(301, '/community/'+community_id);
   },
+
   delete_community: async ({ request, locals, params }) => {
     if (!locals.user) {
       throw redirect(302, '/login');
@@ -73,16 +74,12 @@ export const actions: Actions = {
     }
     const community_id=Number(params.community_id);
 
-    const form = await superValidate(request, community_form_schema);
-    if (!form.valid) {
-      return fail(400, { form });
-    }
     const relation = await db.select().from(user_community_relations).where(and(eq(user_community_relations.community_id, community_id),eq(user_community_relations.user_id, user.id)));
     if(relation.length==0){
-      return fail(403, { form });
+      throw error(403);
     }
     if(relation[0].role!='ADMIN'){
-      return fail(403, { form });
+      throw error(403);
     }
     try {
       await db.transaction(async (tx)=>{

@@ -1,85 +1,36 @@
 <script lang="ts">
-  import type { PageData } from './$types';
-  import {
-    faMagnifyingGlass,
-    faSpinner,
-  } from '@fortawesome/free-solid-svg-icons';
-  import Fa from 'svelte-fa';
-  import type { Community } from '$lib/types';
-  let found_communities: Community[] = [];
-  let search_name: string = '';
-  const search = async () => {
-    const res = await fetch(
-      '/api/community/search?search_name=' + encodeURI(search_name),
-    );
-    if (!res.ok) {
-      throw new Error(String(res.status));
-    }
-    return (await res.json()) as Community[];
-  };
+  import CommunityCard from '$lib/components/Community/CommunityCard.svelte';
+  import ItemPageBar from '$lib/components/ItemDisplay/ItemPageBar.svelte';
+  import ItemPaginator from '$lib/components/ItemDisplay/ItemPaginator.svelte';
 
-  const lengthDisabled = 2;
-  let disabled = false;
-  let searchedOnce = false;
+  export let data;
+  let communities = data.communities;
+  let offset = data.offset;
+  let limit = data.limit;
+  let length = data.length;
+  let search = data.search;
 
-  function button_clicked() {
-    disabled = true;
-    search()
-      .then((value) => {
-        disabled = false;
-        found_communities = value;
-        searchedOnce = true;
-      })
-      .catch((reason) => {
-        disabled = false;
-        searchedOnce = true;
-      });
-  }
-
-  function enterPressed(event: KeyboardEvent): void {
-    if (event.key === 'Enter' || event.code === 'Enter') {
-      if (search_name.length > lengthDisabled) {
-        button_clicked();
-      }
-    }
-  }
+  $: communities = data.communities;
+  $: offset = data.offset;
+  $: limit = data.limit;
+  $: length = data.length;
+  $: search = data.search;
 </script>
 
-<div>
-  <div>
-    <h2 class="text-2xl mt-6">Search for a public community</h2>
-    <p class="text-base mt-1 min-w-xs max-w-xs">Enter at least 3 characters.</p>
-    <div class="input-group input-group-divider flex mt-4 min-w-xs max-w-xs">
-      <input
-        type="search"
-        class="input w-full"
-        placeholder="Search..."
-        on:keydown={enterPressed}
-        bind:value={search_name}
-      />
-      <button
-        on:click={button_clicked}
-        disabled={search_name.length < lengthDisabled || disabled}
-        class="variant-filled-primary w-fit"
-      >
-        {#if !disabled}
-          <Fa icon={faMagnifyingGlass} />
-        {:else}
-          <Fa icon={faSpinner} />
-        {/if}
-      </button>
-    </div>
-  </div>
-
-  {#if searchedOnce}
-    <div class="w-xs">
-      <h2 class="text-2xl mt-8 mb-4">Found public communities</h2>
-      {#each found_communities as community (community.id)}
-        <a href={'/community/' + community.id}>{community.name} </a><br />
-      {/each}
-      {#if found_communities.length == 0}
-        <p>No communities found</p>
-      {/if}
-    </div>
-  {/if}
+<h2 class="text-4xl mb-4">Public communities</h2>
+<ItemPageBar {limit} {offset} {length} {search} root="/communities/search" />
+<div
+  class="grid 2xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-2 mt-6"
+>
+  {#each communities as community}
+    <CommunityCard {community} relation={null} />
+  {/each}
 </div>
+<ItemPaginator
+  {limit}
+  {offset}
+  {length}
+  {search}
+  root="/communities/search"
+  cls="mt-6"
+/>
