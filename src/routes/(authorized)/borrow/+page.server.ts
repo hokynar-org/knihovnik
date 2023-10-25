@@ -6,17 +6,18 @@ import type { Offer } from '$lib/types';
 import { redirect } from '@sveltejs/kit';
 import { getFileUrl } from '$lib/server/bucket';
 import { getItems } from '$lib/server/item_load';
+import { limit } from '$lib/components/ItemDisplay/CardConstants';
+
+let defaultLimit = limit;
 
 export const load = (async ({ locals, url, setHeaders }) => {
-  const defLimit = 4;
-  const defOffset = 0;
   if (!locals.user) {
     throw redirect(301, '/login');
   }
   const user = locals.user;
   const limit = Number(url.searchParams.get('limit'))
     ? Number(url.searchParams.get('limit'))
-    : 4;
+    : defaultLimit;
   const offset = Number(url.searchParams.get('offset'))
     ? Number(url.searchParams.get('offset'))
     : 0;

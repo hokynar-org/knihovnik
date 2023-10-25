@@ -11,7 +11,9 @@ import type { PageServerLoad } from './$types';
 import type { CommunityMessage, CommunityUserSafe } from '$lib/types';
 import { error, redirect } from '@sveltejs/kit';
 import { getCommunityItems, getShelfItems } from '$lib/server/item_load';
-import { user_select } from '$lib/server/db/selects';
+import { limit } from '$lib/components/ItemDisplay/CardConstants';
+
+let defaultLimit = limit;
 
 export const load = (async ({ locals, params, url, parent }) => {
   if (!locals.user) {
@@ -21,13 +23,13 @@ export const load = (async ({ locals, params, url, parent }) => {
     throw error(400);
   }
   const data = await parent();
-  if(!data.role || (data.role!=='MEMBER' && data.role!=='ADMIN')){
+  if (!data.role || (data.role !== 'MEMBER' && data.role !== 'ADMIN')) {
     throw error(403);
   }
   const community_id = Number(params.community_id);
   const limit = Number(url.searchParams.get('limit'))
     ? Number(url.searchParams.get('limit'))
-    : 4;
+    : defaultLimit;
   const offset = Number(url.searchParams.get('offset'))
     ? Number(url.searchParams.get('offset'))
     : 0;
