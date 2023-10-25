@@ -28,7 +28,7 @@
 </script>
 
 <div>
-  <a href="/item/{item.id}" class="!no-underline">
+  <a href="/item/{item.id}" class="!no-underline font-normal">
     <div
       id="oneCard"
       class="card w-80 h-min rounded shadow-lg variant-filled-surface-700 overflow-visible hover:shadow-xl"

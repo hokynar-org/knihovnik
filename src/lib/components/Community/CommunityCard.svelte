@@ -10,7 +10,7 @@
 </script>
 
 <div>
-  <a href="/community/{community.id}" class="inherit !no-underline">
+  <a href="/community/{community.id}" class="inherit !no-underline font-normal">
     <div
       id="oneCard"
       class="card w-80 h-min rounded shadow-lg variant-filled-surface-700 overflow-visible hover:shadow-xl"
