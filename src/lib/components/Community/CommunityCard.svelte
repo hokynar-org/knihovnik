@@ -1,10 +1,10 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import Fa from 'svelte-fa';
-  import type { Community, CommunityRelation } from '$lib/types';
+  import { faUser, faCube, faC } from '@fortawesome/free-solid-svg-icons';
+  import type { Community, CommunityPlus, CommunityRelation } from '$lib/types';
   import { faLock } from '@fortawesome/free-solid-svg-icons';
-  export let community: Community;
-  export let relation: CommunityRelation | null;
+  export let community: CommunityPlus;
 
   var fontSize = 16;
 </script>
@@ -34,20 +34,42 @@
           {/if}
         </div>
       </div>
-      <div class="py-2 px-4 pt-2">
-        {#if relation}
-          {#if relation.role == 'MEMBER'}
-            You are a member
-          {:else if relation.role == 'ADMIN'}
-            You are a admin
-          {:else if relation.role == 'INVITED'}
-            You have been invited
-          {:else if relation.role == 'REQUESTED'}
-            Your request is pending
+      <div class="py-2 px-4 pt-2 flex items-end w-full justify-between">
+        <div>
+          {#if community.role}
+            {#if community.role == 'MEMBER'}
+              You are a member
+            {:else if community.role == 'ADMIN'}
+              You are a admin
+            {:else if community.role == 'INVITED'}
+              You have been invited
+            {:else if community.role == 'REQUESTED'}
+              Your request is pending
+            {/if}
+          {:else}
+            <br />
           {/if}
-        {:else}
-          <br />
-        {/if}
+        </div>
+        <table>
+          <tbody>
+            <tr>
+              <td class="w-6">
+                <Fa icon={faUser} />
+              </td>
+              <td class="w-10">
+                {community.userCount}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <Fa icon={faCube} />
+              </td>
+              <td>
+                {community.itemCount}
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </a>

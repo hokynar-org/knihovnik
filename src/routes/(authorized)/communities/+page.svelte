@@ -16,10 +16,7 @@
       class="grid 2xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-2"
     >
       {#each user_communities as community}
-        <CommunityCard
-          community={community.communities}
-          relation={community.user_community_relations}
-        />
+        <CommunityCard {community} />
       {/each}
     </div>
     {#if user_communities.length == 0}
