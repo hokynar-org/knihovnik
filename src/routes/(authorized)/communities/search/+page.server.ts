@@ -26,7 +26,7 @@ export const load = (async ({ locals, url }) => {
     visibility: communities.visibility,
     role: user_community_relations.role,
     userCount: sql<number>`count(distinct ${count_users.user_id})`,
-    itemCount: sql<number>`count(distinct ${item_visibility.item_id})`
+    itemCount: sql<number>`count(distinct ${items.id})`
     })
     .from(communities).where(and(q,eq(communities.visibility,true)))
     .leftJoin(user_community_relations,
@@ -37,6 +37,7 @@ export const load = (async ({ locals, url }) => {
       )
     .leftJoin(count_users,eq(count_users.community_id,communities.id))
     .leftJoin(item_visibility, eq(item_visibility.community_id,count_users.community_id))
+    .leftJoin(items, and(eq(items.id, item_visibility.item_id),eq(items.offered,true),eq(items.holder_id,items.owner_id)))
     .groupBy(communities.id,communities.name, communities.description, communities.visibility, user_community_relations.role,count_users.community_id )
       
   const length = db_result.length
