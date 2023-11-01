@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import {
   pgTable,
   uuid,
@@ -6,7 +7,6 @@ import {
   integer,
   timestamp,
   boolean,
-  json,
 } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 
@@ -36,7 +36,7 @@ export const items = pgTable('items', {
   offered: boolean('offered').default(true).notNull(),
   hasMainPic: boolean('hasMainPic').default(true).notNull(),
   iconName: text('iconName'),
-  transfeType: text('transfeType').notNull().default("BORROW"),
+  transfeType: text('transfeType').notNull().default('BORROW'),
 });
 
 export const borrow_requests = pgTable('borrow_requests', {
@@ -97,7 +97,6 @@ export const notifications = pgTable('notifications', {
   url: text('url'),
   timestamp: timestamp('timestamp').defaultNow().notNull(),
   read: boolean('read').default(false).notNull(),
-  
 });
 
 export const community_messages = pgTable('community_messages', {
@@ -110,4 +109,15 @@ export const community_messages = pgTable('community_messages', {
     .notNull(),
   message: text('message'),
   timestamp: timestamp('timestamp').defaultNow(),
+});
+
+export const reset_tokens = pgTable('reset_tokens', {
+  hash: text('id').primaryKey(),
+  user_id: integer('user_id')
+    .references(() => users.id)
+    .notNull(),
+  type: text('type').notNull(),
+
+  timestamp: timestamp('timestamp').defaultNow(),
+  expires: timestamp('expires'),
 });
