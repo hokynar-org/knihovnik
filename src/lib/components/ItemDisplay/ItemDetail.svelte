@@ -44,6 +44,7 @@
     class=" gap-4 justify-center sm:grid sm:grid-flow-row sm:grid-rows-1 lg:flex"
   >
     <!--TODO This works, but svelte thiks its not accessible. Maybe a bug?-->
+    <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
     <div
       data-placement="top"
       data-tooltip={displayImage ? imageAltText : null}

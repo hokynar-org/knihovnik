@@ -19,7 +19,7 @@
   export let borrow_request = null as null | BorrowRequest; //Which borrow request does this chat belong to?
 
   function isCommunityMessages(
-    messages: CommunityMessage[] | RequestActionMessage[],
+    messages: (CommunityMessage | RequestActionMessage)[],
   ): messages is CommunityMessage[] {
     //Only CommunityMessage contains the property community_id
     return messages.every((item) => 'community_id' in item);
@@ -31,7 +31,7 @@
   }
 
   function isRequestMessages(
-    messages: CommunityMessage[] | RequestActionMessage[],
+    messages: (CommunityMessage | RequestActionMessage)[],
   ): messages is RequestActionMessage[] {
     return messages.every((item) => 'borrow_request_id' in item);
   }
