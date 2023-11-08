@@ -1,1 +1,0 @@
-ALTER TABLE "items" ADD COLUMN "offered" boolean DEFAULT true NOT NULL;

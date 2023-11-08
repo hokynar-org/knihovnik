@@ -1,6 +1,6 @@
 import {
   pgTable,
-  serial,
+  uuid,
   text,
   varchar,
   integer,
@@ -11,7 +11,7 @@ import {
 import { relations } from 'drizzle-orm';
 
 export const users = pgTable('users', {
-  id: serial('id').primaryKey(),
+  id: uuid('id').primaryKey(),
   full_name: text('full_name').notNull(),
   user_name: text('user_name').notNull().unique(),
   email: varchar('email', { length: 256 }).notNull().unique(),
@@ -23,14 +23,14 @@ export const users = pgTable('users', {
 });
 
 export const items = pgTable('items', {
-  id: serial('id').primaryKey(),
+  id: uuid('id').primaryKey(),
   name: text('name').notNull(),
   description: text('description').notNull(),
   image_src: text('image_src'),
-  owner_id: integer('owner_id')
+  owner_id: uuid('owner_id')
     .references(() => users.id)
     .notNull(),
-  holder_id: integer('holder_id')
+  holder_id: uuid('holder_id')
     .references(() => users.id)
     .notNull(),
   offered: boolean('offered').default(true).notNull(),
@@ -40,14 +40,14 @@ export const items = pgTable('items', {
 });
 
 export const borrow_requests = pgTable('borrow_requests', {
-  id: serial('id').primaryKey(),
-  item_id: integer('item_id')
+  id: uuid('id').primaryKey(),
+  item_id: uuid('item_id')
     .references(() => items.id)
     .notNull(),
-  lender_id: integer('lender_id')
+  lender_id: uuid('lender_id')
     .references(() => users.id)
     .notNull(),
-  borrower_id: integer('borrower_id')
+  borrower_id: uuid('borrower_id')
     .references(() => users.id)
     .notNull(),
   status: text('status').default('PENDING'),
@@ -62,9 +62,9 @@ export const borrow_requestsRelations = relations(
 );
 
 export const request_actions = pgTable('request_actions', {
-  id: serial('id').primaryKey(),
+  id: uuid('id').primaryKey(),
   borrow_request_id: integer('borrow_request_id').notNull(),
-  user_id: integer('user_id')
+  user_id: uuid('user_id')
     .references(() => users.id)
     .notNull(),
   type: text('type').notNull(),
@@ -83,17 +83,17 @@ export const request_actionsRelations = relations(
 );
 
 export const communities = pgTable('communities', {
-  id: serial('id').primaryKey(),
+  id: uuid('id').primaryKey(),
   name: text('name').notNull(),
   description: text('description'),
   visibility: boolean('visibility').default(false).notNull(),
 });
 
 export const user_community_relations = pgTable('user_community_relations', {
-  user_id: integer('user_id')
+  user_id: uuid('user_id')
     .references(() => users.id)
     .notNull(),
-  community_id: integer('community_id')
+  community_id: uuid('community_id')
     .references(() => communities.id)
     .notNull(),
   role: text('role').default('MEMBER'),
@@ -101,13 +101,13 @@ export const user_community_relations = pgTable('user_community_relations', {
 });
 
 export const item_visibility = pgTable('item_visibility', {
-  item_id: integer('item_id').references(() => items.id),
-  community_id: integer('community_id').references(() => communities.id),
+  item_id: uuid('item_id').references(() => items.id),
+  community_id: uuid('community_id').references(() => communities.id),
 });
 
 export const notifications = pgTable('notifications', {
-  id: serial('id').primaryKey(),
-  user_id: integer('user_id')
+  id: uuid('id').primaryKey(),
+  user_id: uuid('user_id')
     .references(() => users.id)
     .notNull(),
   text: text('text'),
@@ -118,11 +118,11 @@ export const notifications = pgTable('notifications', {
 });
 
 export const community_messages = pgTable('community_messages', {
-  id: serial('id').primaryKey(),
-  community_id: integer('community_id')
+  id: uuid('id').primaryKey(),
+  community_id: uuid('community_id')
     .references(() => communities.id)
     .notNull(),
-  user_id: integer('user_id')
+  user_id: uuid('user_id')
     .references(() => users.id)
     .notNull(),
   message: text('message'),

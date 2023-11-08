@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "pg",
-  "id": "5c76f0ee-35c5-41d6-9acf-2113ff5d632a",
+  "id": "90faa1db-6ff4-4bb0-ac5c-b4a41375d56b",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "borrow_requests": {
@@ -10,25 +10,25 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "serial",
+          "type": "uuid",
           "primaryKey": true,
           "notNull": true
         },
         "item_id": {
           "name": "item_id",
-          "type": "integer",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": true
         },
         "lender_id": {
           "name": "lender_id",
-          "type": "integer",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": true
         },
         "borrower_id": {
           "name": "borrower_id",
-          "type": "integer",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": true
         },
@@ -92,13 +92,13 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "community": {
-      "name": "community",
+    "communities": {
+      "name": "communities",
       "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "serial",
+          "type": "uuid",
           "primaryKey": true,
           "notNull": true
         },
@@ -106,17 +106,92 @@
           "name": "name",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "description": {
           "name": "description",
           "type": "text",
           "primaryKey": false,
           "notNull": false
+        },
+        "visibility": {
+          "name": "visibility",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
         }
       },
       "indexes": {},
       "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "community_messages": {
+      "name": "community_messages",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "community_id": {
+          "name": "community_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "message": {
+          "name": "message",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "timestamp": {
+          "name": "timestamp",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "community_messages_community_id_communities_id_fk": {
+          "name": "community_messages_community_id_communities_id_fk",
+          "tableFrom": "community_messages",
+          "tableTo": "communities",
+          "columnsFrom": [
+            "community_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "community_messages_user_id_users_id_fk": {
+          "name": "community_messages_user_id_users_id_fk",
+          "tableFrom": "community_messages",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
@@ -126,13 +201,13 @@
       "columns": {
         "item_id": {
           "name": "item_id",
-          "type": "integer",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": false
         },
         "community_id": {
           "name": "community_id",
-          "type": "integer",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": false
         }
@@ -152,10 +227,10 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "item_visibility_community_id_community_id_fk": {
-          "name": "item_visibility_community_id_community_id_fk",
+        "item_visibility_community_id_communities_id_fk": {
+          "name": "item_visibility_community_id_communities_id_fk",
           "tableFrom": "item_visibility",
-          "tableTo": "community",
+          "tableTo": "communities",
           "columnsFrom": [
             "community_id"
           ],
@@ -175,7 +250,7 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "serial",
+          "type": "uuid",
           "primaryKey": true,
           "notNull": true
         },
@@ -189,7 +264,7 @@
           "name": "description",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "image_src": {
           "name": "image_src",
@@ -199,15 +274,42 @@
         },
         "owner_id": {
           "name": "owner_id",
-          "type": "integer",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": true
         },
         "holder_id": {
           "name": "holder_id",
-          "type": "integer",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": true
+        },
+        "offered": {
+          "name": "offered",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        },
+        "hasMainPic": {
+          "name": "hasMainPic",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        },
+        "iconName": {
+          "name": "iconName",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "transfeType": {
+          "name": "transfeType",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'BORROW'"
         }
       },
       "indexes": {},
@@ -242,13 +344,75 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
+    "notifications": {
+      "name": "notifications",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "text": {
+          "name": "text",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "url": {
+          "name": "url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "timestamp": {
+          "name": "timestamp",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "read": {
+          "name": "read",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "notifications_user_id_users_id_fk": {
+          "name": "notifications_user_id_users_id_fk",
+          "tableFrom": "notifications",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
     "request_actions": {
       "name": "request_actions",
       "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "serial",
+          "type": "uuid",
           "primaryKey": true,
           "notNull": true
         },
@@ -260,7 +424,7 @@
         },
         "user_id": {
           "name": "user_id",
-          "type": "integer",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": true
         },
@@ -303,13 +467,76 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
+    "user_community_relations": {
+      "name": "user_community_relations",
+      "schema": "",
+      "columns": {
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "community_id": {
+          "name": "community_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "role": {
+          "name": "role",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'MEMBER'"
+        },
+        "timestamp": {
+          "name": "timestamp",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "user_community_relations_user_id_users_id_fk": {
+          "name": "user_community_relations_user_id_users_id_fk",
+          "tableFrom": "user_community_relations",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "user_community_relations_community_id_communities_id_fk": {
+          "name": "user_community_relations_community_id_communities_id_fk",
+          "tableFrom": "user_community_relations",
+          "tableTo": "communities",
+          "columnsFrom": [
+            "community_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
     "users": {
       "name": "users",
       "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "serial",
+          "type": "uuid",
           "primaryKey": true,
           "notNull": true
         },
@@ -352,6 +579,12 @@
         },
         "confirm_hash": {
           "name": "confirm_hash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "bio": {
+          "name": "bio",
           "type": "text",
           "primaryKey": false,
           "notNull": false
