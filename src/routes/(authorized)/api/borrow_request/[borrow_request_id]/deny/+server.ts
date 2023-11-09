@@ -12,17 +12,17 @@ export const POST = (async ({ request, params, locals, url, route }) => {
   if (!locals.user) {
     throw error(401);
   }
-  if (!Number(params.borrow_request_id)) {
+  if (!params.borrow_request_id) {
     throw error(400);
   }
   const user_id = locals.user.id;
   const user = locals.user;
-  const borrow_request_id = Number(params.borrow_request_id);
+  const borrow_request_id = params.borrow_request_id;
   const found_borrow_requests =
   await db.select({
     item: item_select,
     borrow_request: borrow_request_select,
-  }).from(borrow_requests).where(eq(borrow_requests.id, Number(borrow_request_id))).innerJoin(items,eq(items.id,borrow_requests.item_id));
+  }).from(borrow_requests).where(eq(borrow_requests.id, borrow_request_id)).innerJoin(items,eq(items.id,borrow_requests.item_id));
   if(found_borrow_requests.length==0) {
     throw error(400);
   }
@@ -38,7 +38,7 @@ export const POST = (async ({ request, params, locals, url, route }) => {
     const [borrow_request,action] = await db.transaction(async (tx)=>{
       const [borrow_request] = await tx.update(borrow_requests).set({
           status: 'DENIED',
-          }).where(eq(borrow_requests.id, Number(borrow_request_id))).returning();
+          }).where(eq(borrow_requests.id, borrow_request_id)).returning();
       const [action] = await tx.insert(request_actions).values({
           borrow_request_id:borrow_request.id,
           user_id:user.id,

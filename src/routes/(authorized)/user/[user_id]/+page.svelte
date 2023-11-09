@@ -15,6 +15,6 @@
     {profiled_user.full_name}, {profiled_user.pronouns}
   </h4>
   <div>
-    {profiled_user.bio?profiled_user.bio:''}
+    {profiled_user.bio ? profiled_user.bio : ''}
   </div>
 {/if}

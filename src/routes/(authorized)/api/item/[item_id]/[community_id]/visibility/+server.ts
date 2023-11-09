@@ -10,14 +10,14 @@ export const POST = (async ({locals, params,url}) => {
     if (!locals.user) {
         throw error(401);
     }
-    if (!Number(params.item_id)) {
+    if (!params.item_id) {
         throw error(400);
     }
-    if (!Number(params.community_id)) {
+    if (!params.community_id) {
         throw error(400);
     }
-    const item_id=Number(params.item_id);
-    const community_id= Number(params.community_id);
+    const item_id=params.item_id;
+    const community_id= params.community_id;
     const results = await db
         .select({item:item_select,item_visibility:item_visibility})
         .from(items)

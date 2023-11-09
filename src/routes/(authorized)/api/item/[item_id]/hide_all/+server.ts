@@ -11,10 +11,10 @@ export const POST = (async ({locals, params,url}) => {
         throw error(401);
     }
     const user = locals.user;
-    if (!Number(params.item_id)) {
+    if (!params.item_id) {
         throw error(400);
     }
-    const item_id = Number(params.item_id);
+    const item_id = params.item_id;
     const results = await Promise.all([
         db.select({item:item_select}).from(items).where(eq(items.id,item_id)),
         db.select({community:communities,

@@ -55,7 +55,7 @@
     // }
   }
 
-  const change_visibility = async (community_id: number) => {
+  const change_visibility = async (community_id: string) => {
     const res = await fetch(
       '/api/item/' + item.id + '/' + community_id + '/visibility',
       {
@@ -66,8 +66,8 @@
       throw new Error(String(res.status));
     }
     return (await res.json()) as {
-      item_id: number | null;
-      community_id: number | null;
+      item_id: string | null;
+      community_id: string | null;
     } | null;
   };
   const hide_all = async () => {
@@ -78,8 +78,8 @@
       throw new Error(String(res.status));
     }
     return (await res.json()) as {
-      item_id: number | null;
-      community_id: number | null;
+      item_id: string | null;
+      community_id: string | null;
     } | null;
   };
   const show_all = async () => {
@@ -90,8 +90,8 @@
       throw new Error(String(res.status));
     }
     return (await res.json()) as {
-      item_id: number | null;
-      community_id: number | null;
+      item_id: string | null;
+      community_id: string | null;
     } | null;
   };
   const deleteItem = async () => {

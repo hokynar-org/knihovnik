@@ -17,7 +17,7 @@ export const POST = (async ({locals, params}) => {
     const found_items = await db
         .select(item_select)
         .from(items)
-        .where(eq(items.id, Number(item_id)));
+        .where(eq(items.id, item_id));
     if (found_items.length == 0) {
         throw error(404);
     }
@@ -36,7 +36,7 @@ export const POST = (async ({locals, params}) => {
     }
     const new_offered= !item.offered;
     try{
-        await db.update(items).set({offered:new_offered}).where(eq(items.id, Number(item_id))).returning(
+        await db.update(items).set({offered:new_offered}).where(eq(items.id, item_id)).returning(
             {offered:items.offered},
         );
         return json(new_offered);

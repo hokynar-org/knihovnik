@@ -51,7 +51,7 @@ export const actions: Actions = {
         pronouns: form.data.pronouns,
         bio: form.data.bio,
       })
-      .where(eq(users.id, Number(locals.user.id)));
+      .where(eq(users.id, locals.user.id));
 
     const session = jwt.verify(
       cookies.get('session_jwt')!,
@@ -101,7 +101,7 @@ export const actions: Actions = {
     const found_users = await db
       .select()
       .from(users)
-      .where(eq(users.id, Number(locals.user.id)));
+      .where(eq(users.id, locals.user.id));
 
     if (found_users.length == 0) {
       throw redirect(303, '/login');
@@ -120,7 +120,7 @@ export const actions: Actions = {
       .set({
         password_hash: await bcrypt.hash(form.data.new_password, 10),
       })
-      .where(eq(users.id, Number(locals.user.id)));
+      .where(eq(users.id, locals.user.id));
 
     throw redirect(303, '/user');
   },

@@ -18,7 +18,7 @@ export const POST = (async ({ request, params, locals, url, route }) => {
   const message = body.message;
   const user = locals.user;
   const user_id = locals.user.id;
-  const borrow_request_id = params.borrow_request_id as string;
+  const borrow_request_id = params.borrow_request_id;
   const found_borrow_requests:{item:PublicItemSafe,borrow_request:BorrowRequest}[] = await db.select({
     item: item_select,
     borrow_request: {
@@ -28,7 +28,7 @@ export const POST = (async ({ request, params, locals, url, route }) => {
       lender_id: borrow_requests.lender_id,
       item_id: borrow_requests.item_id,
       timestamp: borrow_requests.timestamp,
-    },}).from(borrow_requests).where(eq(borrow_requests.id, Number(borrow_request_id))).innerJoin(items,eq(items.id,borrow_requests.item_id));
+    },}).from(borrow_requests).where(eq(borrow_requests.id, borrow_request_id)).innerJoin(items,eq(items.id,borrow_requests.item_id));
   if(found_borrow_requests.length==0) {
     throw error(400);
   }
@@ -43,7 +43,7 @@ export const POST = (async ({ request, params, locals, url, route }) => {
   }
   try {
     const new_requests_actions:Promise<RequestAction[]> = db.insert(request_actions).values({
-      borrow_request_id:Number(borrow_request_id),
+      borrow_request_id:borrow_request_id,
       user_id:user_id,
       type: 'MESSAGE',
       message: message,

@@ -13,11 +13,10 @@ export const POST = (async ({ locals, url}) => {
         throw error(401);
     }
     const user = locals.user;
-    if(!Number(url.searchParams.get('item_id'))){
+    const item_id = url.searchParams.get('item_id')
+    if(!item_id){
         throw error(400);
     }
-    const item_id = Number(url.searchParams.get('item_id'));
-
     const found_items = await db.select(item_select).from(items).where(eq(items.id, item_id));
     if(found_items.length==0){
         throw error(404);
@@ -31,16 +30,16 @@ export const POST = (async ({ locals, url}) => {
         throw error(400);
     }
     const found_borrow_requests:Array<BorrowRequest> =
-    await db.select().from(borrow_requests).where(and(or(eq(borrow_requests.status,'PENDING'),eq(borrow_requests.status,'ACCEPTED')),eq(borrow_requests.item_id, Number(item.id)),eq(borrow_requests.borrower_id, Number(user.id))));
+    await db.select().from(borrow_requests).where(and(or(eq(borrow_requests.status,'PENDING'),eq(borrow_requests.status,'ACCEPTED')),eq(borrow_requests.item_id, item.id),eq(borrow_requests.borrower_id, user.id)));
     if(found_borrow_requests.length>0) {
         throw error(400);
     }
     if(user.id==item.owner_id){
         const [borrow_request,action,other_borrow_requests] = await db.transaction(async (tx)=>{
             const [borrow_request] = await tx.insert(borrow_requests).values({
-                lender_id: item.holder_id as number,
-                borrower_id: user.id as number,
-                item_id: item.id as number,
+                lender_id: item.holder_id,
+                borrower_id: user.id,
+                item_id: item.id,
                 status: 'ACCEPTED',
                 }).returning(borrow_request_select);
             const [action] = await tx.insert(request_actions).values({
@@ -84,9 +83,9 @@ export const POST = (async ({ locals, url}) => {
     else{
         const borrow_request = await db.transaction(async (tx)=>{
             const [borrow_request] = await tx.insert(borrow_requests).values({
-                lender_id: item.holder_id as number,
-                borrower_id: user.id as number,
-                item_id: item.id as number,
+                lender_id: item.holder_id,
+                borrower_id: user.id,
+                item_id: item.id,
                 }).returning(borrow_request_select);
             const [action] = await tx.insert(request_actions).values({
                 borrow_request_id:borrow_request.id,

@@ -10,7 +10,7 @@
   $: holder = data.holder;
   $: last_requst = (
     data.last_requst ? data.last_requst.borrow_request : null
-  ) as last_request;
+  ) as last_request | null;
 
   let isEdit = false;
   $: isEdit = String($page.url).includes('edit');

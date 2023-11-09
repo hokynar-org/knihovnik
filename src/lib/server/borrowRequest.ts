@@ -19,7 +19,7 @@ export class ServerBorrowRequest {
     this.actions = actions;
   }
 
-  static async fetchBorrowRequest(id: number) {
+  static async fetchBorrowRequest(id: string) {
     try {
       const item_borrow_request_results = db
         .select({
@@ -64,5 +64,5 @@ export class ServerBorrowRequest {
       return null;
     }
   }
-  accept(_user_id: number) {}
+  accept(_user_id: string) {}
 }

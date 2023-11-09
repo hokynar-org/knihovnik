@@ -68,10 +68,10 @@ export type CommunityUserSafe = {
 };
 
 export type CommunityMessage = {
-  id: number;
+  id: string;
   timestamp: Date | null;
-  community_id: number;
-  user_id: number;
+  community_id: string;
+  user_id: string;
   message: string | null;
   user_name: string;
 };
@@ -79,12 +79,12 @@ export type CommunityMessage = {
 export type RequestAction = InferModel<typeof request_actions>;
 
 export type RequestActionMessage = {
-  id: number;
+  id: string;
   message: string | null;
   type: string;
-  user_id: number;
+  user_id: string;
   timestamp: Date | null;
-  borrow_request_id: number;
+  borrow_request_id: string;
   user_name: string;
 };
 
@@ -94,9 +94,9 @@ export type GroupNotificaton = {
   url: string | null;
   text: string | null;
   read: boolean;
-  user_id: number;
+  user_id: string;
   timestamp: Date;
-  ids: number[];
+  ids: string[];
 };
 
 export interface Offer {
@@ -116,7 +116,7 @@ export interface NotificationBorrowRequest {
 }
 
 export interface last_request {
-  id: number;
+  id: string;
   status: string | null;
   timestamp: Date | null;
   item_id: number;

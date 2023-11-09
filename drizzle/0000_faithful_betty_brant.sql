@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS "borrow_requests" (
-	"id" uuid PRIMARY KEY NOT NULL,
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"item_id" uuid NOT NULL,
 	"lender_id" uuid NOT NULL,
 	"borrower_id" uuid NOT NULL,
@@ -8,14 +8,14 @@ CREATE TABLE IF NOT EXISTS "borrow_requests" (
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "communities" (
-	"id" uuid PRIMARY KEY NOT NULL,
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"name" text NOT NULL,
 	"description" text,
 	"visibility" boolean DEFAULT false NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "community_messages" (
-	"id" uuid PRIMARY KEY NOT NULL,
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"community_id" uuid NOT NULL,
 	"user_id" uuid NOT NULL,
 	"message" text,
@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS "item_visibility" (
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "items" (
-	"id" uuid PRIMARY KEY NOT NULL,
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"name" text NOT NULL,
 	"description" text NOT NULL,
 	"image_src" text,
@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS "items" (
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "notifications" (
-	"id" uuid PRIMARY KEY NOT NULL,
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"user_id" uuid NOT NULL,
 	"text" text,
 	"url" text,
@@ -50,8 +50,8 @@ CREATE TABLE IF NOT EXISTS "notifications" (
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "request_actions" (
-	"id" uuid PRIMARY KEY NOT NULL,
-	"borrow_request_id" integer NOT NULL,
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"borrow_request_id" uuid NOT NULL,
 	"user_id" uuid NOT NULL,
 	"type" text NOT NULL,
 	"message" text,
@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS "user_community_relations" (
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "users" (
-	"id" uuid PRIMARY KEY NOT NULL,
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"full_name" text NOT NULL,
 	"user_name" text NOT NULL,
 	"email" varchar(256) NOT NULL,

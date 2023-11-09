@@ -10,7 +10,7 @@ export const POST = (async ({ request, params, locals, url, route }) => {
     throw error(401);
   }
   const body = await request.json();
-  const ids = body.ids as number[];
+  const ids = body.ids as string[];
   const user_id = locals.user.id;
   const read_notifications:Notification[] = await db.update(notifications).set({read:true}).where(and(inArray(notifications.id,ids),eq(notifications.user_id,user_id))).returning();
   if(read_notifications.length == 0) {

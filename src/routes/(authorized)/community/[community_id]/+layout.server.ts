@@ -21,7 +21,7 @@ export const load = (async ({ locals, params, url }) => {
   if (!params.community_id) {
     throw error(400);
   }
-  const community_id = Number(params.community_id);
+  const community_id = params.community_id;
   const results = await db
     .select({
       community:community_select,

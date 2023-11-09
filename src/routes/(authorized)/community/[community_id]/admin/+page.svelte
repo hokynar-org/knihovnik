@@ -23,7 +23,7 @@
     }
     return (await res.json()) as PublicUserSafe[];
   };
-  const invite = async (user_id: number) => {
+  const invite = async (user_id: string) => {
     const res = await fetch(
       '/api/community/' + community.id + '/' + user_id + '/invite',
       {
@@ -47,7 +47,7 @@
       });
   }
 
-  const kick = async (user_id: number) => {
+  const kick = async (user_id: string) => {
     const res = await fetch(
       '/api/community/' + community.id + '/' + user_id + '/kick',
       {
@@ -74,7 +74,7 @@
       });
   }
 
-  const promote = async (user_id: number) => {
+  const promote = async (user_id: string) => {
     const res = await fetch(
       '/api/community/' + community.id + '/' + user_id + '/promote',
       {
@@ -105,7 +105,7 @@
       });
   }
 
-  const accept = async (user_id: number) => {
+  const accept = async (user_id: string) => {
     const res = await fetch(
       '/api/community/' + community.id + '/' + user_id + '/accept',
       {
@@ -135,7 +135,7 @@
       });
   }
 
-  const deny = async (user_id: number) => {
+  const deny = async (user_id: string) => {
     const res = await fetch(
       '/api/community/' + community.id + '/' + user_id + '/deny',
       {

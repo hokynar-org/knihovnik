@@ -53,8 +53,8 @@ export const actions: Actions = {
         iconName: form.data.iconName,
         name: form.data.name as string,
         description: form.data.description as string,
-        owner_id: locals.user.id as number,
-        holder_id: locals.user.id as number,
+        owner_id: locals.user.id,
+        holder_id: locals.user.id,
         image_src:files[0],
       }).returning(item_select))[0];
       if(form.data.visibility){
@@ -84,7 +84,7 @@ export const actions: Actions = {
       const found_items = await db
         .select()
         .from(items)
-        .where(eq(items.id, Number(id)));
+        .where(eq(items.id, id));
       if (found_items.length == 0) {
         return fail(400, { message: 'Invalid request' });
       }
@@ -94,8 +94,8 @@ export const actions: Actions = {
       }
       await db
         .delete(borrow_requests)
-        .where(eq(borrow_requests.item_id, Number(id)));
-      await db.delete(items).where(eq(items.id, Number(id)));
+        .where(eq(borrow_requests.item_id, id));
+      await db.delete(items).where(eq(items.id, id));
     } catch (err) {
       console.error(err);
       return fail(500, {

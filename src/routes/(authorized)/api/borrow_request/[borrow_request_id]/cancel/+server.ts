@@ -20,7 +20,7 @@ export const POST = (async ({ request, params, locals, url, route }) => {
   await db.select({
     item: item_select,
     borrow_request: borrow_request_select,
-  }).from(borrow_requests).where(eq(borrow_requests.id, Number(borrow_request_id))).innerJoin(items,eq(items.id,borrow_requests.item_id));
+  }).from(borrow_requests).where(eq(borrow_requests.id, borrow_request_id)).innerJoin(items,eq(items.id,borrow_requests.item_id));
   if(found_borrow_requests.length==0) {
     throw error(404);
   }
@@ -34,8 +34,8 @@ export const POST = (async ({ request, params, locals, url, route }) => {
   }
   try {
     const [borrow_request,actions] = await db.transaction(async (tx)=>{
-      const actions = await tx.delete(request_actions).where(eq(request_actions.borrow_request_id, Number(borrow_request_id))).returning()
-      const [borrow_request] = await tx.delete(borrow_requests).where(eq(borrow_requests.id, Number(borrow_request_id))).returning();
+      const actions = await tx.delete(request_actions).where(eq(request_actions.borrow_request_id, borrow_request_id)).returning()
+      const [borrow_request] = await tx.delete(borrow_requests).where(eq(borrow_requests.id, borrow_request_id)).returning();
       return [borrow_request,actions]
     });
     await notifyUser({

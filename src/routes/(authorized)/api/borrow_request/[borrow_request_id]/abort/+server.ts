@@ -23,11 +23,11 @@ export const POST = (async ({ request, params, locals, url, route }) => {
       item: item_select,
       borrow_request: borrow_request_select,
     })
-      .from(borrow_requests).where(eq(borrow_requests.id, Number(borrow_request_id)))
+      .from(borrow_requests).where(eq(borrow_requests.id, borrow_request_id))
       .innerJoin(items,eq(items.id,borrow_requests.item_id));
   
   const request_actions_promise= await db.select().from(request_actions)
-    .where(and(eq(request_actions.borrow_request_id,Number(borrow_request_id)),eq(request_actions.type,'CONFIRM')));
+    .where(and(eq(request_actions.borrow_request_id,borrow_request_id),eq(request_actions.type,'CONFIRM')));
   
   const state_results:[{borrow_request:BorrowRequest,item:PublicItemSafe}[],RequestAction[]]
   = await Promise.all([found_borrow_requests_promise,request_actions_promise]);
@@ -55,7 +55,7 @@ export const POST = (async ({ request, params, locals, url, route }) => {
     throw error(401);
   }
 
-  const other_user_id:number=user_ids[(user_ids.indexOf(user_id)+1)%2]
+  const other_user_id=user_ids[(user_ids.indexOf(user_id)+1)%2]
 
   // This user has allready confirmed and can not abort
   if(found_confirm_actions.length==1 && found_confirm_actions[0].user_id==user_id){
@@ -70,7 +70,7 @@ export const POST = (async ({ request, params, locals, url, route }) => {
     const [borrow_request,action] = await db.transaction(async (tx)=>{
       const [borrow_request] = await tx.update(borrow_requests).set({
           status: 'ABORTED',
-          }).where(eq(borrow_requests.id, Number(borrow_request_id))).returning();
+          }).where(eq(borrow_requests.id, borrow_request_id)).returning();
       const [action] = await tx.insert(request_actions).values({
           borrow_request_id:borrow_request.id,
           user_id:user.id,

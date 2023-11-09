@@ -26,12 +26,12 @@ export const actions: Actions = {
         .delete(borrow_requests)
         .where(
           or(
-            eq(borrow_requests.lender_id, Number(id)),
-            eq(borrow_requests.borrower_id, Number(id)),
+            eq(borrow_requests.lender_id, id),
+            eq(borrow_requests.borrower_id, id),
           ),
         );
-      await db.delete(items).where(eq(items.owner_id, Number(id)));
-      await db.delete(users).where(eq(users.id, Number(id)));
+      await db.delete(items).where(eq(items.owner_id, id));
+      await db.delete(users).where(eq(users.id, id));
     } catch (err) {
       console.error(err);
       return fail(500, {
@@ -56,7 +56,7 @@ export const actions: Actions = {
         await db
           .update(users)
           .set({ role: role })
-          .where(eq(users.id, Number(id)));
+          .where(eq(users.id, id));
       } else {
         return fail(400, { message: 'Invalid request' });
       }

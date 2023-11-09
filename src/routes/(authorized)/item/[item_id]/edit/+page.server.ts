@@ -32,7 +32,7 @@ export const load = (async ({ locals, params }) => {
   if (!params.item_id) {
     throw error(400);
   }
-  const item_id = Number(params.item_id);
+  const item_id = params.item_id;
 
   const user = locals.user;
   const results = await Promise.all([
@@ -59,11 +59,11 @@ export const actions: Actions = {
       throw redirect(302, '/login');
     }
 
-    if (!Number(params.item_id)) {
+    if (!params.item_id) {
       throw error(400);
     }
 
-    const item_id = Number(params.item_id);
+    const item_id = params.item_id;
 
     const form = await superValidate(request, item_form_schema);
     if (!form.valid) {

@@ -5,7 +5,7 @@ import { getFileUrl } from "./bucket";
 import type { BorrowRequest, PublicItemSafe, PublicUserSafe } from "$lib/types";
 import { item_select,borrow_request_select,borrowers,lenders,owners,holders,holder_select,borrower_select,lender_select,owner_select } from "./db/selects";
 
-export const getItem = async (item_id:number)=>{
+export const getItem = async (item_id:string)=>{
     const result_item:Promise<{holder:PublicUserSafe,owner:PublicUserSafe,item:PublicItemSafe}[]> =
     db.select({
         holder: holder_select,
@@ -46,7 +46,7 @@ export const getItem = async (item_id:number)=>{
     }
 }
 
-export const getJustItem = async (item_id:number)=>{
+export const getJustItem = async (item_id:string)=>{
     const result:{holder:PublicUserSafe,owner:PublicUserSafe,item:PublicItemSafe}[] =
     await db.select({
         holder: holder_select,
@@ -77,7 +77,7 @@ export const getJustItem = async (item_id:number)=>{
     }
 }
 
-export const getItems = async (user_id:number, offset:number, limit:number, search:string|null)=>{
+export const getItems = async (user_id:string, offset:number, limit:number, search:string|null)=>{
     const q = search?or(ilike(items.name,'%'+search+'%'),ilike(items.description,'%'+search+'%')):undefined
     const db_result:{owner:PublicUserSafe,item:PublicItemSafe}[] =
     await db.selectDistinct({
@@ -115,7 +115,7 @@ export const getItems = async (user_id:number, offset:number, limit:number, sear
     return {offers:offers, length:length}
 }
 
-export const getCommunityItems = async (community_id:number, offset:number, limit:number, search:string|null)=>{
+export const getCommunityItems = async (community_id:string, offset:number, limit:number, search:string|null)=>{
     const q = search?or(ilike(items.name,'%'+search+'%'),ilike(items.description,'%'+search+'%')):undefined
     const db_result:{owner:PublicUserSafe,item:PublicItemSafe}[] =
     await db.select({
@@ -150,7 +150,7 @@ export const getCommunityItems = async (community_id:number, offset:number, limi
     return {offers:offers, length:length}
 }
 
-export const getShelfItems = async (user_id:number, offset:number, limit:number, search:string|null)=>{
+export const getShelfItems = async (user_id:string, offset:number, limit:number, search:string|null)=>{
     const q = search?or(ilike(items.name,'%'+search+'%'),ilike(items.description,'%'+search+'%')):undefined
     const db_result:{owner:PublicUserSafe,item:PublicItemSafe}[] =
     await db.select({
@@ -184,7 +184,7 @@ export const getShelfItems = async (user_id:number, offset:number, limit:number,
     return {offers:offers, length:length}
 }
 
-export const getMyItems = async (user_id:number, offset:number, limit:number, search:string|null)=>{
+export const getMyItems = async (user_id:string, offset:number, limit:number, search:string|null)=>{
     const q = search?or(ilike(items.name,'%'+search+'%'),ilike(items.description,'%'+search+'%')):undefined
     const db_result:{holder:PublicUserSafe,item:PublicItemSafe}[] =
     await db.select({

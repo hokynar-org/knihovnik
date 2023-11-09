@@ -15,7 +15,7 @@ export const load = (async ({ locals,params }) => {
   if(!params.community_id){
     throw error(400);
   }
-  const community_id=Number(params.community_id)
+  const community_id=params.community_id
   const user_relations = await db.select().from(user_community_relations).where(and(eq(user_community_relations.community_id,community_id),eq(user_community_relations.user_id,user.id)));
   if(user_relations.length==0){
     throw error(401);

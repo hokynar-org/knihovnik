@@ -6,7 +6,7 @@ import { user_community_relation_select } from "./db/selects";
 import { pusher } from "./pusher";
 
 
-export const notifyUser = async (input:{url:string|null,user_id:number,text:string}) =>{
+export const notifyUser = async (input:{url:string|null,user_id:string,text:string}) =>{
     const {url, user_id, text} = input;
     const notification = (await db.insert(notifications).values({
         user_id: user_id,
@@ -17,7 +17,7 @@ export const notifyUser = async (input:{url:string|null,user_id:number,text:stri
     return notification;
 }
 
-export const notifyUsers = async (input:{url:string|null,user_ids:number[],text:string}) =>{
+export const notifyUsers = async (input:{url:string|null,user_ids:string[],text:string}) =>{
     const {url, user_ids, text} = input;
     const notifications_query = user_ids.flatMap((value)=>{
         return {
@@ -34,7 +34,7 @@ export const notifyUsers = async (input:{url:string|null,user_ids:number[],text:
     return all_notifications;
 }
 
-export const notifyAdmins = async (community_id:number, input:{url:string|null,text:string}) =>{
+export const notifyAdmins = async (community_id:string, input:{url:string|null,text:string}) =>{
     const {url, text} = input;
     const community_admins = await db.select(user_community_relation_select)
         .from(user_community_relations)

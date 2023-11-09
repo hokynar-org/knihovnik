@@ -20,7 +20,7 @@ export const load = (async ({ locals, params }) => {
   if(!params.user_id){
     throw error(400)
   }
-  const user_id = Number(params.user_id);
+  const user_id = params.user_id;
 
   const found_users = await db.select(user_select).from(users).where(eq(users.id, user_id));
   if(found_users.length==0){

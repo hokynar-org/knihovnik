@@ -11,7 +11,7 @@ import {
 import { relations } from 'drizzle-orm';
 
 export const users = pgTable('users', {
-  id: uuid('id').primaryKey(),
+  id: uuid('id').defaultRandom().primaryKey(),
   full_name: text('full_name').notNull(),
   user_name: text('user_name').notNull().unique(),
   email: varchar('email', { length: 256 }).notNull().unique(),
@@ -23,7 +23,7 @@ export const users = pgTable('users', {
 });
 
 export const items = pgTable('items', {
-  id: uuid('id').primaryKey(),
+  id: uuid('id').defaultRandom().primaryKey(),
   name: text('name').notNull(),
   description: text('description').notNull(),
   image_src: text('image_src'),
@@ -40,7 +40,7 @@ export const items = pgTable('items', {
 });
 
 export const borrow_requests = pgTable('borrow_requests', {
-  id: uuid('id').primaryKey(),
+  id: uuid('id').defaultRandom().primaryKey(),
   item_id: uuid('item_id')
     .references(() => items.id)
     .notNull(),
@@ -62,8 +62,8 @@ export const borrow_requestsRelations = relations(
 );
 
 export const request_actions = pgTable('request_actions', {
-  id: uuid('id').primaryKey(),
-  borrow_request_id: integer('borrow_request_id').notNull(),
+  id: uuid('id').defaultRandom().primaryKey(),
+  borrow_request_id: uuid('borrow_request_id').notNull(),
   user_id: uuid('user_id')
     .references(() => users.id)
     .notNull(),
@@ -83,7 +83,7 @@ export const request_actionsRelations = relations(
 );
 
 export const communities = pgTable('communities', {
-  id: uuid('id').primaryKey(),
+  id: uuid('id').defaultRandom().primaryKey(),
   name: text('name').notNull(),
   description: text('description'),
   visibility: boolean('visibility').default(false).notNull(),
@@ -106,7 +106,7 @@ export const item_visibility = pgTable('item_visibility', {
 });
 
 export const notifications = pgTable('notifications', {
-  id: uuid('id').primaryKey(),
+  id: uuid('id').defaultRandom().primaryKey(),
   user_id: uuid('user_id')
     .references(() => users.id)
     .notNull(),
@@ -118,7 +118,7 @@ export const notifications = pgTable('notifications', {
 });
 
 export const community_messages = pgTable('community_messages', {
-  id: uuid('id').primaryKey(),
+  id: uuid('id').defaultRandom().primaryKey(),
   community_id: uuid('community_id')
     .references(() => communities.id)
     .notNull(),

@@ -12,7 +12,7 @@ export const load = (async ({ locals,params, url}) => {
   if(!params.borrow_request_id){
     throw error(404);
   }
-  const borrow_request_id=Number(params.borrow_request_id)
+  const borrow_request_id=params.borrow_request_id
 
   const borrow_request_reusults:Promise<{
     borrower:PublicUserSafe,

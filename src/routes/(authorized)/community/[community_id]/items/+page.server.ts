@@ -26,7 +26,7 @@ export const load = (async ({ locals, params, url, parent }) => {
   if (!data.role || (data.role !== 'MEMBER' && data.role !== 'ADMIN')) {
     throw error(403);
   }
-  const community_id = Number(params.community_id);
+  const community_id = params.community_id;
   const limit = Number(url.searchParams.get('limit'))
     ? Number(url.searchParams.get('limit'))
     : defaultLimit;

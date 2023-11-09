@@ -16,7 +16,7 @@ export const POST = (async ({locals, params}) => {
     const found_items = await db
         .select()
         .from(items)
-        .where(eq(items.id, Number(item_id)));
+        .where(eq(items.id, item_id));
     if (found_items.length == 0) {
         throw error(404);
     }
@@ -24,9 +24,9 @@ export const POST = (async ({locals, params}) => {
     if (item.owner_id != locals.user.id) {
         throw error(401);
     }
-    await db.delete(item_visibility).where(eq(item_visibility.item_id, Number(item_id)));
-    await db.delete(borrow_requests).where(eq(borrow_requests.item_id, Number(item_id)));
-    const deleted_item:Item[] = await db.delete(items).where(eq(items.id, Number(item_id))).returning();
+    await db.delete(item_visibility).where(eq(item_visibility.item_id, item_id));
+    await db.delete(borrow_requests).where(eq(borrow_requests.item_id, item_id));
+    const deleted_item:Item[] = await db.delete(items).where(eq(items.id, item_id)).returning();
 
     return json(deleted_item[0]);
 }) satisfies RequestHandler;

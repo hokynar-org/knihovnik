@@ -9,13 +9,13 @@ import { getFileUrl } from '$lib/server/bucket';
 import { getItem } from '$lib/server/item_load';
 
 export const load: LayoutServerLoad = (async ({ locals, params }) => {
-  if(!Number(params.item_id)){
+  if(!params.item_id){
     throw error(400)
   }
   if(!locals.user){
     redirect(301,"/")
   }
-  const item_id = Number(params.item_id);
+  const item_id = params.item_id;
   const user=locals.user;
   const results = await Promise.all([getItem(item_id),db.select().from(user_community_relations).where(and(eq(user_community_relations.user_id, user.id),or(eq(user_community_relations.role, 'ADMIN'),eq(user_community_relations.role, 'MEMBER')))).innerJoin(communities,eq(user_community_relations.community_id,communities.id)).leftJoin(item_visibility,and(eq(item_visibility.item_id, item_id),eq(item_visibility.community_id,user_community_relations.community_id)))]);
   const item_result=results[0];
