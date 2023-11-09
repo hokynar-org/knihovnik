@@ -1,7 +1,7 @@
 import { redirect, type Actions, fail } from '@sveltejs/kit';
 import { db } from '$lib/server/db/drizzle';
 import { borrow_requests, communities, item_visibility, items, user_community_relations, users } from '$lib/server/db/schema';
-import { and, asc, eq, sql } from 'drizzle-orm';
+import { and, asc, eq, or, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { superValidate } from 'sveltekit-superforms/server';
 import type { PageServerLoad } from './$types';
@@ -34,7 +34,7 @@ export const load = (async ({ locals }) => {
         eq(user_community_relations.user_id,user.id)
       )
     )
-    .leftJoin(count_users,eq(count_users.community_id,communities.id))
+    .leftJoin(count_users,and(eq(count_users.community_id,communities.id),or(eq(count_users.role, 'MEMBER'), eq(count_users.role, 'ADMIN'))))
     .leftJoin(item_visibility, eq(item_visibility.community_id,count_users.community_id))
     .leftJoin(items, and(eq(items.id, item_visibility.item_id),eq(items.offered,true),eq(items.holder_id,items.owner_id)))
     .groupBy(communities.id,communities.name, communities.description, communities.visibility, user_community_relations.role,count_users.community_id )
