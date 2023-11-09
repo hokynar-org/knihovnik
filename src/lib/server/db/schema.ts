@@ -54,16 +54,9 @@ export const borrow_requests = pgTable('borrow_requests', {
   timestamp: timestamp('timestamp').defaultNow(),
 });
 
-export const borrow_requestsRelations = relations(
-  borrow_requests,
-  ({ many }) => ({
-    request_actions: many(request_actions),
-  }),
-);
-
 export const request_actions = pgTable('request_actions', {
   id: uuid('id').defaultRandom().primaryKey(),
-  borrow_request_id: uuid('borrow_request_id').notNull(),
+  borrow_request_id: uuid('borrow_request_id').references(() => borrow_requests.id).notNull(),
   user_id: uuid('user_id')
     .references(() => users.id)
     .notNull(),
@@ -71,16 +64,6 @@ export const request_actions = pgTable('request_actions', {
   message: text('message'),
   timestamp: timestamp('timestamp').defaultNow(),
 });
-
-export const request_actionsRelations = relations(
-  request_actions,
-  ({ one }) => ({
-    borrow_request: one(borrow_requests, {
-      fields: [request_actions.borrow_request_id],
-      references: [borrow_requests.id],
-    }),
-  }),
-);
 
 export const communities = pgTable('communities', {
   id: uuid('id').defaultRandom().primaryKey(),

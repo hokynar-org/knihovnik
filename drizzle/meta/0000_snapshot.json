@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "pg",
-  "id": "4482e880-d58a-4123-b0c7-e7603aa2c3c2",
+  "id": "ca6c56e7-8aba-4338-a513-a562e55d487e",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "borrow_requests": {
@@ -456,6 +456,19 @@
       },
       "indexes": {},
       "foreignKeys": {
+        "request_actions_borrow_request_id_borrow_requests_id_fk": {
+          "name": "request_actions_borrow_request_id_borrow_requests_id_fk",
+          "tableFrom": "request_actions",
+          "tableTo": "borrow_requests",
+          "columnsFrom": [
+            "borrow_request_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
         "request_actions_user_id_users_id_fk": {
           "name": "request_actions_user_id_users_id_fk",
           "tableFrom": "request_actions",
