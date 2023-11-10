@@ -19,8 +19,8 @@ export const POST = (async ({ request, params, locals, url, route }) => {
   const socketId = body.split('&')[0].split('=')[1]
   const channelName = body.split('&')[1].split('=')[1]
   const channelType = channelName.split('-')[1]
-  const channelId   = channelName.split('-')[2]
   if(channelType=='borrow_request'){
+      const channelId   = channelName.split('private-borrow_request-')[1]
       const borrow_request_id=channelId;
       const found_borrow_requests:{item:PublicItemSafe,borrow_request:BorrowRequest}[]= await db.select({
       item: item_select,
@@ -36,6 +36,7 @@ export const POST = (async ({ request, params, locals, url, route }) => {
       return json(authResponse);
     }
     else if(channelType=='community'){
+      const channelId   = channelName.split('private-community-')[1]
       const community_id=channelId;
       const found_communities= await db.select().from(communities).where(eq(communities.id,community_id))
       if(found_communities.length==0){

@@ -13,9 +13,7 @@
 
   let fallback = false;
   if ($pusher) {
-    const channel = $pusher.subscribe(
-      'private-community-' + String(data.community.id),
-    );
+    const channel = $pusher.subscribe('private-community-' + data.community.id);
     channel.bind('message', (data: { message: CommunityMessage }) => {
       community_messages = [...community_messages, data.message];
     });

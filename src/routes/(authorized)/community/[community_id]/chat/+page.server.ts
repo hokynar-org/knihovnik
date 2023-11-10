@@ -36,7 +36,8 @@ export const load = (async ({ locals, params, url, parent, }) => {
     })
     .from(community_messages)
     .where(eq(community_messages.community_id, community_id))
-    .innerJoin(users, eq(users.id, community_messages.user_id));
+    .innerJoin(users, eq(users.id, community_messages.user_id))
+    .orderBy(community_messages.timestamp)
   return {
     community_messages: messages,
   };

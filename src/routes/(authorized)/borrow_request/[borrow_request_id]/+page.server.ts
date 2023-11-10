@@ -37,7 +37,9 @@ export const load = (async ({ locals,params, url}) => {
   
   const request_actions_results:Promise<RequestActionMessage[]> = db
   .select(request_action_message_select)
-  .from(request_actions).where(eq(request_actions.borrow_request_id,borrow_request_id)).innerJoin(users,eq(users.id,request_actions.user_id));
+  .from(request_actions).where(eq(request_actions.borrow_request_id,borrow_request_id))
+  .innerJoin(users,eq(users.id,request_actions.user_id))
+  .orderBy(request_actions.timestamp)
 
   const results = await Promise.all([borrow_request_reusults,request_actions_results]);
   if(results[0].length==0){
