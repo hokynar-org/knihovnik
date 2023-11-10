@@ -1,22 +1,22 @@
 <script lang="ts">
   import Fa from 'svelte-fa';
-  import { faCube, faUser } from '@fortawesome/free-solid-svg-icons';
-  import type { PublicItemSafe, PublicUserSafe } from '$lib/types';
   import { iconList } from '../IconSelector/iconList';
   import BorrowItem from './Actions/BorrowItem.svelte';
   import OfferItem from '$lib/components/ItemDisplay/Actions/OfferItem.svelte';
   import OwnedBy from './Status/OwnedBy.svelte';
   import HeldBy from './Status/HeldBy.svelte';
   import TransferType from './Status/TransferType.svelte';
-  import type { last_request } from '$lib/types';
-  export let last_requst: last_request | null;
   import { modalStore, type ModalSettings } from '@skeletonlabs/skeleton';
   import { page } from '$app/stores';
-  $: user = $page.data.user as PublicUserSafe;
+  import type { last_request } from '$lib/types';
+  import type { PublicItemSafe, PublicUserSafe } from '$lib/types';
 
+  export let last_requst: last_request | null;
   export let item: PublicItemSafe;
   export let owner: PublicUserSafe | null;
   export let holder: PublicUserSafe | null;
+
+  $: user = $page.data.user as PublicUserSafe;
 
   let imageAltText = 'TODO';
 
@@ -32,6 +32,7 @@
     body: '',
     image: item.image_src!,
   };
+
   function triggerModal(): void {
     if (displayImage) {
       modalStore.trigger(imageView);

@@ -4,11 +4,9 @@ import {
   uuid,
   text,
   varchar,
-  integer,
   timestamp,
   boolean,
 } from 'drizzle-orm/pg-core';
-import { relations } from 'drizzle-orm';
 
 export const users = pgTable('users', {
   id: uuid('id').defaultRandom().primaryKey(),
@@ -56,7 +54,9 @@ export const borrow_requests = pgTable('borrow_requests', {
 
 export const request_actions = pgTable('request_actions', {
   id: uuid('id').defaultRandom().primaryKey(),
-  borrow_request_id: uuid('borrow_request_id').references(() => borrow_requests.id).notNull(),
+  borrow_request_id: uuid('borrow_request_id')
+    .references(() => borrow_requests.id)
+    .notNull(),
   user_id: uuid('user_id')
     .references(() => users.id)
     .notNull(),
@@ -113,7 +113,7 @@ export const community_messages = pgTable('community_messages', {
 
 export const reset_tokens = pgTable('reset_tokens', {
   hash: text('id').primaryKey(),
-  user_id: integer('user_id')
+  user_id: uuid('user_id')
     .references(() => users.id)
     .notNull(),
   type: text('type').notNull(),

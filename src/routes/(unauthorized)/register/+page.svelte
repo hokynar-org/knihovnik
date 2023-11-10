@@ -124,11 +124,13 @@
     <p class="p-1 text-red-500 text-md text-center">{$message}</p>
   {/if}
 
-  <ModeSwitcher
-    href="/login"
-    text="Already have an account? Log in!"
-    darkMode={data.darkMode}
-  />
+  <ModeSwitcher darkMode={data.darkMode}>
+    <div>
+      <a class="underline" href="/login">
+        <span class="font-normal">Already have an account?</span> Log in!
+      </a>
+    </div>
+  </ModeSwitcher>
 </FormBox>
 
 <style lang="scss">

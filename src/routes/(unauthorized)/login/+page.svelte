@@ -61,11 +61,18 @@
     <p class="p-1 text-error-600-300-token text-center">{$message}</p>
   {/if}
 
-  <ModeSwitcher
-    href="/register"
-    text="Don't have an account? Register now!"
-    darkMode={data.darkMode}
-  />
+  <ModeSwitcher darkMode={data.darkMode}>
+    <div>
+      <a class="underline" href="/reset/password">
+        <span class="font-normal">Forgot your password?</span> Reset it
+      </a>
+    </div>
+    <div>
+      <a class="underline" href="/register">
+        <span class="font-normal">Don't have an account?</span> Register now!
+      </a>
+    </div>
+  </ModeSwitcher>
 </FormBox>
 
 <style lang="scss">
