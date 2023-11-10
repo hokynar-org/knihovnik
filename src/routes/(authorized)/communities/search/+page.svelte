@@ -26,11 +26,13 @@
     <CommunityCard {community} />
   {/each}
 </div>
-<ItemPaginator
-  {limit}
-  {offset}
-  {length}
-  {search}
-  root="/communities/search"
-  cls="mt-6"
-/>
+{#if communities.length > 0}
+  <ItemPaginator
+    {offset}
+    {limit}
+    {search}
+    {length}
+    root="/communities/search"
+    cls="mt-6"
+  />
+{/if}

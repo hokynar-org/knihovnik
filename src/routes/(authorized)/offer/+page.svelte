@@ -51,4 +51,11 @@
   {/each}
 </ItemGrid>
 
-<ItemPaginator {offset} {limit} {search} {length} root="/offer" cls="mt-6" />
+{#if offers.length > 0}<ItemPaginator
+    {offset}
+    {limit}
+    {search}
+    {length}
+    root="/offer"
+    cls="mt-6"
+  />{/if}

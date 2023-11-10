@@ -59,11 +59,20 @@
         </div>
       </ItemCard>
     {/each}
-    {#if data.offers.length == 0}
+    {#if offers.length == 0}
       <p>There are no items you can borrow right now :/</p>
     {/if}
   </ItemGrid>
-  <ItemPaginator {offset} {limit} {search} {length} root="/borrow" cls="mt-6" />
+  {#if offers.length > 0}
+    <ItemPaginator
+      {offset}
+      {limit}
+      {search}
+      {length}
+      root="/borrow"
+      cls="mt-6"
+    />
+  {/if}
 {:else}
   <p>
     It seems you are not a part of any community. To borrow or offer anything
