@@ -18,6 +18,7 @@
   let limit = data.limit; //Maximum number of items displayed
   let length = data.length;
   let search = data.search;
+  const noCommunities = data.noCommunities;
 
   $: offers = data.offers;
   $: offset = data.offset;
@@ -32,33 +33,41 @@
   <h2 class="text-4xl mx-4">Items on offer</h2>
 </div>
 
-<ItemPageBar {limit} {offset} {length} {search} root="/borrow" />
-<ItemGrid cls="mt-6">
-  {#each offers as offer (offer.item.id)}
-    <ItemCard item={offer.item}>
-      <!-- {#if offer.user != data.user}
+{#if !noCommunities}
+  <ItemPageBar {limit} {offset} {length} {search} root="/borrow" />
+  <ItemGrid cls="mt-6">
+    {#each offers as offer (offer.item.id)}
+      <ItemCard item={offer.item}>
+        <!-- {#if offer.user != data.user}
       <BorrowItem borrow_request={offer.borrow_request} item={offer.item} />
     {/if} -->
-      <div class="pb-2 text-lg">
-        <OwnedBy owner={offer.owner} />
-        <TransferType item={offer.item} />
+        <div class="pb-2 text-lg">
+          <OwnedBy owner={offer.owner} />
+          <TransferType item={offer.item} />
 
-        {#if offer.item.offered && offer.owner && offer.owner.id != user.id}
-          <div class="flex items-center">
-            <p><Fa icon={faCheck} /></p>
-            <p class="pl-2">You can borrow this item</p>
-          </div>
-        {:else if offer.item.offered && offer.owner && offer.owner.id == user.id}
-          <div class="flex items-center">
-            <p><Fa icon={faCheck} /></p>
-            <p class="pl-2">Others can borrow your item</p>
-          </div>
-        {/if}
-      </div>
-    </ItemCard>
-  {/each}
-  {#if data.offers.length == 0}
-    <p>There are no items you can borrow right now :/</p>
-  {/if}
-</ItemGrid>
-<ItemPaginator {offset} {limit} {search} {length} root="/borrow" cls="mt-6" />
+          {#if offer.item.offered && offer.owner && offer.owner.id != user.id}
+            <div class="flex items-center">
+              <p><Fa icon={faCheck} /></p>
+              <p class="pl-2">You can borrow this item</p>
+            </div>
+          {:else if offer.item.offered && offer.owner && offer.owner.id == user.id}
+            <div class="flex items-center">
+              <p><Fa icon={faCheck} /></p>
+              <p class="pl-2">Others can borrow your item</p>
+            </div>
+          {/if}
+        </div>
+      </ItemCard>
+    {/each}
+    {#if data.offers.length == 0}
+      <p>There are no items you can borrow right now :/</p>
+    {/if}
+  </ItemGrid>
+  <ItemPaginator {offset} {limit} {search} {length} root="/borrow" cls="mt-6" />
+{:else}
+  <p>
+    It seems you are not a part of any community. To borrow or offer anything
+    you have to join one first.
+  </p>
+  <a href="/communities/search">Search for one here!</a>
+{/if}
