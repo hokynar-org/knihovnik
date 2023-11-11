@@ -8,7 +8,7 @@
   export let community: Community; //Which community does this chat belong to?
 
   let disabled = false;
-  let fallback = false;
+  export let fallback = true;
 
   const send_message = async () => {
     const res = await fetch('/api/community/' + community.id + '/message', {

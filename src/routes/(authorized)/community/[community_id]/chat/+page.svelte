@@ -36,5 +36,5 @@
       <Fa class="inline text-xl" icon={faLockOpen} />
     </p>
   </div>
-  <Chat messages={community_messages} {user} {community} />
+  <Chat messages={community_messages} {user} {community} {fallback} />
 </div>

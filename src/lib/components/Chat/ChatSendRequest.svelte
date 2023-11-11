@@ -9,7 +9,7 @@
   export let borrow_request: BorrowRequest;
 
   let disabled = false;
-  let fallback = false;
+  export let fallback = true;
 
   async function send_message() {
     const response = await fetch(

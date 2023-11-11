@@ -315,7 +315,7 @@
 {/if}
 
 <div class="mt-6 border-solid border-2 pl-4 w-modal">
-  <Chat messages={$request_actions} {user} {borrow_request} />
+  <Chat messages={$request_actions} {user} {borrow_request} {fallback} />
 </div>
 
 <div class="mt-6">

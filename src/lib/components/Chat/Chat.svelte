@@ -17,7 +17,7 @@
   //export let isadmin: Boolean; //To be used to determine if you can delete messages
   export let community = null as null | Community; //Which community does this chat belong to?
   export let borrow_request = null as null | BorrowRequest; //Which borrow request does this chat belong to?
-
+  export let fallback: boolean = true;
   function isCommunityMessages(
     messages: (CommunityMessage | RequestActionMessage)[],
   ): messages is CommunityMessage[] {
@@ -106,7 +106,7 @@
       bind:value={$composedMessage}
       on:keydown={enterPressed}
     />
-    <ChatSendCommunity {community} {messages} />
+    <ChatSendCommunity {community} {messages} {fallback} />
   </div>
 {:else if isRequestMessages(messages) && isBorrowRequestNotNull(borrow_request)}
   {#if borrow_request.status !== 'CONFIRMED' && borrow_request.status !== 'PENDING' && borrow_request.status !== 'ABORTED' && borrow_request.status !== 'DENIED'}
@@ -117,7 +117,7 @@
         bind:value={$composedMessage}
         on:keydown={enterPressed}
       />
-      <ChatSendRequest {borrow_request} />
+      <ChatSendRequest {borrow_request} {fallback} />
     </div>
   {/if}
 {/if}
