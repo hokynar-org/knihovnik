@@ -14,11 +14,11 @@
   export let search: string | null;
   export let cls = '' as string;
   const pagesShown = (length: number, limit: number, offset: number) => {
-    const pagesTotal = Math.max(Math.ceil(length / limit), 1);
+    let pagesTotal = Math.max(Math.ceil(length / limit), 1);
     const thisPage = Math.max(Math.floor(offset / limit) + 1, 1);
     if (pagesTotal <= 7) {
       const pgs: number[] = [];
-      for (let i = 1; i < pagesTotal; i++) {
+      for (let i = 1; i <= pagesTotal; i++) {
         pgs.push(i);
       }
       return pgs;
@@ -42,7 +42,6 @@
           (pgs[pgs.length - 1] - pgs[pgs.length - 2] > 1 ? 1 : 0) >
         6
       ) {
-        console.log(pgs[pgs.length - 1] - pgs[pgs.length - 2]);
         return pgs;
       }
     }
