@@ -41,9 +41,7 @@
 </script>
 
 <div class="mx-6">
-  <div
-    class=" gap-4 justify-center sm:grid sm:grid-flow-row sm:grid-rows-1 lg:flex"
-  >
+  <div class=" gap-4 justify-center grid grid-flow-row grid-rows-1 lg:flex">
     <!--TODO This works, but svelte thiks its not accessible. Maybe a bug?-->
     <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
     <div
@@ -100,13 +98,20 @@
       {/if}
 
       {#if (owner && user.id == owner.id && holder && holder.id == owner.id) || (item.transfeType == 'TRANSITIVE' && holder && user.id == holder.id)}
-        <OfferItem {item} />
+        <div
+          class="w-full mt-2 grid justify-items-center lg:justify-items-start"
+        >
+          <OfferItem {item} />
+        </div>
       {/if}
     </div>
   </div>
 
   <div class="mt-6 flex justify-center">
-    <div class="overflow-hidden max-w-xl" class:line-clamp={clamped}>
+    <div
+      class="overflow-hidden max-w-xs md:max-w-sm lg:max-w-none lg:w-max"
+      class:line-clamp={clamped}
+    >
       {@html item.description.replace(/\n/g, '<br>')}
     </div>
   </div>

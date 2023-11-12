@@ -11,10 +11,12 @@
   {profiled_user.user_name}
 </h4>
 {#if profiled_user.full_name && profiled_user.pronouns && profiled_user.bio}
-  <h4>
+  <h4 class="mt-2">
     {profiled_user.full_name}, {profiled_user.pronouns}
   </h4>
-  <div>
-    {profiled_user.bio ? profiled_user.bio : ''}
+  <div class="mt-2">
+    <p>
+      {profiled_user.bio ? profiled_user.bio : ''}
+    </p>
   </div>
 {/if}

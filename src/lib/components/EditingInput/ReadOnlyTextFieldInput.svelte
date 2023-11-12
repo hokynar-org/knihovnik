@@ -43,7 +43,7 @@
       bind:this={self}
       class:hidden={!editing}
     />
-    <p class="max-w-sm mr-3" class:hidden={editing}>
+    <p class="mr-3" class:hidden={editing}>
       {@html value?.replace(/\n/g, '<br>')}
     </p>
     <button

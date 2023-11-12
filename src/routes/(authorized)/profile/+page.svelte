@@ -24,6 +24,11 @@
     old_full_name == $form.full_name &&
     old_pronouns == $form.pronouns &&
     old_bio == $form.bio;
+
+  //window.onbeforeunload = function () {
+  //  // Return null to disable the unsaved changes warning
+  //  return null;
+  //};
 </script>
 
 <div class="w-xs">

@@ -104,7 +104,7 @@
   };
 </script>
 
-<div class="mt-8">
+<div class="mt-8 w-80 md:w-96 lg:w-[40rem]">
   <div>
     <form method="POST" action="?/edit" class="grid grid-cols-1 gap-4">
       <ReadOnlyTextInput
