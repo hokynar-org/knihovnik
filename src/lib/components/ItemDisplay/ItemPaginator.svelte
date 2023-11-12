@@ -16,24 +16,42 @@
   const pagesShown = (length: number, limit: number, offset: number) => {
     const pagesTotal = Math.max(Math.ceil(length / limit), 1);
     const thisPage = Math.max(Math.floor(offset / limit) + 1, 1);
-    const pgs: number[] = [];
-    for (let i = 1; i <= pagesTotal; i++) {
-      if (
-        i == 1 ||
-        i == pagesTotal ||
-        i == thisPage ||
-        Math.abs(i - thisPage) <= 1
-      ) {
+    if (pagesTotal <= 7) {
+      const pgs: number[] = [];
+      for (let i = 1; i < pagesTotal; i++) {
         pgs.push(i);
       }
+      return pgs;
     }
-    return pgs;
+    for (let j = 1; j < 6; j++) {
+      const pgs: number[] = [];
+      for (let i = 1; i <= pagesTotal; i++) {
+        if (
+          i == 1 ||
+          pagesTotal == i ||
+          i == thisPage ||
+          Math.abs(i - thisPage) <= j
+        ) {
+          pgs.push(i);
+        } else if (true) {
+        }
+      }
+      if (
+        pgs.length +
+          (pgs[1] - pgs[0] > 1 ? 1 : 0) +
+          (pgs[pgs.length - 1] - pgs[pgs.length - 2] > 1 ? 1 : 0) >
+        6
+      ) {
+        console.log(pgs[pgs.length - 1] - pgs[pgs.length - 2]);
+        return pgs;
+      }
+    }
   };
   let pages = pagesShown(length, limit, offset);
   $: pages = pagesShown(length, limit, offset);
 </script>
 
-{#if length > 0}
+{#if length > 0 && pages}
   <div class="flex gap-0 {cls}">
     {#each pages as page, index (page)}
       {#if index > 0 && pages[index - 1] != page - 1}
