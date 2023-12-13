@@ -2,8 +2,8 @@
   import Fa from 'svelte-fa';
   import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
   import { editFieldsNo } from './stores';
+  import { onDestroy } from 'svelte';
 
-  let disabled = true;
   let editing = false;
   export let value: string;
   const original = value;
@@ -29,6 +29,12 @@
       editFieldsNo.update((n) => n - 1);
     }
   }
+
+  onDestroy(async () => {
+    if (isChanged) {
+      editFieldsNo.update((n) => n - 1);
+    }
+  });
 </script>
 
 <label>
