@@ -31,6 +31,8 @@ export type PublicItemSafe = Pick<
   | 'transfeType'
 >;
 
+export type BorrowModes = 'BORROW' | 'GIVE' | 'TRANSITIVE';
+
 export interface Session {
   user_safe: PrivateUserSafe;
   session_stay: boolean;
@@ -45,10 +47,10 @@ export type User = InferModel<typeof users>;
 export type Community = InferModel<typeof communities>;
 
 export type CommunityPlus = Community & {
-  role: string | null,
-  userCount:number,
-  itemCount:number,
-}
+  role: string | null;
+  userCount: number;
+  itemCount: number;
+};
 
 export type CommunityRelation = InferModel<typeof user_community_relations>;
 

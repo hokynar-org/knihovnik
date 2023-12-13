@@ -4,6 +4,7 @@
   import type { PageData } from './$types';
   import ReadOnlyTextInput from '$lib/components/EditingInput/ReadOnlyTextInput.svelte';
   import ReadOnlyTextFieldInput from '$lib/components/EditingInput/ReadOnlyTextFieldInput.svelte';
+  import { onMount } from 'svelte';
 
   export let data: PageData;
 
@@ -30,8 +31,6 @@
     console.log(old_pronouns);
     console.log($page.data.user.pronouns);
   }
-
-  updateOld();
 
   $: disabled =
     old_user_name == $form.user_name &&
@@ -77,6 +76,9 @@
   //  // Return null to disable the unsaved changes warning
   //  return null;
   //};
+  onMount(async () => {
+    updateOld();
+  });
 </script>
 
 <div class="w-xs">
@@ -123,7 +125,7 @@
         />
       {/key}
       <div class="self-end justify-self-center col-span-full">
-        <button {disabled} class="btn variant-filled-primary"
+        <button {disabled} class="btn variant-filled-primary" type="submit"
           >Save changes</button
         >
       </div>

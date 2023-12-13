@@ -94,11 +94,11 @@
     }
   }
 
-  $: console.log($editFieldsNo);
+  //$: console.log($editFieldsNo);
 
   beforeNavigate(async ({ cancel, to, type }) => {
-    console.log('before navigate');
-    console.log(type);
+    //console.log('before navigate');
+    //console.log(type);
     if (editingAtLeastOne) {
       cancel();
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { goto, beforeNavigate } from '$app/navigation';
+  import { goto } from '$app/navigation';
   import PromiseButton from '$lib/components/PromiseButton.svelte';
   import ReadOnlyTextFieldInput from '$lib/components/EditingInput/ReadOnlyTextFieldInput.svelte';
   import ReadOnlyTextInput from '$lib/components/EditingInput/ReadOnlyTextInput.svelte';
@@ -12,39 +12,61 @@
   } from '@fortawesome/free-solid-svg-icons';
   import { superForm } from 'sveltekit-superforms/client';
   import FileUploader from '$lib/components/FileUploader.svelte';
+  import type { BorrowModes } from '$lib/types.js';
+  import { onMount } from 'svelte';
+
   export let data;
   const { form, errors } = superForm(data.form);
   $: item = data.item;
   $: community_visibility = data.community_visibility;
   $: $form.name = data.item.name;
   $: $form.description = data.item.description;
-  $: $form.transferType = data.item.transfeType as
-    | 'BORROW'
-    | 'GIVE'
-    | 'TRANSITIVE';
-  $: $form.transferType = transferType;
-  const old_name = data.item.name;
-  const old_description = data.item.description;
-  const old_transferType = data.item.transfeType as
-    | 'BORROW'
-    | 'GIVE'
-    | 'TRANSITIVE';
-  const old_hasMainPic = data.item.hasMainPic;
-  const old_iconName = data.item.iconName;
+  $: $form.transferType = data.item.transfeType as BorrowModes;
+
+  let old_name: string, old_description: string, old_transferType: BorrowModes;
+  let old_hasMainPic: Boolean, old_iconName: string | null;
+
+  function updateOld() {
+    //We have to run this function on when we start this component
+    //and everytime we submit a form
+    console.log(data.item.description);
+    old_name = $form.name;
+    old_description = $form.description;
+    old_transferType = $form.transferType as BorrowModes;
+    old_hasMainPic = $form.hasMainPic;
+    old_iconName = $form.iconName;
+  }
+
   $: disabled =
     old_name == $form.name &&
     old_description == $form.description &&
     old_transferType == $form.transferType &&
     !imageChange;
+  $: console.log('d'), console.log(disabled);
+  $: console.log(old_name == $form.name);
+  $: console.log(old_description == $form.description);
+  $: console.log(old_description);
+  $: console.log($form.description);
+
   $: toNewIcon = !hasMainPic && selectedIconName != old_iconName;
   $: toNewImage = hasMainPic && fileName;
   $: imageChange = toNewIcon || toNewImage;
 
-  let transferType: 'BORROW' | 'GIVE' | 'TRANSITIVE' = old_transferType;
-
+  //Initial values of data used in forms
+  //let transferType: 'BORROW' | 'GIVE' | 'TRANSITIVE' = data.item.transfeType as BorrowModes;
   let hasMainPic = data.item.hasMainPic;
   let selectedIconName: string | null = data.item.iconName;
   let fileName: string | null = null;
+  $: if (fileName) {
+    $form.files = fileName;
+  } else {
+    //In case user selects the image from the picker and then cancels
+    $form.files = '';
+  }
+  $: if (selectedIconName) {
+    $form.iconName = selectedIconName;
+  }
+  $: $form.hasMainPic = hasMainPic;
 
   function changeMain(): void {
     hasMainPic = !hasMainPic;
@@ -53,6 +75,37 @@
     // } else {
     //   selectedIconName = data.item.iconName;
     // }
+  }
+
+  async function handleSubmit(
+    content: object,
+    updateFunc: () => void,
+  ): Promise<void> {
+    try {
+      const respBody = new URLSearchParams();
+      Object.entries(content).forEach(([key, value]) => {
+        respBody.append(key, value);
+      });
+      const response = await fetch('?/edit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Upgrade-Insecure-Requests': '1',
+        },
+        body: respBody.toString(),
+      });
+
+      if (response.ok) {
+        // Handle success (e.g., show a success message)
+        //console.log('Form submitted successfully');
+        updateFunc();
+      } else {
+        // Handle errors (e.g., show an error message)
+        //console.error('Error submitting form');
+      }
+    } catch (error) {
+      console.error('Error submitting form', error);
+    }
   }
 
   const change_visibility = async (community_id: string) => {
@@ -102,64 +155,87 @@
       throw new Error(String(response.status));
     }
   };
+
+  let updates_main_form = 0;
+
+  onMount(async () => {
+    updateOld();
+  });
 </script>
 
 <div class="mt-8 w-80 md:w-96 lg:w-[40rem]">
   <div>
-    <form method="POST" action="?/edit" class="grid grid-cols-1 gap-4">
-      <ReadOnlyTextInput
-        label="Name"
-        name="name"
-        bind:value={$form.name}
-        error={$errors.name}
-      />
-      <ReadOnlyTextFieldInput
-        label="Description"
-        name="description"
-        bind:value={$form.description}
-        error={$errors.description}
-      />
-      <h4 class="text-2xl">Transfer type</h4>
-      <input name="transferType" bind:value={transferType} class="hidden" />
-      <input name="files" bind:value={fileName} class="hidden" />
-      <input name="hasMainPic" bind:value={hasMainPic} class="hidden" />
-      <input name="iconName" bind:value={selectedIconName} class="hidden" />
-      <OptionPicker
-        options={[
-          { name: 'Borrow', value: 'BORROW', icon: faHandHolding },
-          { name: 'Transitive', value: 'TRANSITIVE', icon: faHandHoldingHand },
-          { name: 'Give', value: 'GIVE', icon: faHandsHolding },
-        ]}
-        bind:selected={transferType}
-      />
-      <div class="flex content-center justify-center mt-2">
-        <ol class="breadcrumb w-auto">
-          <li class:text-lg={hasMainPic} class:text-base={!hasMainPic}>
-            {#if hasMainPic}
-              Upload
-            {:else}
-              <button class="font-bold" on:click={changeMain}>Upload</button>
-            {/if}
-          </li>
-          <li class="crumb-separator text-lg" aria-hidden>/</li>
+    <form
+      on:submit|preventDefault={() =>
+        handleSubmit($form, () => {
+          updates_main_form++;
+          updateOld();
+        })}
+      class="grid grid-cols-1 gap-4"
+    >
+      {#key updates_main_form}
+        <ReadOnlyTextInput
+          label="Name"
+          name="name"
+          bind:value={$form.name}
+          error={$errors.name}
+        />
+        <ReadOnlyTextFieldInput
+          label="Description"
+          name="description"
+          bind:value={$form.description}
+          error={$errors.description}
+        />
+        <h4 class="text-2xl">Transfer type</h4>
+        <input
+          name="transferType"
+          bind:value={$form.transferType}
+          class="hidden"
+        />
+        <input name="files" bind:value={fileName} class="hidden" />
+        <input name="hasMainPic" bind:value={hasMainPic} class="hidden" />
+        <input name="iconName" bind:value={selectedIconName} class="hidden" />
+        <OptionPicker
+          options={[
+            { name: 'Borrow', value: 'BORROW', icon: faHandHolding },
+            {
+              name: 'Transitive',
+              value: 'TRANSITIVE',
+              icon: faHandHoldingHand,
+            },
+            { name: 'Give', value: 'GIVE', icon: faHandsHolding },
+          ]}
+          bind:selected={$form.transferType}
+        />
+        <div class="flex content-center justify-center mt-2">
+          <ol class="breadcrumb w-auto">
+            <li class:text-lg={hasMainPic} class:text-base={!hasMainPic}>
+              {#if hasMainPic}
+                Upload
+              {:else}
+                <button class="font-bold" on:click={changeMain}>Upload</button>
+              {/if}
+            </li>
+            <li class="crumb-separator text-lg" aria-hidden>/</li>
 
-          <li class:text-lg={!hasMainPic} class:text-base={hasMainPic}>
-            {#if !hasMainPic}
-              Presets
-            {:else}
-              <button class="font-bold" on:click={changeMain}>Presets</button>
-            {/if}
-          </li>
-        </ol>
-      </div>
+            <li class:text-lg={!hasMainPic} class:text-base={hasMainPic}>
+              {#if !hasMainPic}
+                Presets
+              {:else}
+                <button class="font-bold" on:click={changeMain}>Presets</button>
+              {/if}
+            </li>
+          </ol>
+        </div>
 
-      <div class="mb-4 mt-3">
-        {#if hasMainPic}
-          <FileUploader bind:fileName />
-        {:else}
-          <IconSelector bind:selectedIconName />
-        {/if}
-      </div>
+        <div class="mb-4 mt-3">
+          {#if hasMainPic}
+            <FileUploader bind:fileName />
+          {:else}
+            <IconSelector bind:selectedIconName />
+          {/if}
+        </div>
+      {/key}
       <div class="self-end justify-self-center col-span-full">
         <button {disabled} class="btn variant-filled-primary" type="submit"
           >Save changes</button
