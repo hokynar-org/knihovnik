@@ -6,6 +6,7 @@
   export let names: string[];
   export let urls: string[];
   export let activeNo: number;
+  export let cls = '';
 
   let url: string = '';
   $: url = String($page.url);
@@ -21,7 +22,7 @@
   {#each names as name, id}
     <ConditionalAnchor condition={!(id == activeNo)} url={urls[id]}>
       <RadioItem bind:group={activeNo} name="justify" value={id}>
-        {name}
+        <span class={cls}>{name}</span>
       </RadioItem>
     </ConditionalAnchor>
   {/each}
