@@ -12,6 +12,8 @@
     Modal,
     modalStore,
     type ModalSettings,
+    RadioItem,
+    RadioGroup,
   } from '@skeletonlabs/skeleton';
   import PickBorrowType from '$lib/components/Forms/PickBorrowType.svelte';
 
@@ -68,14 +70,9 @@
   }
   $: $form.hasMainPic = hasMainPic;
 
-  function changeMain(): void {
-    hasMainPic = !hasMainPic;
-    // if (hasMainPic) {
-    //   selectedIconName = null;
-    // } else {
-    //   selectedIconName = data.item.iconName;
-    // }
-  }
+  let radioValue = 0;
+  //$: radioValue = Number(!hasMainPic) % 2;
+  $: hasMainPic = !Boolean(radioValue);
 
   async function handleSubmit(
     content: object,
@@ -217,24 +214,17 @@
         <input name="hasMainPic" bind:value={hasMainPic} class="hidden" />
         <input name="iconName" bind:value={selectedIconName} class="hidden" />
         <div class="flex content-center justify-center mt-2">
-          <ol class="breadcrumb w-auto">
-            <li class:text-lg={hasMainPic} class:text-base={!hasMainPic}>
-              {#if hasMainPic}
-                Upload
-              {:else}
-                <button class="font-bold" on:click={changeMain}>Upload</button>
-              {/if}
-            </li>
-            <li class="crumb-separator text-lg" aria-hidden>/</li>
-
-            <li class:text-lg={!hasMainPic} class:text-base={hasMainPic}>
-              {#if !hasMainPic}
-                Presets
-              {:else}
-                <button class="font-bold" on:click={changeMain}>Presets</button>
-              {/if}
-            </li>
-          </ol>
+          <RadioGroup
+            active="variant-filled-primary"
+            hover="hover:variant-soft-primary"
+          >
+            <RadioItem bind:group={radioValue} name="justify" value={0}
+              >Upload</RadioItem
+            >
+            <RadioItem bind:group={radioValue} name="justify" value={1}
+              >Presets</RadioItem
+            >
+          </RadioGroup>
         </div>
 
         <div class="mb-4 mt-3">
