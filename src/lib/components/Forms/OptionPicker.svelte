@@ -5,7 +5,7 @@
   export let selected: string = options[0].value;
 </script>
 
-<div class="flex flex-col">
+<div class="flex flex-col w-min">
   {#each options as option, index}
     <label class="flex items-center">
       <input

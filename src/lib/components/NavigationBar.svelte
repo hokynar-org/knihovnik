@@ -1,7 +1,7 @@
 <script lang="ts">
   import { page } from '$app/stores';
   import { RadioGroup, RadioItem } from '@skeletonlabs/skeleton';
-  import ConditionalAnchor from './ConditionalAnchor.svelte';
+  import ConditionalAnchor from './Utilities/ConditionalAnchor.svelte';
 
   export let names: string[];
   export let urls: string[];

@@ -1,25 +1,19 @@
 <script lang="ts">
   import { goto, invalidate, invalidateAll } from '$app/navigation';
-  import PromiseButton from '$lib/components/PromiseButton.svelte';
+  import PromiseButton from '$lib/components/Utilities/PromiseButton.svelte';
   import ReadOnlyTextFieldInput from '$lib/components/EditingInput/ReadOnlyTextFieldInput.svelte';
   import ReadOnlyTextInput from '$lib/components/EditingInput/ReadOnlyTextInput.svelte';
-  import OptionPicker from '$lib/components/OptionPicker.svelte';
   import IconSelector from '$lib/components/IconSelector/IconSelector.svelte';
-  import {
-    faHandHoldingHand,
-    faHandHolding,
-    faHandsHolding,
-  } from '@fortawesome/free-solid-svg-icons';
   import { superForm } from 'sveltekit-superforms/client';
-  import FileUploader from '$lib/components/FileUploader.svelte';
-  import type { BorrowModes } from '$lib/types.js';
+  import FileUploader from '$lib/components/Forms/FileUploader.svelte';
+  import type { BorrowMode } from '$lib/types.js';
   import { onMount } from 'svelte';
   import {
     Modal,
     modalStore,
     type ModalSettings,
   } from '@skeletonlabs/skeleton';
-  import { promise } from 'zod';
+  import PickBorrowType from '$lib/components/Forms/PickBorrowType.svelte';
 
   export let data;
   const { form, errors } = superForm(data.form);
@@ -27,9 +21,9 @@
   $: community_visibility = data.community_visibility;
   $: $form.name = data.item.name;
   $: $form.description = data.item.description;
-  $: $form.transferType = data.item.transfeType as BorrowModes;
+  $: $form.transferType = data.item.transfeType as BorrowMode;
 
-  let old_name: string, old_description: string, old_transferType: BorrowModes;
+  let old_name: string, old_description: string, old_transferType: BorrowMode;
   let old_hasMainPic: Boolean, old_iconName: string | null;
 
   function updateOld() {
@@ -38,7 +32,7 @@
     console.log(data.item.description);
     old_name = $form.name;
     old_description = $form.description;
-    old_transferType = $form.transferType as BorrowModes;
+    old_transferType = $form.transferType as BorrowMode;
     old_hasMainPic = $form.hasMainPic;
     old_iconName = $form.iconName;
   }
@@ -212,7 +206,8 @@
           bind:value={$form.description}
           error={$errors.description}
         />
-        <h4 class="text-2xl">Transfer type</h4>
+        <h3 class="text-xl mt-2 mb-[-1rem]">Transfer type</h3>
+        <PickBorrowType bind:selectedType={$form.transferType} />
         <input
           name="transferType"
           bind:value={$form.transferType}
@@ -221,18 +216,6 @@
         <input name="files" bind:value={fileName} class="hidden" />
         <input name="hasMainPic" bind:value={hasMainPic} class="hidden" />
         <input name="iconName" bind:value={selectedIconName} class="hidden" />
-        <OptionPicker
-          options={[
-            { name: 'Borrow', value: 'BORROW', icon: faHandHolding },
-            {
-              name: 'Transitive',
-              value: 'TRANSITIVE',
-              icon: faHandHoldingHand,
-            },
-            { name: 'Give', value: 'GIVE', icon: faHandsHolding },
-          ]}
-          bind:selected={$form.transferType}
-        />
         <div class="flex content-center justify-center mt-2">
           <ol class="breadcrumb w-auto">
             <li class:text-lg={hasMainPic} class:text-base={!hasMainPic}>
@@ -271,8 +254,8 @@
   </div>
 
   <div class="mt-6">
-    <h4 class="text-2xl mt-6">Visibility settings</h4>
-    <p class="text-sm">Which communities can see and borrow this item?</p>
+    <h3 class="text-2xl mt-6">Visibility settings</h3>
+    <p class="text-base">Which communities can see and borrow this item?</p>
     <div class="grid grid-cols-2 justify-items-center mt-4">
       <span>
         <PromiseButton
@@ -359,7 +342,7 @@
   </div>
 
   <div class="mt-6">
-    <h4 class="text-2xl">Deletion</h4>
+    <h3 class="text-2xl">Deletion</h3>
 
     <div class="grid justify-items-center">
       <PromiseButton

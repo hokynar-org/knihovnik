@@ -31,7 +31,7 @@ export type PublicItemSafe = Pick<
   | 'transfeType'
 >;
 
-export type BorrowModes = 'BORROW' | 'GIVE' | 'TRANSITIVE';
+export type BorrowMode = 'BORROW' | 'GIVE' | 'TRANSITIVE';
 
 export interface Session {
   user_safe: PrivateUserSafe;

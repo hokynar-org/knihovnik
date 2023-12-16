@@ -1,20 +1,22 @@
 <script lang="ts">
   import { superForm } from 'sveltekit-superforms/client';
-  import FileUploader from '$lib/components/FileUploader.svelte';
+  import FileUploader from '$lib/components/Forms/FileUploader.svelte';
   import type { PageData } from './$types';
   import IconSelector from '$lib/components/IconSelector/IconSelector.svelte';
-  import OptionPicker from '$lib/components/OptionPicker.svelte';
+  import OptionPicker from '$lib/components/Forms/OptionPicker.svelte';
+  import PickBorrowType from '$lib/components/Forms/PickBorrowType.svelte';
   import {
     faHandHoldingHand,
     faHandHolding,
     faHandsHolding,
   } from '@fortawesome/free-solid-svg-icons';
+  import type { BorrowMode } from '$lib/types';
   export let data: PageData;
 
   const { form, enhance } = superForm(data.item_form);
   let fileName: string | null = null;
   let selectedIconName: string | null;
-  let transferType: string;
+  let transferType: BorrowMode;
   $: $form.hasMainPic = hasMainPic;
   $: $form.iconName = selectedIconName;
   // $: console.log(hasMainPic, selectedIconName, $form.iconName);
@@ -54,14 +56,7 @@
       style="resize: none;"
     />
     <label for="transferType" class="text-xl mt-4 mb-2">Transfer Type</label>
-    <OptionPicker
-      options={[
-        { name: 'Borrow', value: 'BORROW', icon: faHandHolding },
-        { name: 'Transitive', value: 'TRANSITIVE', icon: faHandHoldingHand },
-        { name: 'Give', value: 'GIVE', icon: faHandsHolding },
-      ]}
-      bind:selected={transferType}
-    />
+    <PickBorrowType bind:selectedType={transferType} />
     <input name="transferType" bind:value={transferType} class="hidden" />
     <input name="files" bind:value={fileName} class="hidden" />
     <input name="hasMainPic" bind:value={hasMainPic} class="hidden" />
