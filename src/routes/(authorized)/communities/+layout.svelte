@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { page } from '$app/stores';
   import NavigationBar from '$lib/components/NavigationBar.svelte';
 
   let names = ['Your communities', 'Find a community', 'New community'];

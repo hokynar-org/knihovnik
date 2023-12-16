@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { CommunityRelation } from '$lib/types';
+  import NavigationBar from '$lib/components/NavigationBar.svelte';
   import Fa from 'svelte-fa';
   import { faClock } from '@fortawesome/free-solid-svg-icons';
   import { page } from '$app/stores';
@@ -35,9 +36,28 @@
     }
     return (await res.json()) as CommunityRelation;
   };
+
+  let names = ['Home', 'Items', 'Chat', 'Users'];
+  let urls = ['/community/', '/items', '/chat', '/users'];
+  $: if (community) {
+    urls = [
+      '/community/' + community.id,
+      '/community/' + community.id + '/items',
+      '/community/' + community.id + '/chat',
+      '/community/' + community.id + '/users',
+    ];
+    if (role && role == 'ADMIN') {
+      names.push('Admin dashboard');
+      names.push('Settings');
+
+      urls.push('/community/' + community.id + '/admin');
+      urls.push('/community/' + community.id + '/admin/edit');
+    }
+  }
+  let activeNo: number = 0;
 </script>
 
-<h4 class="mb-2">Community: {community.name}</h4>
+<h4 class="mb-4">Community: {community.name}</h4>
 {#if community.description}
   <p>
     {community.description}
@@ -112,82 +132,7 @@
 </div>
 
 {#if role && (role == 'MEMBER' || role == 'ADMIN')}
-  <div>
-    <div class="">
-      <ol class="breadcrumb">
-        <li class="text-lg">
-          {#if $page.route.id == '/(authorized)/community/[community_id]'}
-            Home
-          {:else}
-            <a class="text-base" href={'/community/' + community.id}>Home</a>
-          {/if}
-        </li>
-
-        <li class="crumb-separator" aria-hidden>/</li>
-
-        <li class="text-lg">
-          {#if $page.route.id == '/(authorized)/community/[community_id]/items'}
-            Items
-          {:else}
-            <a class="text-base" href={'/community/' + community.id + '/items'}
-              >Items</a
-            >
-          {/if}
-        </li>
-
-        <li class="crumb-separator" aria-hidden>/</li>
-
-        <li class="text-lg">
-          {#if $page.route.id == '/(authorized)/community/[community_id]/chat'}
-            Chat
-          {:else}
-            <a class="text-base" href={'/community/' + community.id + '/chat'}
-              >Chat</a
-            >
-          {/if}
-        </li>
-
-        <li class="crumb-separator" aria-hidden>/</li>
-
-        <li class="text-lg">
-          {#if $page.route.id == '/(authorized)/community/[community_id]/users'}
-            Users
-          {:else}
-            <a class="text-base" href={'/community/' + community.id + '/users'}
-              >Users</a
-            >
-          {/if}
-        </li>
-
-        {#if role && role == 'ADMIN'}
-          <li class="crumb-separator" aria-hidden>/</li>
-
-          <li class="text-lg">
-            {#if $page.route.id == '/(authorized)/community/[community_id]/admin'}
-              Admin dashboard
-            {:else}
-              <a
-                class="text-base"
-                href={'/community/' + community.id + '/admin'}
-                >Admin dashboard</a
-              >
-            {/if}
-          </li>
-          <li class="crumb-separator" aria-hidden>/</li>
-          <li class="text-lg">
-            {#if $page.route.id == '/(authorized)/community/[community_id]/admin/edit'}
-              Settings
-            {:else}
-              <a
-                class="text-base"
-                href={'/community/' + community.id + '/admin/edit'}>Settings</a
-              >
-            {/if}
-          </li>
-        {/if}
-      </ol>
-    </div>
-  </div>
+  <NavigationBar {names} {urls} bind:activeNo />
 
   <slot />
 {/if}
