@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { string } from 'zod';
-
   export let disabled: boolean;
   export let btn_class: string;
   export let callback: () => Promise<any>;
@@ -14,10 +12,12 @@
     disabled = true;
     callback()
       .then((value) => {
+        console.log('Success');
         succes(value);
         disabled = false;
       })
       .catch(() => {
+        console.log('fail');
         disabled = false;
       });
   }}

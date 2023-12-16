@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { goto } from '$app/navigation';
+  import { goto, invalidate, invalidateAll } from '$app/navigation';
   import PromiseButton from '$lib/components/PromiseButton.svelte';
   import ReadOnlyTextFieldInput from '$lib/components/EditingInput/ReadOnlyTextFieldInput.svelte';
   import ReadOnlyTextInput from '$lib/components/EditingInput/ReadOnlyTextInput.svelte';
@@ -14,6 +14,12 @@
   import FileUploader from '$lib/components/FileUploader.svelte';
   import type { BorrowModes } from '$lib/types.js';
   import { onMount } from 'svelte';
+  import {
+    Modal,
+    modalStore,
+    type ModalSettings,
+  } from '@skeletonlabs/skeleton';
+  import { promise } from 'zod';
 
   export let data;
   const { form, errors } = superForm(data.form);
@@ -146,6 +152,26 @@
       item_id: string | null;
       community_id: string | null;
     } | null;
+  };
+
+  const pushDelete = async () => {
+    const result = await new Promise<boolean>((resolve, reject) => {
+      const AreYouSure: ModalSettings = {
+        type: 'confirm',
+        title: 'This operation cannot be undone',
+        body: 'Are you sure you want to do it?',
+        response: (r: boolean) => {
+          resolve(r);
+        },
+      };
+      modalStore.trigger(AreYouSure);
+    });
+
+    if (result) {
+      deleteItem();
+    } else {
+      throw new Error('Deleting aborted');
+    }
   };
   const deleteItem = async () => {
     const response = await fetch('/api/item/' + item.id + '/remove', {
@@ -339,9 +365,14 @@
     <div class="grid justify-items-center">
       <PromiseButton
         btn_class={'btn variant-filled-error py-1 my-2'}
-        callback={deleteItem}
-        succes={() => {
-          goto('/offer');
+        callback={pushDelete}
+        succes={async () => {
+          await goto('/offer');
+          //When we go back, do not display the deleted item
+          //in the list of items. Idk if there is a better
+          //way to do this without reloading
+          invalidateAll();
+          location.reload();
         }}
         disabled={false}
       >
