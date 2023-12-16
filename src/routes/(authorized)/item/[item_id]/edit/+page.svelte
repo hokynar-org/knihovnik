@@ -189,7 +189,7 @@
   });
 </script>
 
-<div class="mt-8 w-80 md:w-96 lg:w-[40rem]">
+<div class="mt-8 w-80 md:w-96 lg:w-[42rem]">
   <div>
     <form
       on:submit|preventDefault={() =>
@@ -360,7 +360,6 @@
 
   <div class="mt-6">
     <h4 class="text-2xl">Deletion</h4>
-    <p class="mb-2">Warning: this cannot be undone.</p>
 
     <div class="grid justify-items-center">
       <PromiseButton
