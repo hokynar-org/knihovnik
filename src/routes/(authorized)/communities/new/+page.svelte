@@ -9,7 +9,7 @@
 <div>
   <h2 class="text-4xl mt-6 mb-2">Create a community</h2>
 
-  <p class="text-base min-w-xs max-w-xs">
+  <p class="text-base min-w-sm max-w-sm">
     Anyone can create a community and invite other users to it. Admins have a
     responsibility to moderate their community. TODO agree on this description
   </p>
@@ -17,7 +17,7 @@
   <form
     method="POST"
     action="?/new_community"
-    class="max-w-xs min-w-xs"
+    class="max-w-sm min-w-sm"
     use:enhance
   >
     <label for="name" class="text-xl mt-4 mb-2">Name</label>

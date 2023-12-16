@@ -28,7 +28,7 @@
 </script>
 
 <div class="mt-6">
-  <p class="text-base min-w-xs max-w-xs">
+  <p class="text-base min-w-sm max-w-sm">
     Add an item others can borrow. You will be able to choose which community
     can borrow it.
   </p>
@@ -38,7 +38,7 @@
   <form
     method="POST"
     action="?/new_item"
-    class="max-w-xs min-w-xs"
+    class="max-w-sm min-w-sm"
     enctype="multipart/form-data"
   >
     <label for="name" class="text-xl mt-4 mb-2">Name*</label>
