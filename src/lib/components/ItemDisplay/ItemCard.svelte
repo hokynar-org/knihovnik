@@ -28,11 +28,11 @@
 </script>
 
 <div>
-  <a href="/item/{item.id}" class="!no-underline font-normal">
-    <div
-      id="oneCard"
-      class="card w-80 h-min rounded shadow-lg variant-filled-surface-700 overflow-visible hover:shadow-xl"
-    >
+  <div
+    id="oneCard"
+    class="card w-80 h-min rounded shadow-lg variant-filled-surface-700 overflow-visible hover:shadow-xl"
+  >
+    <a href="/item/{item.id}" class="!no-underline font-normal">
       <div class="flex h-40 justify-center items-center py-auto shadow-md">
         {#if item.hasMainPic && item.image_src !== null}
           <div class="h-full w-full">
@@ -78,15 +78,16 @@
           {item.description}
         </div>
       </div>
-      <div class="mt-2 px-4 pt-2">
-        <slot />
-      </div>
+    </a>
 
-      {#if $$slots}
-        <div class="mt-2"></div>
-      {/if}
+    <div class="mt-2 px-4 pt-2">
+      <slot />
     </div>
-  </a>
+
+    {#if $$slots}
+      <div class="mt-2"></div>
+    {/if}
+  </div>
 </div>
 
 <style>
