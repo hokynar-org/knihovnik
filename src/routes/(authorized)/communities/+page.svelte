@@ -9,9 +9,10 @@
   let isSearch = true;
 </script>
 
+<h2 class="text-4xl mt-6 mb-4">Your communities</h2>
+
 <div>
   <div class="w-xs">
-    <h2 class="text-4xl mb-4">Your communities</h2>
     <div
       class="grid 2xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-2"
     >

@@ -17,7 +17,7 @@
   $: search = data.search;
 </script>
 
-<h2 class="text-4xl mb-4">Public communities</h2>
+<h2 class="text-4xl mt-6 mb-4">Public communities</h2>
 <ItemPageBar {limit} {offset} {length} {search} root="/communities/search" />
 <div
   class="grid 2xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-2 mt-6"
