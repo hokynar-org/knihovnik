@@ -189,7 +189,7 @@
   });
 </script>
 
-<div class="mt-8 w-80 md:w-96 lg:w-[42rem]">
+<div class="mt-6 w-80 md:w-96 lg:w-[42rem]">
   <div>
     <form
       on:submit|preventDefault={() =>

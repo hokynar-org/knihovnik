@@ -5,7 +5,7 @@
   $: borrow_requests = data.borrow_requests;
 </script>
 
-<div class="mt-1">
+<div class="mt-6">
   <ol>
     {#each [...borrow_requests].reverse() as borrow_request (borrow_request.borrow_request.id)}
       <li>
