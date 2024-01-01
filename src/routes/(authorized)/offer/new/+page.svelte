@@ -2,6 +2,7 @@
   import { superForm } from 'sveltekit-superforms/client';
   import FileUploader from '$lib/components/Forms/FileUploader.svelte';
   import type { PageData } from './$types';
+  import TagSelector from '$lib/components/TagSelector/TagSelector.svelte';
   import IconSelector from '$lib/components/IconSelector/IconSelector.svelte';
   import OptionPicker from '$lib/components/Forms/OptionPicker.svelte';
   import PickBorrowType from '$lib/components/Forms/PickBorrowType.svelte';
@@ -17,6 +18,7 @@
   let fileName: string | null = null;
   let selectedIconName: string | null;
   let transferType: BorrowMode;
+  let selectedTags: string[] = [];
   $: $form.hasMainPic = hasMainPic;
   $: $form.iconName = selectedIconName;
   // $: console.log(hasMainPic, selectedIconName, $form.iconName);
@@ -58,9 +60,12 @@
     <label for="transferType" class="text-xl mt-4 mb-2">Transfer Type</label>
     <PickBorrowType bind:selectedType={transferType} />
     <input name="transferType" bind:value={transferType} class="hidden" />
+    <label for="tags" class="text-xl mt-4 mb-2">Tags</label>
+    <TagSelector bind:selectedTags />
     <input name="files" bind:value={fileName} class="hidden" />
     <input name="hasMainPic" bind:value={hasMainPic} class="hidden" />
     <input name="iconName" bind:value={selectedIconName} class="hidden" />
+    <input name="selectedTags" bind:value={selectedTags} class="hidden" />
     <label for="description" class="text-xl mt-4">Main picture*</label>
     <p class="mt-1">This will be used for thumbnails.</p>
 

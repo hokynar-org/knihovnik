@@ -1,13 +1,19 @@
 import { redirect, type Actions, fail } from '@sveltejs/kit';
 import { db } from '$lib/server/db/drizzle';
-import { borrow_requests, communities, item_visibility, items, user_community_relations } from '$lib/server/db/schema';
+import {
+  borrow_requests,
+  communities,
+  item_visibility,
+  items,
+  user_community_relations,
+} from '$lib/server/db/schema';
 import { and, eq, or } from 'drizzle-orm';
 import { z } from 'zod';
 import { superValidate } from 'sveltekit-superforms/server';
 import type { PageServerLoad } from './$types';
 import type { Item, PublicItemSafe } from '$lib/types';
 import { getMyItems } from '$lib/server/item_load';
-import {item_select} from '$lib/server/db/selects'
+import { item_select } from '$lib/server/db/selects';
 
 const item_form_schema = z.object({
   name: z.string().min(2),
@@ -15,13 +21,14 @@ const item_form_schema = z.object({
   visibility: z.boolean(),
   files: z.string(),
   hasMainPic: z.boolean(),
-  iconName:z.string().nullable(),
-  transferType:z.enum(["BORROW","GIVE","TRANSITIVE"]),
+  iconName: z.string().nullable(),
+  transferType: z.enum(['BORROW', 'GIVE', 'TRANSITIVE']),
+  selectedTags: z.array(z.string()),
 });
 
 export const load = (async ({ locals }) => {
-  if(!locals.user){
-    throw redirect(301,"/login")
+  if (!locals.user) {
+    throw redirect(301, '/login');
   }
   const user = locals.user;
 
@@ -41,26 +48,46 @@ export const actions: Actions = {
     const form = await superValidate(request, item_form_schema);
     // console.log(form.errors,form.data.hasMainPic,form.data.iconName);
     // return fail(400, { form });
+    console.log(form.data);
     if (!form.valid) {
       return fail(400, { form });
     }
     const files = form.data.files.split(',');
-
     try {
-      const item = (await db.insert(items).values({
-        transfeType: form.data.transferType,
-        hasMainPic: form.data.hasMainPic,
-        iconName: form.data.iconName,
-        name: form.data.name as string,
-        description: form.data.description as string,
-        owner_id: locals.user.id,
-        holder_id: locals.user.id,
-        image_src:files[0],
-      }).returning(item_select))[0];
-      if(form.data.visibility){
-        const user_communities = await db.select().from(communities).innerJoin(user_community_relations,and(eq(communities.id,user_community_relations.community_id),eq(user_community_relations.user_id,user.id),or(eq(user_community_relations.role,'ADMIN'),eq(user_community_relations.role,'MEMBER'))))
-        const inserted_visibilities = user_communities.flatMap((value)=>{return {community_id:value.communities.id,item_id:item.id}});
-        await db.insert(item_visibility).values(inserted_visibilities)
+      const item = (
+        await db
+          .insert(items)
+          .values({
+            transfeType: form.data.transferType,
+            hasMainPic: form.data.hasMainPic,
+            iconName: form.data.iconName,
+            name: form.data.name as string,
+            description: form.data.description as string,
+            owner_id: locals.user.id,
+            holder_id: locals.user.id,
+            image_src: files[0],
+          })
+          .returning(item_select)
+      )[0];
+      if (form.data.visibility) {
+        const user_communities = await db
+          .select()
+          .from(communities)
+          .innerJoin(
+            user_community_relations,
+            and(
+              eq(communities.id, user_community_relations.community_id),
+              eq(user_community_relations.user_id, user.id),
+              or(
+                eq(user_community_relations.role, 'ADMIN'),
+                eq(user_community_relations.role, 'MEMBER'),
+              ),
+            ),
+          );
+        const inserted_visibilities = user_communities.flatMap((value) => {
+          return { community_id: value.communities.id, item_id: item.id };
+        });
+        await db.insert(item_visibility).values(inserted_visibilities);
       }
     } catch (error) {
       console.error(error);
@@ -81,10 +108,7 @@ export const actions: Actions = {
     }
 
     try {
-      const found_items = await db
-        .select()
-        .from(items)
-        .where(eq(items.id, id));
+      const found_items = await db.select().from(items).where(eq(items.id, id));
       if (found_items.length == 0) {
         return fail(400, { message: 'Invalid request' });
       }
@@ -92,9 +116,7 @@ export const actions: Actions = {
       if (item.owner_id != locals.user.id) {
         return fail(400, { message: 'Invalid request' });
       }
-      await db
-        .delete(borrow_requests)
-        .where(eq(borrow_requests.item_id, id));
+      await db.delete(borrow_requests).where(eq(borrow_requests.item_id, id));
       await db.delete(items).where(eq(items.id, id));
     } catch (err) {
       console.error(err);
